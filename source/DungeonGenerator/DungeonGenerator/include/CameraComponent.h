@@ -5,10 +5,10 @@
 
 #include <Component.h>
 
-class CameraComponent : Component
+class CameraComponent : public Component
 {
 private:
-	const int ComponentID = 1;
+	const int ComponentID = 2;
 
 	glm::vec3 Position;
 	glm::vec3 Front;

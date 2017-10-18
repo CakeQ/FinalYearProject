@@ -2,6 +2,11 @@
 
 #include <Entity.h>
 
+Entity::Entity(glm::vec3 IWorldPos)
+{
+	WorldPos = IWorldPos;
+}
+
 void Entity::AddComponent(Component* IComponent)
 {
 	ComponentList.push_back(IComponent);
@@ -33,4 +38,12 @@ Component* Entity::GetComponent(int IComponentID)
 		}
 	}
 	return nullptr;
+}
+
+void Entity::Update()
+{
+	for (Component* IComponent : ComponentList)
+	{
+		IComponent->Update();
+	}
 }

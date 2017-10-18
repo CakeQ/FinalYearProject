@@ -4,12 +4,12 @@
 #include <Component.h>
 #include <CameraComponent.h>
 
-Player::Player()
+Player::Player(glm::vec3 IWorldPos) : Entity(IWorldPos)
 {
-
+	AddComponent(new CameraComponent(GetWorldPos()));
 }
 
-void Player::Update()
+void Player::HandleInput() 
 {
 
 }

@@ -17,7 +17,7 @@ Created by Daniel Thompson, P15230940.
 class Game
 {
 private:
-
+	std::vector<Entity*> EntityList;
 
 public:
 	EngineCore* GameEngine;
@@ -27,4 +27,6 @@ public:
 
 	void Update();
 	void Draw();
+
+	void SpawnPlayer();
 };

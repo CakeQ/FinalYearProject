@@ -2,12 +2,12 @@
 
 #include <Entity.h>
 
-class Player : Entity
+class Player : public Entity
 {
 private:
 
 public:
-	Player();
+	Player(glm::vec3 IWorldPos);
 
-	void Update() override;
+	void HandleInput() override;
 };

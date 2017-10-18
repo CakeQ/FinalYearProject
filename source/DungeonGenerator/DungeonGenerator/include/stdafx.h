@@ -14,6 +14,9 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+
+#include <glm\glm.hpp>
 
 #ifdef USE_GLFW
 	#include <gl_core_4_3.hpp>
