@@ -5,11 +5,18 @@
 
 #pragma once
 
+#define USE_GLFW 1
+
 #include "targetver.h"
 
 #include <stdio.h>
 #include <tchar.h>
 
+#include <string>
+#include <iostream>
 
-
-// TODO: reference additional headers your program requires here
+#ifdef USE_GLFW
+	#include <gl_core_4_3.hpp>
+	#include <glfw3.h>
+	#include <EngineCoreGLFW.h>
+#endif

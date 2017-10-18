@@ -169,8 +169,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="EngineCoreGLFW.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gl_core_4_3.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -179,7 +184,15 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\CameraComponent.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\EngineCoreBase.h" />
+    <ClInclude Include="include\EngineCoreGLFW.h" />
+    <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\gl_core_4_3.hpp" />
+    <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
   </ItemGroup>
