@@ -3,13 +3,10 @@
 #include <Player.h>
 #include <Component.h>
 #include <CameraComponent.h>
+#include <MovementComponent.h>
 
 Player::Player(glm::vec3 IWorldPos) : Entity(IWorldPos)
 {
-	AddComponent(new CameraComponent(GetWorldPos()));
-}
-
-void Player::HandleInput() 
-{
-
+	ComponentHandler->AddComponent(new CameraComponent(ComponentHandler, ComponentHandler->GetWorldPos()));
+	ComponentHandler->AddComponent(new MovementComponent(ComponentHandler));
 }

@@ -4,46 +4,15 @@
 
 Entity::Entity(glm::vec3 IWorldPos)
 {
-	WorldPos = IWorldPos;
-}
-
-void Entity::AddComponent(Component* IComponent)
-{
-	ComponentList.push_back(IComponent);
-}
-
-bool Entity::CheckForComponent(int IComponentID)
-{
-	for (Component* IComponent : ComponentList)
-	{
-		if (IComponent->GetComponentID() == IComponentID)
-		{ 
-			return true;
-		}
-	}
-
-	return false;
-}
-
-Component* Entity::GetComponent(int IComponentID)
-{
-	if (CheckForComponent(IComponentID))
-	{
-		for (Component* IComponent : ComponentList)
-		{
-			if (IComponent->GetComponentID() == IComponentID)
-			{
-				return IComponent;
-			}
-		}
-	}
-	return nullptr;
+	ComponentHandler = new RootComponent(IWorldPos);
 }
 
 void Entity::Update()
 {
-	for (Component* IComponent : ComponentList)
-	{
-		IComponent->Update();
-	}
+	ComponentHandler->Update();
+}
+
+void Entity::HandleInput(const std::vector<bool>& KeyBuffer)
+{
+	ComponentHandler->HandleInput(KeyBuffer);
 }

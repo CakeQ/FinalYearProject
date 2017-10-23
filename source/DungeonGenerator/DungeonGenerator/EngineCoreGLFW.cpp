@@ -65,8 +65,10 @@ bool EngineCoreGLFW::InitWindow(int IWidth, int IHeight, std::string IWindowName
 		0.15f, -0.5f, 0.0f
 	};
 
-	printf("Number of functions that failed to load : %i.\n", DidLoad.GetNumMissing());								//!< Output number of GL functions that failed to load.
-																													//!< End error handling.
+	if (DidLoad.GetNumMissing() > 0)
+	{
+		printf("Number of functions that failed to load : %i.\n", DidLoad.GetNumMissing());								//!< Output number of GL functions that failed to load.
+	}																											//!< End error handling.
 
 	glfwSetFramebufferSizeCallback(WindowID, WindowResizeCallbackEvent);
 	glfwSetKeyCallback(WindowID, KeyCallbackEvent);
@@ -124,7 +126,7 @@ bool EngineCoreGLFW::RunEngine(Game& IGameID)
 	IGameID.GameEngine = this;
 
 	while (!glfwWindowShouldClose(WindowID)) {																		//!< Draw loop.
-		IGameID.GameInputHandler->HandleInputs(KeyBuffer);
+		IGameID.HandleInput(KeyBuffer);
 		IGameID.Update();
 		IGameID.Draw();
 
@@ -151,6 +153,7 @@ void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* window, int key, int scancode,
 	{
 		return;
 	}
+
 	KeyBuffer[key] = ((action == GLFW_PRESS || action == GLFW_REPEAT));
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

@@ -11,23 +11,19 @@ Created by Daniel Thompson, P15230940.
 #pragma once
 
 #include <Component.h>
+#include <RootComponent.h>
 
 class Entity
 {
 private:
 	glm::vec3 WorldPos;
-	std::vector<Component*> ComponentList;
 
 public:
+	RootComponent* ComponentHandler;
+
 	Entity(glm::vec3 IWorldPos);
-
-	void AddComponent(Component* IComponent);
-	bool CheckForComponent(int ComponentID);
-	
-
-	glm::vec3 GetWorldPos() { return WorldPos; };
-	Component* GetComponent(int ComponentID);
+	virtual ~Entity() {};
 
 	void Update();
-	virtual void HandleInput() = 0;
+	void HandleInput(const std::vector<bool>& KeyBuffer);
 };

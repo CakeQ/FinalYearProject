@@ -11,20 +11,20 @@ Created by Daniel Thompson, P15230940.
 #pragma once
 
 #include <EngineCoreBase.h>
-#include <Input.h>
 #include <Entity.h>
 
 class Game
 {
 private:
 	std::vector<Entity*> EntityList;
+	Entity* PlayerEntity;
 
 public:
 	EngineCore* GameEngine;
-	InputHandler* GameInputHandler;
 
 	Game();
 
+	void HandleInput(const std::vector<bool>& KeyBuffer);
 	void Update();
 	void Draw();
 

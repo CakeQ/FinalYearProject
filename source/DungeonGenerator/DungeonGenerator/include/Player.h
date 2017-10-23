@@ -8,6 +8,4 @@ private:
 
 public:
 	Player(glm::vec3 IWorldPos);
-
-	void HandleInput() override;
 };

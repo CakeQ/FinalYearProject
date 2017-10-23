@@ -24,7 +24,8 @@ private:
 	float Zoom;
 
 public:
-	CameraComponent(glm::vec3 IPosition);
+	CameraComponent(Component* IParentComponent, glm::vec3 IPosition);
 
 	void Update() override;
+	void HandleInput(const std::vector<bool>& KeyBuffer) override {};
 };

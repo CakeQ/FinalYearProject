@@ -6,9 +6,13 @@
 Game::Game()
 {
 	GameEngine = nullptr;
-	GameInputHandler = new InputHandler();
+	SpawnPlayer();
 
+}
 
+void Game::HandleInput(const std::vector<bool>& KeyBuffer)
+{
+	PlayerEntity->HandleInput(KeyBuffer);
 }
 
 void Game::Update()
@@ -26,5 +30,6 @@ void Game::Draw()
 
 void Game::SpawnPlayer()
 {
-	EntityList.push_back(new Player(glm::vec3(0.0f,0.0f,10.0f)));
+	PlayerEntity = new Player(glm::vec3(0.0f, 0.0f, 10.0f));
+	EntityList.push_back(PlayerEntity);
 }

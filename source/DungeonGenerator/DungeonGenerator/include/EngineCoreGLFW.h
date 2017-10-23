@@ -31,7 +31,7 @@ private:
 
 	int NumberOfTriangles = 4;
 
-	//static void MouseMoveCallbackEvent(GLFWwindow* window, double xPos, double yPos);
+	static void MouseMoveCallbackEvent(GLFWwindow* window, double xPos, double yPos) {};
 	static void KeyCallbackEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
 	static void WindowResizeCallbackEvent(GLFWwindow* window, int width, int height);
 
