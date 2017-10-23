@@ -39,11 +39,11 @@ bool RootComponent::CheckForComponent(int IComponentID)
 	return false;
 }
 
-void RootComponent::Draw()
+void RootComponent::Draw(GLuint IShaderProgram)
 {
 	if (CheckForComponent(3))
 	{
-		GetComponent(3)->Draw();
+		GetComponent(3)->Draw(IShaderProgram);
 	}
 }
 

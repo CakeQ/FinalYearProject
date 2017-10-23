@@ -12,9 +12,9 @@ void Entity::Update()
 	ComponentHandler->Update();
 }
 
-void Entity::Draw()
+void Entity::Draw(GLuint IShaderProgram)
 {
-	ComponentHandler->Draw();
+	ComponentHandler->Draw(IShaderProgram);
 }
 
 void Entity::HandleInput(const std::vector<bool>& KeyBuffer)

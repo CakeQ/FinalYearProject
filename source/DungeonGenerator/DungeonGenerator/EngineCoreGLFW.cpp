@@ -98,7 +98,7 @@ bool EngineCoreGLFW::RunEngine(Game& IGameID)
 	while (!glfwWindowShouldClose(WindowID)) {																		//!< Draw loop.
 		IGameID.HandleInput(KeyBuffer);
 		IGameID.Update();
-		IGameID.Draw();
+		IGameID.Draw(ShaderProgram);
 
 		glfwSwapBuffers(WindowID);
 		glfwPollEvents();

@@ -26,7 +26,7 @@ private:
 public:
 	CameraComponent(Component* IParentComponent, glm::vec3 IPosition);
 
-	void Draw() override {};
+	void Draw(GLuint IShaderProgram) override {};
 	void Update() override;
 	void HandleInput(const std::vector<bool>& KeyBuffer) override {};
 };

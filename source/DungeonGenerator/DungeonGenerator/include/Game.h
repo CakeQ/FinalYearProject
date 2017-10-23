@@ -17,7 +17,7 @@ class Game
 {
 private:
 	std::vector<Entity*> EntityList;
-	Entity* PlayerEntity;
+	Entity* Player;
 
 public:
 	EngineCore* GameEngine;
@@ -26,7 +26,7 @@ public:
 
 	void HandleInput(const std::vector<bool>& KeyBuffer);
 	void Update();
-	void Draw();
+	void Draw(GLuint IShaderProgram);
 
 	void SpawnPlayer();
 };

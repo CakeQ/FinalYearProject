@@ -14,7 +14,7 @@ private:
 public:
 	MovementComponent(RootComponent* IParentComponent);
 
-	void Draw() override {};
+	void Draw(GLuint IShaderProgram) override {};
 	void Update() override {};
 	void HandleInput(const std::vector<bool>& KeyBuffer) override;
 };

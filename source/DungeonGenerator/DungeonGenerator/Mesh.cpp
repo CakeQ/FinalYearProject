@@ -1,7 +1,9 @@
 #include <stdafx.h>
-
 #include <Mesh.h>
 
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp\postprocess.h>
 
 Mesh::Mesh(std::vector<Vertex> IVertices, std::vector<GLuint> IIndices, std::vector<Texture> ITextures)
 {

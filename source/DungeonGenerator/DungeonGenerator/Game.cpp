@@ -1,7 +1,7 @@
 #include <stdafx.h>
 
 #include <Game.h>
-#include <Player.h>
+#include <PlayerEntity.h>
 
 Game::Game()
 {
@@ -12,7 +12,7 @@ Game::Game()
 
 void Game::HandleInput(const std::vector<bool>& KeyBuffer)
 {
-	PlayerEntity->HandleInput(KeyBuffer);
+	Player->HandleInput(KeyBuffer);
 }
 
 void Game::Update()
@@ -23,13 +23,16 @@ void Game::Update()
 	}
 }
 
-void Game::Draw()
+void Game::Draw(GLuint IShaderProgram)
 {
-	//Draw();
+	for (Entity* IEntity : EntityList)
+	{
+		IEntity->Draw(IShaderProgram);
+	}
 }
 
 void Game::SpawnPlayer()
 {
-	PlayerEntity = new Player(glm::vec3(0.0f, 0.0f, 10.0f));
-	EntityList.push_back(PlayerEntity);
+	Player = new PlayerEntity(glm::vec3(0.0f, 0.0f, -10.0f));
+	EntityList.push_back(Player);
 }

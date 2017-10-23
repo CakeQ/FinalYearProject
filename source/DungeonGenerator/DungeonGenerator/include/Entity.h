@@ -25,6 +25,6 @@ public:
 	virtual ~Entity() {};
 
 	void Update();
-	void Draw();
+	void Draw(GLuint IShaderProgram);
 	void HandleInput(const std::vector<bool>& KeyBuffer);
 };

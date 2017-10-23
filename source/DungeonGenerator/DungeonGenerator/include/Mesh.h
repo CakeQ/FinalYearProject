@@ -5,7 +5,11 @@
 #include <sstream>
 #include <vector>
 
-#include <glm/gtc/matrix_transform.hpp>
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp\postprocess.h>
+
+#include <glm\gtc\matrix_transform.hpp>
 
 struct Vertex
 {
@@ -18,7 +22,7 @@ struct Texture
 {
 	GLuint ID;
 	std::string Type;
-	std::string path;
+	aiString Path;
 };
 
 class Mesh
