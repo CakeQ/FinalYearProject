@@ -19,5 +19,4 @@ public:
 
 	virtual bool InitWindow(int width, int height, std::string WindowName) = 0;
 	virtual bool RunEngine(Game& game) = 0;
-	virtual void Draw() = 0;
 };

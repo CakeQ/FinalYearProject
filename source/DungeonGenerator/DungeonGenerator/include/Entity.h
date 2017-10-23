@@ -25,5 +25,6 @@ public:
 	virtual ~Entity() {};
 
 	void Update();
+	void Draw();
 	void HandleInput(const std::vector<bool>& KeyBuffer);
 };

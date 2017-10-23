@@ -11,7 +11,6 @@ Created by Daniel Thompson, P15230940.
 #pragma once
 
 #include <EngineCoreBase.h>
-#include <glfw3.h>
 #include <vector>
 
 class Game;
@@ -23,8 +22,6 @@ private:
 	static std::vector<bool> KeyBuffer;
 	static const int KeyBufferSize = 400;
 
-	GLuint VBO;
-	GLuint VAO;
 	GLuint FS;
 	GLuint VS;
 	GLuint ShaderProgram;
@@ -40,6 +37,5 @@ public:
 
 	bool InitWindow(int Width, int Height, std::string WindowName) override;
 	bool RunEngine(Game& GameID) override;
-	void Draw() override;
 };
 

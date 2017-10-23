@@ -25,7 +25,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-	GameEngine->Draw();
+	//Draw();
 }
 
 void Game::SpawnPlayer()

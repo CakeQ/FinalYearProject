@@ -171,6 +171,8 @@
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="EngineCoreGLFW.cpp" />
@@ -194,6 +196,8 @@
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\gl_core_4_3.hpp" />
     <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\MeshComponent.h" />
     <ClInclude Include="include\MovementComponent.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\RootComponent.h" />

@@ -12,6 +12,11 @@ void Entity::Update()
 	ComponentHandler->Update();
 }
 
+void Entity::Draw()
+{
+	ComponentHandler->Draw();
+}
+
 void Entity::HandleInput(const std::vector<bool>& KeyBuffer)
 {
 	ComponentHandler->HandleInput(KeyBuffer);

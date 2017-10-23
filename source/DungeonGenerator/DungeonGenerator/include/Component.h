@@ -12,6 +12,8 @@ public:
 	virtual ~Component() {};
 
 	void Transform(glm::vec3 ITransform);
+
+	virtual void Draw() = 0;
 	virtual void Update() = 0;
 	virtual void HandleInput(const std::vector<bool>& KeyBuffer) = 0;
 

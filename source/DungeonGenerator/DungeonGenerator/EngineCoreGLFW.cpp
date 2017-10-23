@@ -47,23 +47,6 @@ bool EngineCoreGLFW::InitWindow(int IWidth, int IHeight, std::string IWindowName
 		glfwTerminate();
 		return false;
 	}
-	float TrianglePoints[] = {
-		-0.15f, 0.5f, 0.0f,
-		0.10f, -0.5f, 0.0f,
-		-0.15f, -0.5f, 0.0f,
-
-		-0.4f, 0.5f, 0.0f,
-		-0.15f, 0.5f, 0.0f,
-		-0.15f, -0.5f, 0.0f,
-
-		0.15f, 0.5f, 0.0f,
-		0.15f, -0.5f, 0.0f,
-		-0.1f, -0.5f, 0.0f,
-
-		0.15f, 0.5f, 0.0f,
-		0.4f, 0.5f, 0.0f,
-		0.15f, -0.5f, 0.0f
-	};
 
 	if (DidLoad.GetNumMissing() > 0)
 	{
@@ -75,19 +58,6 @@ bool EngineCoreGLFW::InitWindow(int IWidth, int IHeight, std::string IWindowName
 
 	KeyBuffer.resize(KeyBufferSize);
 	std::fill(KeyBuffer.begin(), KeyBuffer.end(), false);
-
-	VBO = 0;																										//!< Create a vertex buffer object to hold this data.
-	gl::GenBuffers(1, &VBO);																						//!< Generate buffers for VBO.
-	gl::BindBuffer(gl::ARRAY_BUFFER, VBO);																			//!< Bind the buffers for the VBO.
-	gl::BufferData(gl::ARRAY_BUFFER, ((9 * sizeof(float))* NumberOfTriangles), TrianglePoints, gl::STATIC_DRAW);	//!< Buffer the triangle points in the VBO.
-
-	VAO = 0;																										//!< Create a vertex array object.
-	gl::GenVertexArrays(1, &VAO);																					//!< Generate the evertext array for the VAO.
-	gl::BindVertexArray(VAO);																						//!< Bind the VAO.
-	gl::EnableVertexAttribArray(0);																					//!< Enable the VAO.
-	gl::BindBuffer(gl::ARRAY_BUFFER, VAO);																			//!< Bind the VAO to the buffer.
-	gl::VertexAttribPointer(0, 3, gl::FLOAT, FALSE, 0, NULL);
-
 
 	const char* VertexShader =																						//!< Create vertex shader.
 		"#version 400\n"
@@ -135,16 +105,6 @@ bool EngineCoreGLFW::RunEngine(Game& IGameID)
 	}
 
 	return true;
-}
-
-void EngineCoreGLFW::Draw()
-{
-	gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);														//!< Clear previous frame.
-	gl::UseProgram(ShaderProgram);																				//!< Assign shader program.
-	gl::BindVertexArray(VAO);																					//!< Bind VAO to the vertex array.
-
-	gl::DrawArrays(gl::TRIANGLES, 0, (3 * NumberOfTriangles));													//!< Draw all triangles.
-
 }
 
 void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* window, int key, int scancode, int action, int mods)

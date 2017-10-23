@@ -12,14 +12,39 @@ void RootComponent::AddComponent(Component* IComponent)
 	ComponentList.push_back(IComponent);
 }
 
-Component* RootComponent::GetComponent(int ComponentID)
+Component* RootComponent::GetComponent(int IComponentID)
 {
+	if (CheckForComponent(IComponentID))
+	{
+		for (Component* IteratorComponent : ComponentList)
+		{
+			if (IteratorComponent->GetComponentID() == IComponentID)
+			{
+				return IteratorComponent;
+			}
+		}
+	}
 	return nullptr;
 }
 
-bool RootComponent::CheckForComponent(int ComponentID)
+bool RootComponent::CheckForComponent(int IComponentID)
 {
+	for (Component* IteratorComponent : ComponentList)
+	{
+		if (IteratorComponent->GetComponentID() == IComponentID)
+		{
+			return true;
+		}
+	}
 	return false;
+}
+
+void RootComponent::Draw()
+{
+	if (CheckForComponent(3))
+	{
+		GetComponent(3)->Draw();
+	}
 }
 
 void RootComponent::Update()

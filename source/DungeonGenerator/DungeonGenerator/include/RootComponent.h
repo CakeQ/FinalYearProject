@@ -17,6 +17,7 @@ public:
 	Component* GetComponent(int ComponentID);
 	bool CheckForComponent(int ComponentID);
 
+	void Draw();
 	void Update() override;
 	void HandleInput(const std::vector<bool>& KeyBuffer) override;
 };
