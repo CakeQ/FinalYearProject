@@ -19,6 +19,7 @@ public:
 	Component* GetComponent(int ComponentID);
 	bool CheckForComponent(int ComponentID);
 
+	void Transform(glm::vec3 ITransform);
 	glm::vec3 GetWorldPos() { return WorldPos; };
 
 	void Update() override;

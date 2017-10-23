@@ -22,6 +22,12 @@ bool RootComponent::CheckForComponent(int ComponentID)
 	return false;
 }
 
+void RootComponent::Transform(glm::vec3 ITransform)
+{
+	WorldPos += ITransform;
+	std::cout << WorldPos.x << " " << WorldPos.y << " " << WorldPos.z << std::endl;
+}
+
 void RootComponent::Update()
 {
 	for (Component* IComponent : ComponentList)

@@ -13,5 +13,6 @@ public:
 	virtual void Update() = 0;
 	virtual void HandleInput(const std::vector<bool>& KeyBuffer) = 0;
 
+	Component* GetRoot() { return ParentComponent; };
 	int GetComponentID() { return ComponentID; };
 };
