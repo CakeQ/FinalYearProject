@@ -4,7 +4,7 @@
 
 RootComponent::RootComponent(glm::vec3 IWorldPos) : Component(this)
 {
-	WorldPos = IWorldPos;
+	SetWorldPos(IWorldPos);
 }
 
 void RootComponent::AddComponent(Component* IComponent)
@@ -20,12 +20,6 @@ Component* RootComponent::GetComponent(int ComponentID)
 bool RootComponent::CheckForComponent(int ComponentID)
 {
 	return false;
-}
-
-void RootComponent::Transform(glm::vec3 ITransform)
-{
-	WorldPos += ITransform;
-	std::cout << WorldPos.x << " " << WorldPos.y << " " << WorldPos.z << std::endl;
 }
 
 void RootComponent::Update()

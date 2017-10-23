@@ -10,17 +10,12 @@ private:
 	const int ComponentID = 1;
 	std::vector<Component*> ComponentList;
 
-	glm::vec3 WorldPos;
-
 public:
 	RootComponent(glm::vec3 IWorldPos);
 
 	void AddComponent(Component* IComponent);
 	Component* GetComponent(int ComponentID);
 	bool CheckForComponent(int ComponentID);
-
-	void Transform(glm::vec3 ITransform);
-	glm::vec3 GetWorldPos() { return WorldPos; };
 
 	void Update() override;
 	void HandleInput(const std::vector<bool>& KeyBuffer) override;
