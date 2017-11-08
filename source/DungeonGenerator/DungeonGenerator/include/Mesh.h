@@ -11,6 +11,8 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
+#include <Shader.h>
+
 struct Vertex
 {
 	glm::vec3 Position;
@@ -40,5 +42,5 @@ public:
 	std::vector<Texture> Textures;
 
 	Mesh(std::vector<Vertex> IVertices, std::vector<GLuint> IIndices, std::vector<Texture> ITextures);
-	void Draw(GLuint IShaderProgram);
+	void Draw(Shader IShader);
 };

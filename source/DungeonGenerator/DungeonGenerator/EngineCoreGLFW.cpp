@@ -1,9 +1,19 @@
 
 #include <stdafx.h>
-#include <Game.h>
+
+#include <glm/detail/type_vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <EngineCoreGLFW.h>
+#include <Game.h>
 
 std::vector<bool> EngineCoreGLFW::KeyBuffer;
+
+EngineCoreGLFW::EngineCoreGLFW() : ShaderProgram("../../../assets/shaders/basic.vs", "../../../assets/shaders/basic.frag")
+{
+
+}
 
 EngineCoreGLFW::~EngineCoreGLFW()
 {
@@ -12,7 +22,7 @@ EngineCoreGLFW::~EngineCoreGLFW()
 
 bool EngineCoreGLFW::InitWindow(int IWidth, int IHeight, std::string IWindowName)
 {
-	//!< Begin GLFW set-up.
+																													//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																	//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																	//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																//!< Set GLFW forward compatability to true.
@@ -50,44 +60,14 @@ bool EngineCoreGLFW::InitWindow(int IWidth, int IHeight, std::string IWindowName
 
 	if (DidLoad.GetNumMissing() > 0)
 	{
-		printf("Number of functions that failed to load : %i.\n", DidLoad.GetNumMissing());								//!< Output number of GL functions that failed to load.
-	}																											//!< End error handling.
+		printf("Number of functions that failed to load : %i.\n", DidLoad.GetNumMissing());							//!< Output number of GL functions that failed to load.
+	}																												//!< End error handling.
 
 	glfwSetFramebufferSizeCallback(WindowID, WindowResizeCallbackEvent);
 	glfwSetKeyCallback(WindowID, KeyCallbackEvent);
 
 	KeyBuffer.resize(KeyBufferSize);
 	std::fill(KeyBuffer.begin(), KeyBuffer.end(), false);
-
-	const char* VertexShader =																						//!< Create vertex shader.
-		"#version 400\n"
-		"in vec3 vp;"
-		"void main()"
-		"{"
-		"	gl_Position = vec4(vp, 1.0);"
-		"}";
-
-	const char* FragmentShader =																					//!< Create fragment shader.
-		"#version 400\n"
-		"out vec4 frag_colour;"
-		"void main() "
-		"{"
-		" frag_colour = vec4(0.0, 0.0, 1.0, 1.0); "
-		"}";
-
-	VS = gl::CreateShader(gl::VERTEX_SHADER);																		//!< Create the shader sources.
-	gl::ShaderSource(VS, 1, &VertexShader, NULL);
-	gl::CompileShader(VS);
-
-	FS = gl::CreateShader(gl::FRAGMENT_SHADER);
-	gl::ShaderSource(FS, 1, &FragmentShader, NULL);
-	gl::CompileShader(FS);
-
-	ShaderProgram = gl::CreateProgram();																			//!< Create shader program.
-	gl::AttachShader(ShaderProgram, FS);
-	gl::AttachShader(ShaderProgram, VS);
-	gl::LinkProgram(ShaderProgram);
-
 	return true;
 }
 
@@ -95,7 +75,9 @@ bool EngineCoreGLFW::RunEngine(Game& IGameID)
 {
 	IGameID.GameEngine = this;
 
-	while (!glfwWindowShouldClose(WindowID)) {																		//!< Draw loop.
+	while (!glfwWindowShouldClose(WindowID)) {																		//!< Game loop.
+		ShaderProgram.Use();
+
 		IGameID.HandleInput(KeyBuffer);
 		IGameID.Update();
 		IGameID.Draw(ShaderProgram);
@@ -107,18 +89,18 @@ bool EngineCoreGLFW::RunEngine(Game& IGameID)
 	return true;
 }
 
-void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
+void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* IWindow, int IKey, int IScanCode, int IAction, int IMods)
 {
-	if (key == GLFW_KEY_UNKNOWN || key > KeyBufferSize)
+	if (IKey == GLFW_KEY_UNKNOWN || IKey > KeyBufferSize)
 	{
 		return;
 	}
 
-	KeyBuffer[key] = ((action == GLFW_PRESS || action == GLFW_REPEAT));
+	KeyBuffer[IKey] = ((IAction == GLFW_PRESS || IAction == GLFW_REPEAT));
 
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(IWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
-		glfwSetWindowShouldClose(window, true);
+		glfwSetWindowShouldClose(IWindow, true);
 	}
 }
 
@@ -126,4 +108,14 @@ void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* IWindow, int IWidth, 
 {
 	// change the opengl viewport to match the new m_window size
 	gl::Viewport(0, 0, IWidth, IHeight);
+}
+
+void EngineCoreGLFW::Draw(const glm::mat4& IModelMatrix)
+{
+	// set the model component of our shader to the cube model
+	gl::UniformMatrix4fv(gl::GetUniformLocation(ShaderProgram.ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(IModelMatrix));
+
+	// the only thing we can draw so far is the cube, so we know it is bound already
+	// this will obviously have to change later
+	gl::DrawArrays(gl::TRIANGLES, 0, 36);
 }

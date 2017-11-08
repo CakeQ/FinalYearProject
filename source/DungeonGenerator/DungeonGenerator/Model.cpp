@@ -160,10 +160,12 @@ Model::Model(GLchar * Path)
 	LoadModel(Path);
 }
 
-void Model::Draw(GLuint ShaderProgram)
+void Model::Draw(Shader IShader)
 {
 	for (GLuint i = 0; i < Meshes.size(); i++)
 	{
-		Meshes[i].Draw(ShaderProgram);
+		std::cout << "Model drawing" << std::endl;
+		Meshes[i].Draw(IShader);
+		std::cout << Meshes.size() << std::endl;
 	}
 }

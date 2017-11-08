@@ -8,8 +8,6 @@
 class CameraComponent : public Component
 {
 private:
-	const int ComponentID = 2;
-
 	glm::vec3 Position;
 	glm::vec3 Front;
 	glm::vec3 Up;
@@ -24,9 +22,8 @@ private:
 	float Zoom;
 
 public:
-	CameraComponent(Component* IParentComponent, glm::vec3 IPosition);
+	CameraComponent();
 
-	void Draw(GLuint IShaderProgram) override {};
 	void Update() override;
 	void HandleInput(const std::vector<bool>& KeyBuffer) override {};
 };

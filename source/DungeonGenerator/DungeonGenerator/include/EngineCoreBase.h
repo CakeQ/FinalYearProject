@@ -17,6 +17,7 @@ class EngineCore
 public:
 	virtual ~EngineCore() {};
 
-	virtual bool InitWindow(int width, int height, std::string WindowName) = 0;
-	virtual bool RunEngine(Game& game) = 0;
+	virtual bool InitWindow(int IWidth, int IHeight, std::string IWindowName) = 0;
+	virtual bool RunEngine(Game& IGame) = 0;
+	virtual void Draw(const glm::mat4& IModelMatrix) = 0;
 };

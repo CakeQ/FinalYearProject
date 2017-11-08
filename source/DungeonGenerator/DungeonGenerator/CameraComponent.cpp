@@ -2,9 +2,9 @@
 
 #include <CameraComponent.h>
 
-CameraComponent::CameraComponent(Component* IParentComponent, glm::vec3 IPosition) : Component(IParentComponent)
+CameraComponent::CameraComponent()
 {
-	Position = IPosition;
+
 }
 
 void CameraComponent::Update()

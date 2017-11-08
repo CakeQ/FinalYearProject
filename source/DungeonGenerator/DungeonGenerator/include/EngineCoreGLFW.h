@@ -13,6 +13,8 @@ Created by Daniel Thompson, P15230940.
 #include <EngineCoreBase.h>
 #include <vector>
 
+#include <Shader.h>
+
 class Game;
 
 class EngineCoreGLFW : public EngineCore
@@ -22,20 +24,20 @@ private:
 	static std::vector<bool> KeyBuffer;
 	static const int KeyBufferSize = 400;
 
-	GLuint FS;
-	GLuint VS;
-	GLuint ShaderProgram;
+	Shader ShaderProgram;
 
 	int NumberOfTriangles = 4;
 
-	static void MouseMoveCallbackEvent(GLFWwindow* window, double xPos, double yPos) {};
-	static void KeyCallbackEvent(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void WindowResizeCallbackEvent(GLFWwindow* window, int width, int height);
+	static void MouseMoveCallbackEvent(GLFWwindow* IWindow, double IXPos, double IYPos) {};
+	static void KeyCallbackEvent(GLFWwindow* IWindow, int IKey, int IScanCode, int IAction, int IMods);
+	static void WindowResizeCallbackEvent(GLFWwindow* IWindow, int IWidth, int IHeight);
 
 public:
+	EngineCoreGLFW();
 	~EngineCoreGLFW() override;
 
-	bool InitWindow(int Width, int Height, std::string WindowName) override;
-	bool RunEngine(Game& GameID) override;
+	bool InitWindow(int IWidth, int IHeight, std::string IWindowName) override;
+	bool RunEngine(Game& IGameID) override;
+	void Draw(const glm::mat4& IModelMatrix);
 };
 

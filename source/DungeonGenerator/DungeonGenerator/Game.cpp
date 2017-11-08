@@ -1,38 +1,31 @@
 #include <stdafx.h>
 
 #include <Game.h>
-#include <PlayerEntity.h>
 
-Game::Game()
+Game::Game() : Player(glm::vec3(0.0f, 0.0f, -10.0f)), Camera(glm::vec3(0.0f, 0.0f, 3.0f))
 {
 	GameEngine = nullptr;
-	SpawnPlayer();
-
+	EntityList.push_back(Player);
 }
 
 void Game::HandleInput(const std::vector<bool>& KeyBuffer)
 {
-	Player->HandleInput(KeyBuffer);
+	Player.HandleInput(KeyBuffer);
 }
 
 void Game::Update()
 {
-	for (Entity* IEntity : EntityList)
+	for (Entity IEntity : EntityList)
 	{
-		IEntity->Update();
+		IEntity.Update();
 	}
 }
 
-void Game::Draw(GLuint IShaderProgram)
+void Game::Draw(Shader IShader)
 {
-	for (Entity* IEntity : EntityList)
+	gl::ClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	for (Entity IteratorObject : EntityList)
 	{
-		IEntity->Draw(IShaderProgram);
+		IteratorObject.Draw(IShader);
 	}
-}
-
-void Game::SpawnPlayer()
-{
-	Player = new PlayerEntity(glm::vec3(0.0f, 0.0f, -10.0f));
-	EntityList.push_back(Player);
 }

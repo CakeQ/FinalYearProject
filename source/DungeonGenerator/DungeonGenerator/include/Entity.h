@@ -10,21 +10,30 @@ Created by Daniel Thompson, P15230940.
 
 #pragma once
 
+#include <unordered_map>
+#include <typeindex>
+
 #include <Component.h>
-#include <RootComponent.h>
+#include <MeshComponent.h>
+#include <Shader.h>
 
 class Entity
 {
 private:
 	glm::vec3 WorldPos;
 
-public:
-	RootComponent* ComponentHandler;
+	std::unordered_map<std::type_index, Component*> ComponentList;
 
+public:
 	Entity(glm::vec3 IWorldPos);
-	virtual ~Entity() {};
+
+	template <typename T>
+	void AddComponent(T* IComponent);
+
+	template <typename T>
+	T* GetComponent();
 
 	void Update();
-	void Draw(GLuint IShaderProgram);
+	void Draw(Shader IShader);
 	void HandleInput(const std::vector<bool>& KeyBuffer);
 };

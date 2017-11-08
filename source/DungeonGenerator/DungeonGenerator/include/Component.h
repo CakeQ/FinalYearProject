@@ -3,17 +3,14 @@
 class Component
 {
 private:
-	const int ComponentID = 0;
-	Component* ParentComponent;
 	glm::vec3 WorldPos;
 
 public:
-	Component(Component* IParentComponent) { ParentComponent = IParentComponent; };
+	Component() {};
 	virtual ~Component() {};
 
 	void Transform(glm::vec3 ITransform);
 
-	virtual void Draw(GLuint IShaderProgram) = 0;
 	virtual void Update() = 0;
 	virtual void HandleInput(const std::vector<bool>& KeyBuffer) = 0;
 
@@ -21,6 +18,4 @@ public:
 	void SetWorldPos(float IX, float IY, float IZ);
 	
 	glm::vec3 GetWorldPos() { return WorldPos; };
-	Component* GetRoot() { return ParentComponent; };
-	int GetComponentID() { return ComponentID; };
 };

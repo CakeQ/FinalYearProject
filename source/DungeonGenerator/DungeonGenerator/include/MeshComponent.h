@@ -1,22 +1,32 @@
 #pragma once
 
+#include <vector>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
+
 #include <Component.h>
-#include <RootComponent.h>
 #include <Mesh.h>
 #include <Model.h>
+#include <Shader.h>
 
 class MeshComponent : public Component
 {
 private:
-	const int ComponentID = 1;
-
-	Model* MeshModel;
 	GLuint ShaderProgram;
 
 public:
-	MeshComponent(RootComponent* IParentComponent, GLchar* IPath);
+	Model MeshModel;
+	glm::vec3 Position;
+	glm::quat Orientation;
+	glm::vec3 Scale;
 
-	void Draw(GLuint IShaderProgram) override;
+	MeshComponent(GLchar* IPath);
+
 	void Update() override;
+	void Draw(Shader IShader);
 	void HandleInput(const std::vector<bool>& KeyBuffer) override {};
+	glm::mat4 GetModelMatrix();
 };

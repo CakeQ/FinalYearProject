@@ -12,12 +12,16 @@ Created by Daniel Thompson, P15230940.
 
 #include <EngineCoreBase.h>
 #include <Entity.h>
+#include <Component.h>
+#include <MeshComponent.h>
+#include <Shader.h>
 
 class Game
 {
 private:
-	std::vector<Entity*> EntityList;
-	Entity* Player;
+	std::vector<Entity> EntityList;
+	Entity Player;
+	Entity Camera;
 
 public:
 	EngineCore* GameEngine;
@@ -26,7 +30,5 @@ public:
 
 	void HandleInput(const std::vector<bool>& KeyBuffer);
 	void Update();
-	void Draw(GLuint IShaderProgram);
-
-	void SpawnPlayer();
+	void Draw(Shader IShader);
 };

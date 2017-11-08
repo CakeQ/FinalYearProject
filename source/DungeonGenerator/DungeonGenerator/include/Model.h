@@ -11,6 +11,7 @@
 #include <assimp\postprocess.h>
 
 #include <Mesh.h>
+#include <Shader.h>
 
 class Model
 {
@@ -29,5 +30,5 @@ public:
 
 	Model(GLchar* Path);
 
-	void Draw(GLuint ShaderProgram);
+	void Draw(Shader IShader);
 };

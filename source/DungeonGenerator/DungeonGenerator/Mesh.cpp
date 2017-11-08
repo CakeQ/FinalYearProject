@@ -10,12 +10,14 @@ Mesh::Mesh(std::vector<Vertex> IVertices, std::vector<GLuint> IIndices, std::vec
 	Vertices = IVertices;
 	Indices = IIndices;
 	Textures = ITextures;
+
+	SetUpMesh();
 }
 
-void Mesh::Draw(GLuint IShaderProgram)
+void Mesh::Draw(Shader IShader)
 {
-	GLuint DiffuseNr = 1;
-	GLuint SpecularNr = 1;
+	GLuint DiffuseNum = 1;
+	GLuint SpecularNum = 1;
 
 	for (GLuint i = 0; i < Textures.size(); i++)
 	{
@@ -26,22 +28,23 @@ void Mesh::Draw(GLuint IShaderProgram)
 
 		if (Name == "texture_diffuse")
 		{
-			SS << DiffuseNr++;
+			SS << DiffuseNum++;
 		}
 		else if (Name == "texture_specular")
 		{
-			SS << SpecularNr++;
+			SS << SpecularNum++;
 		}
 
 		Number = SS.str();
 
-		gl::Uniform1i(gl::GetUniformLocation(IShaderProgram, (Name + Number).c_str()), i);
+		gl::Uniform1i(gl::GetUniformLocation(IShader.ShaderProgram, (Name + Number).c_str()), i);
 		gl::BindTexture(gl::TEXTURE_2D, Textures[i].ID);
 	}
 	
-	gl::Uniform1f(gl::GetUniformLocation(IShaderProgram, "material.shininess"), 16.0f);
+	gl::Uniform1f(gl::GetUniformLocation(IShader.ShaderProgram, "material.shininess"), 16.0f);
 
 	gl::BindVertexArray(VAO);
+	std::cout << Indices.size() << std::endl;
 	gl::DrawElements(gl::TRIANGLES, Indices.size(), gl::UNSIGNED_INT, 0);
 	gl::BindVertexArray(0);
 
@@ -55,9 +58,6 @@ void Mesh::Draw(GLuint IShaderProgram)
 
 void Mesh::SetUpMesh()
 {
-	VBO = 0;
-	VAO = 0;
-
 	gl::GenVertexArrays(1, &VAO);																					//!< Generate the evertext array for the VAO.
 	gl::GenBuffers(1, &VBO);																						//!< Generate buffers for VBO.
 	gl::GenBuffers(1, &EBO);
