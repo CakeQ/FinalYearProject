@@ -15,9 +15,11 @@ class Game;
 class EngineCore
 {
 public:
+	int i_Width;
+	int i_Height;
+
 	virtual ~EngineCore() {};
 
 	virtual bool InitWindow(int IWidth, int IHeight, std::string IWindowName) = 0;
 	virtual bool RunEngine(Game& IGame) = 0;
-	virtual void Draw(const glm::mat4& IModelMatrix) = 0;
 };

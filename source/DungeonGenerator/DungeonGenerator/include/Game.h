@@ -14,21 +14,24 @@ Created by Daniel Thompson, P15230940.
 #include <Entity.h>
 #include <Component.h>
 #include <ModelComponent.h>
+#include <CameraComponent.h>
+#include <MovementComponent.h>
 #include <Shader.h>
+#include <Scene.h>
 
 class Game
 {
 private:
-	std::vector<Entity> vt_EntityList;
-	Entity e_Player;
-	Entity e_Camera;
 
 public:
 	EngineCore* g_GameEngine;
+	Scene* s_CurrentScene;
 
 	Game();
 
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer);
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
 	void Update();
-	void Draw(Shader* s_IShader);
+	void Draw(Shader* s_IShaderProgram);
+
+	void SetUpTestScene();
 };

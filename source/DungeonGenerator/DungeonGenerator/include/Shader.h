@@ -1,9 +1,9 @@
 #pragma once
 
-#include <glfw3.h>
-
 #include <fstream>
 #include <sstream>
+
+#include <glfw3.h>
 
 class Shader
 {

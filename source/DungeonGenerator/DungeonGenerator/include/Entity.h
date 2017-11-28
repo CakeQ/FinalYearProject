@@ -15,6 +15,8 @@ Created by Daniel Thompson, P15230940.
 
 #include <Component.h>
 #include <ModelComponent.h>
+#include <CameraComponent.h>
+#include <MovementComponent.h>
 #include <Shader.h>
 
 class Entity
@@ -28,12 +30,24 @@ public:
 	Entity(glm::vec3 IWorldPos);
 
 	template <typename T>
-	void AddComponent(T* IComponent);
+	void AddComponent(T* t_IComponent)
+	{
+		m_ComponentList[typeid(T)] = t_IComponent;
+	}
 
 	template <typename T>
-	T* GetComponent();
+	T* GetComponent()
+	{
+		auto a_Iterator = m_ComponentList.find(typeid(T));
+
+		if (a_Iterator != std::end(m_ComponentList))
+		{
+			return dynamic_cast<T*>(a_Iterator->second);
+		}
+
+		return nullptr;
+	}
 
 	void Update();
-	void Draw(Shader* s_IShader);
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer);
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
 };

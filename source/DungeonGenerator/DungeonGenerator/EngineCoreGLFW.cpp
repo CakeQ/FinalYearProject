@@ -1,16 +1,21 @@
 
 #include <stdafx.h>
 
+#include <EngineCoreGLFW.h>
+
 #include <glm/detail/type_vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <EngineCoreGLFW.h>
 #include <Game.h>
 
 std::vector<bool> EngineCoreGLFW::vt_KeyBuffer;
-	
+glm::vec2 EngineCoreGLFW::v2_MouseBuffer;
+bool EngineCoreGLFW::b_FirstMouse;
+float EngineCoreGLFW::f_LastX;
+float EngineCoreGLFW::f_LastY;
+
 EngineCoreGLFW::EngineCoreGLFW()																								//!< Constructor.
 {
 
@@ -23,7 +28,10 @@ EngineCoreGLFW::~EngineCoreGLFW()
 
 bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWindowName)											//!< Window Initialisation.
 {
-																																//!< Begin GLFW set-up.
+	i_Width = i_IWidth;
+	i_Height = i_IHeight;
+	
+																															//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																				//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																				//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																			//!< Set GLFW forward compatability to true.
@@ -38,7 +46,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 		return false;
 	}
 
-	w_WindowID = glfwCreateWindow(i_IWidth, i_IHeight, s_IWindowName.c_str(), nullptr, nullptr);								//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later. Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
+	w_WindowID = glfwCreateWindow(i_Width, i_Height, s_IWindowName.c_str(), nullptr, nullptr);								//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later. Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
 
 	if (!w_WindowID)																											//!< Terminates if there is no window initialisation.
 	{
@@ -65,18 +73,19 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	}																															//!< End error handling.
 
 	glfwSetFramebufferSizeCallback(w_WindowID, WindowResizeCallbackEvent);
+	
+	glfwSetCursorPosCallback(w_WindowID, MouseMoveCallbackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
 
 	s_ShaderProgram = new Shader("../../../assets/shaders/basic.vs", "../../../assets/shaders/basic.frag");						//!< Loads shaders.
 
-	glm::mat4 Proj = glm::perspective(1.2f, (float)16 / 9, 0.1f, 100.0f);														//!< Creates projection matrix.
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "projection"), 1, 0, glm::value_ptr(Proj));	//!< Sets projection matrix.
-
-	glm::mat4 View = glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));		//!< Creates view matrix.
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "view"), 1, 0, glm::value_ptr(View));		//!< Sets view matrix.
-
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
+
+	b_FirstMouse = true;
+	f_LastX = i_Width / 2;																										
+	f_LastY = i_Height / 2;																									
+
 	return true;
 }
 
@@ -86,9 +95,12 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
+		gl::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+
 		s_ShaderProgram->Use();																									//!< Set shader program.
 
-		g_IGameID.HandleInput(vt_KeyBuffer);																					//!< Handle any input.
+		g_IGameID.HandleInput(vt_KeyBuffer, v2_MouseBuffer);																	//!< Handle any input.
 		g_IGameID.Update();																										//!< Handle game updates.
 		g_IGameID.Draw(s_ShaderProgram);																						//!< Draw everything.
 
@@ -99,32 +111,40 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 	return true;
 }
 
-void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* IWindow, int IKey, int IScanCode, int IAction, int IMods)
+void EngineCoreGLFW::KeyCallbackEvent(GLFWwindow* w_IWindow, int i_IKey, int i_IScanCode, int i_IAction, int i_IMods)
 {
-	if (IKey == GLFW_KEY_UNKNOWN || IKey > i_KeyBufferSize)
+	if (i_IKey == GLFW_KEY_UNKNOWN || i_IKey > i_KeyBufferSize)
 	{
 		return;
 	}
 
-	vt_KeyBuffer[IKey] = ((IAction == GLFW_PRESS || IAction == GLFW_REPEAT));
+	vt_KeyBuffer[i_IKey] = ((i_IAction == GLFW_PRESS || i_IAction == GLFW_REPEAT));
 
-	if (glfwGetKey(IWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(w_IWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
-		glfwSetWindowShouldClose(IWindow, true);
+		glfwSetWindowShouldClose(w_IWindow, true);
 	}
 }
 
-void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* IWindow, int IWidth, int IHeight)
+void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPos, double d_IYPos)
 {
-	gl::Viewport(0, 0, IWidth, IHeight);																						//!< Change OpenGL viewport to match window size.
+	if (b_FirstMouse)
+	{
+		f_LastX = d_IXPos;
+		f_LastY = d_IYPos;
+		b_FirstMouse = false;
+	}
+
+	GLfloat f_XOffset = d_IXPos - f_LastX;
+	GLfloat f_YOffset = f_LastY - d_IYPos;  // Reversed since y-coordinates go from bottom to left
+
+	f_LastX = d_IXPos;
+	f_LastY = d_IYPos;
+
+	v2_MouseBuffer = glm::vec2(f_XOffset, f_YOffset);
 }
 
-void EngineCoreGLFW::Draw(const glm::mat4& IModelMatrix)
+void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
 {
-	// set the model component of our shader to the cube model
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(IModelMatrix));
-
-	// the only thing we can draw so far is the cube, so we know it is bound already
-	// this will obviously have to change later
-	gl::DrawArrays(gl::TRIANGLES, 0, 36);
+	gl::Viewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
 }

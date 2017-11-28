@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Entities">
       <UniqueIdentifier>{15abd5ff-26c3-41c0-a7de-8103a689c5b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{0991bdb9-86c2-4d05-8e6f-7fff80a2f56c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +84,9 @@
     <ClCompile Include="ModelComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="include\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\stdafx.h">
@@ -124,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="include\ModelComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

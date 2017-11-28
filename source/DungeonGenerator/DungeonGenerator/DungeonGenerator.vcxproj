@@ -171,6 +171,7 @@
   <ItemGroup>
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="include\Scene.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\MovementComponent.h" />
+    <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />

@@ -7,7 +7,7 @@ MovementComponent::MovementComponent()
 
 }
 
-void MovementComponent::HandleInput(const std::vector<bool>& vt_IKeyBuffer)
+void MovementComponent::HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer)
 {
 	if (vt_IKeyBuffer[87])
 	{

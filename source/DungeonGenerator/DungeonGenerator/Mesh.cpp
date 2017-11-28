@@ -1,4 +1,5 @@
 #include <stdafx.h>
+
 #include <Mesh.h>
 
 #include <assimp\Importer.hpp>
@@ -13,6 +14,7 @@ Mesh::Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, st
 
 	SetUpMesh();
 }
+
 
 void Mesh::Draw(Shader* s_IShader)
 {
@@ -54,6 +56,7 @@ void Mesh::Draw(Shader* s_IShader)
 	}
 
 }
+
 
 void Mesh::SetUpMesh()
 {

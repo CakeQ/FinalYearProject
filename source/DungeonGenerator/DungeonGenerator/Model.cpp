@@ -44,40 +44,40 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 
 	for (GLuint i = 0; i < m_IMesh->mNumVertices; i++)
 	{
-		Vertex InputVertex;
-		glm::vec3 Vector;
+		Vertex v_InputVertex;
+		glm::vec3 v3_Vector;
 
-		Vector.x = m_IMesh->mVertices[i].x;
-		Vector.y = m_IMesh->mVertices[i].y;
-		Vector.z = m_IMesh->mVertices[i].z;
-		InputVertex.v3_Position = Vector;
+		v3_Vector.x = m_IMesh->mVertices[i].x;
+		v3_Vector.y = m_IMesh->mVertices[i].y;
+		v3_Vector.z = m_IMesh->mVertices[i].z;
+		v_InputVertex.v3_Position = v3_Vector;
 		
-		//if (IMesh->mNormals[i])
-		//{
-		//	Vector.x = IMesh->mNormals[i].x;
-		//	Vector.y = IMesh->mNormals[i].y;
-		//	Vector.z = IMesh->mNormals[i].z;
-		//	InputVertex.Normal = Vector;
-		//}
-		//else
-		//{
-//
-		//}
-
-		if (m_IMesh->mTextureCoords[0])
+		if (m_IMesh->mNormals[0].x)
 		{
-			glm::vec2 TextureVector;
-
-			TextureVector.x = m_IMesh->mTextureCoords[0][i].x;
-			TextureVector.y = m_IMesh->mTextureCoords[0][i].y;
-			InputVertex.v2_TextureCoords = TextureVector;
+			v3_Vector.x = m_IMesh->mNormals[i].x;
+			v3_Vector.y = m_IMesh->mNormals[i].y;
+			v3_Vector.z = m_IMesh->mNormals[i].z;
+			v_InputVertex.v3_Normal = v3_Vector;
 		}
 		else
 		{
-			InputVertex.v2_TextureCoords = glm::vec2(0.0f, 0.0f);
+			v_InputVertex.v3_Normal = glm::vec3(0.0f, 0.0f, 0.0f);
 		}
 
-		vt_Vertices[i] = InputVertex;
+		if (m_IMesh->mTextureCoords[0])
+		{
+			glm::vec2 v2_TextureVector;
+
+			v2_TextureVector.x = m_IMesh->mTextureCoords[0][i].x;
+			v2_TextureVector.y = m_IMesh->mTextureCoords[0][i].y;
+			v_InputVertex.v2_TextureCoords = v2_TextureVector;
+		}
+		else
+		{
+			v_InputVertex.v2_TextureCoords = glm::vec2(0.0f, 0.0f);
+		}
+
+		vt_Vertices[i] = v_InputVertex;
 	}
 
 	for (GLuint i = 0; i < m_IMesh->mNumFaces; i++)

@@ -2,6 +2,8 @@
 
 #include <ModelComponent.h>
 
+#include <glm/gtc/type_ptr.hpp>
+
 ModelComponent::ModelComponent(GLchar* c_IPath) : m_MeshModel(c_IPath)
 {
 
@@ -12,9 +14,10 @@ void ModelComponent::Update()
 
 }
 
-void ModelComponent::Draw(Shader* IShader)
+void ModelComponent::Draw(Shader* s_IShaderProgram)
 {
-	m_MeshModel.Draw(IShader);
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_IShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(GetModelMatrix()));
+	m_MeshModel.Draw(s_IShaderProgram);
 }
 
 glm::mat4 ModelComponent::GetModelMatrix()

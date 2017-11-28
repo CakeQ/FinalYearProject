@@ -27,6 +27,6 @@ public:
 
 	void Update() override;
 	void Draw(Shader* s_IShader);
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer) override {};
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) override {};
 	glm::mat4 GetModelMatrix();
 };
