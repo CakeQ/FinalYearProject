@@ -3,19 +3,19 @@
 class Component
 {
 private:
-	glm::vec3 WorldPos;
+	glm::vec3 v3_WorldPos;
 
 public:
 	Component() {};
 	virtual ~Component() {};
 
-	void Transform(glm::vec3 ITransform);
+	void Transform(glm::vec3 v3_ITransform);
 
 	virtual void Update() = 0;
-	virtual void HandleInput(const std::vector<bool>& KeyBuffer) = 0;
+	virtual void HandleInput(const std::vector<bool>& vt_IKeyBuffer) = 0;
 
-	void SetWorldPos(glm::vec3 IWorldPos);
-	void SetWorldPos(float IX, float IY, float IZ);
+	void SetWorldPos(glm::vec3 v3_IWorldPos);
+	void SetWorldPos(float f_IX, float f_IY, float f_IZ);
 	
-	glm::vec3 GetWorldPos() { return WorldPos; };
+	glm::vec3 GetWorldPos() { return v3_WorldPos; };
 };

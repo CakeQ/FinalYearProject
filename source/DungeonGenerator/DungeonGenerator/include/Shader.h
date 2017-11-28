@@ -11,9 +11,9 @@ private:
 
 
 public:
-	GLuint ShaderProgram;
+	GLuint ui_ShaderProgram;
 	
-	Shader(const char *IVertexPath, const char *IFragmentPath);
+	Shader(const char *c_IVertexPath, const char *c_IFragmentPath);
 	
 	void Use();
 };

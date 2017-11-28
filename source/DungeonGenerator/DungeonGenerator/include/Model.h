@@ -16,19 +16,20 @@
 class Model
 {
 private:
-	std::vector<Mesh> Meshes;
-	std::string Directory;
-	std::vector<Texture> TexturesLoaded;
+	std::vector<Mesh> vt_Meshes;
+	std::string s_Directory;
+	std::vector<Texture> vt_TexturesLoaded;
 
-	void LoadModel(std::string IPath);
-	void ProcessNode(aiNode* INode, const aiScene* IScene);
-	Mesh ProcessMesh(aiMesh* IMesh, const aiScene* IScene);
-	std::vector<Texture> LoadMaterialTextures(aiMaterial* IMaterial, aiTextureType IType, std::string ITypeName);
-	GLint TextureFromFile(const char *IPath, std::string IDirectory);
+	void LoadModel(std::string s_IPath);
+	void ProcessNode(aiNode* n_INode, const aiScene* s_IScene);
+	Mesh ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene);
+	std::vector<Texture> LoadMaterialTextures(aiMaterial* m_IMaterial, aiTextureType t_IType, std::string s_ITypeName);
 
 public:
 
-	Model(GLchar* Path);
+	Model(GLchar* c_Path);
 
-	void Draw(Shader IShader);
+	void Draw(Shader* s_IShader);
+
+	GLint TextureFromFile(const char *c_IPath, std::string s_IDirectory);
 };

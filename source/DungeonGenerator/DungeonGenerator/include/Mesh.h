@@ -15,32 +15,32 @@
 
 struct Vertex
 {
-	glm::vec3 Position;
-	glm::vec3 Normal;
-	glm::vec2 TextureCoords;
+	glm::vec3 v3_Position;
+	glm::vec3 v3_Normal;
+	glm::vec2 v2_TextureCoords;
 };
 
 struct Texture
 {
-	GLuint ID;
-	std::string Type;
-	aiString Path;
+	GLuint ui_ID;
+	std::string s_Type;
+	aiString s_Path;
 };
 
 class Mesh
 {
 private:
-	GLuint VAO;
-	GLuint VBO;
-	GLuint EBO;
+	GLuint ui_VAO;
+	GLuint ui_VBO;
+	GLuint ui_EBO;
 
 	void SetUpMesh();
 
 public:
-	std::vector<Vertex> Vertices;
-	std::vector<GLuint> Indices;
-	std::vector<Texture> Textures;
+	std::vector<Vertex> vt_Vertices;
+	std::vector<GLuint> vt_Indices;
+	std::vector<Texture> vt_Textures;
 
-	Mesh(std::vector<Vertex> IVertices, std::vector<GLuint> IIndices, std::vector<Texture> ITextures);
-	void Draw(Shader IShader);
+	Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, std::vector<Texture> vt_ITextures);
+	void Draw(Shader* s_IShader);
 };

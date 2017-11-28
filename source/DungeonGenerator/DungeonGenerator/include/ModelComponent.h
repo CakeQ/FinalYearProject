@@ -12,21 +12,21 @@
 #include <Model.h>
 #include <Shader.h>
 
-class MeshComponent : public Component
+class ModelComponent : public Component
 {
 private:
-	GLuint ShaderProgram;
+	GLuint ui_ShaderProgram;
 
 public:
-	Model MeshModel;
-	glm::vec3 Position;
-	glm::quat Orientation;
-	glm::vec3 Scale;
+	Model m_MeshModel;
+	glm::vec3 v3_Position;
+	glm::quat q_Orientation;
+	glm::vec3 v3_Scale;
 
-	MeshComponent(GLchar* IPath);
+	ModelComponent(GLchar* c_IPath);
 
 	void Update() override;
-	void Draw(Shader IShader);
-	void HandleInput(const std::vector<bool>& KeyBuffer) override {};
+	void Draw(Shader* s_IShader);
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer) override {};
 	glm::mat4 GetModelMatrix();
 };

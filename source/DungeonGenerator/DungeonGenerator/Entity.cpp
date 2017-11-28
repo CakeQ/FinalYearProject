@@ -2,27 +2,27 @@
 
 #include <Entity.h>
 
-Entity::Entity(glm::vec3 IWorldPos)
+Entity::Entity(glm::vec3 v3_IWorldPos)
 {
-	WorldPos = IWorldPos;
+	v3_WorldPos = v3_IWorldPos;
 
-	AddComponent(new MeshComponent("../../../assets/meshes/nanosuit.obj"));
+	AddComponent(new ModelComponent("../../../assets/meshes/simpleCube.obj"));
 }
 
 template <typename T>
-void Entity::AddComponent(T* IComponent)
+void Entity::AddComponent(T* t_IComponent)
 {
-	ComponentList[typeid(T)] = IComponent;
+	m_ComponentList[typeid(T)] = t_IComponent;
 }
 
 template <typename T>
 T* Entity::GetComponent()
 {
-	auto Iterator = ComponentList.find(typeid(T));
+	auto a_Iterator = m_ComponentList.find(typeid(T));
 
-	if (Iterator != std::end(ComponentList))
+	if (a_Iterator != std::end(m_ComponentList))
 	{
-		return dynamic_cast<T*>(Iterator->second);
+		return dynamic_cast<T*>(a_Iterator->second);
 	}
 
 	return nullptr;
@@ -33,12 +33,12 @@ void Entity::Update()
 
 }
 
-void Entity::Draw(Shader IShader)
+void Entity::Draw(Shader* s_IShader)
 {
-	GetComponent<MeshComponent>()->Draw(IShader);
+	GetComponent<ModelComponent>()->Draw(s_IShader);
 }
 
-void Entity::HandleInput(const std::vector<bool>& KeyBuffer)
+void Entity::HandleInput(const std::vector<bool>& vt_IKeyBuffer)
 {
 
 }

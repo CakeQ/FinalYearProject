@@ -13,22 +13,22 @@ Created by Daniel Thompson, P15230940.
 #include <EngineCoreBase.h>
 #include <Entity.h>
 #include <Component.h>
-#include <MeshComponent.h>
+#include <ModelComponent.h>
 #include <Shader.h>
 
 class Game
 {
 private:
-	std::vector<Entity> EntityList;
-	Entity Player;
-	Entity Camera;
+	std::vector<Entity> vt_EntityList;
+	Entity e_Player;
+	Entity e_Camera;
 
 public:
-	EngineCore* GameEngine;
+	EngineCore* g_GameEngine;
 
 	Game();
 
-	void HandleInput(const std::vector<bool>& KeyBuffer);
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer);
 	void Update();
-	void Draw(Shader IShader);
+	void Draw(Shader* s_IShader);
 };

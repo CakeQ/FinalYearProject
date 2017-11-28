@@ -8,18 +8,18 @@
 class CameraComponent : public Component
 {
 private:
-	glm::vec3 Position;
-	glm::vec3 Front;
-	glm::vec3 Up;
-	glm::vec3 Right;
-	glm::vec3 WorldUp;
+	glm::vec3 v3_Position;
+	glm::vec3 v3_Front;
+	glm::vec3 v3_Up;
+	glm::vec3 v3_Right;
+	glm::vec3 v3_WorldUp;
 
-	float Pitch;
-	float Yaw;
+	float f_Pitch;
+	float f_Yaw;
 
-	float MovementSpeed;
-	float MouseSensitivity;
-	float Zoom;
+	float f_MovementSpeed;
+	float f_MouseSensitivity;
+	float f_Zoom;
 
 public:
 	CameraComponent();

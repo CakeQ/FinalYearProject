@@ -13,5 +13,5 @@ public:
 	MovementComponent();
 
 	void Update() override {};
-	void HandleInput(const std::vector<bool>& KeyBuffer) override;
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer) override;
 };

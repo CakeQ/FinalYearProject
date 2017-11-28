@@ -2,20 +2,19 @@
 
 #include <Component.h>
 
-void Component::Transform(glm::vec3 ITransform)
+void Component::Transform(glm::vec3 v3_ITransform)
 {
-	WorldPos += ITransform;
-	std::cout << WorldPos.x << " " << WorldPos.y << " " << WorldPos.z << std::endl;
+	v3_WorldPos += v3_ITransform;
 }
 
-void Component::SetWorldPos(glm::vec3 IWorldPos)
+void Component::SetWorldPos(glm::vec3 v3_IWorldPos)
 {
-	WorldPos = IWorldPos;
+	v3_WorldPos = v3_IWorldPos;
 }
 
-void Component::SetWorldPos(float IX, float IY, float IZ)
+void Component::SetWorldPos(float f_IX, float f_IY, float f_IZ)
 {
-	WorldPos.x = IX;
-	WorldPos.y = IY;
-	WorldPos.z = IZ;
+	v3_WorldPos.x = f_IX;
+	v3_WorldPos.y = f_IY;
+	v3_WorldPos.z = f_IZ;
 }

@@ -2,10 +2,10 @@
 
 #include <Model.h>
 
-void Model::LoadModel(std::string IPath)
+void Model::LoadModel(std::string s_IPath)
 {
 	Assimp::Importer ModelImporter;
-	const aiScene* Scene = ModelImporter.ReadFile(IPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* Scene = ModelImporter.ReadFile(s_IPath, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 	if (!Scene || Scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
 	{
@@ -13,102 +13,121 @@ void Model::LoadModel(std::string IPath)
 		return;
 	}
 
-	Directory = IPath.substr(0, IPath.find_last_of('/'));
+	s_Directory = s_IPath.substr(0, s_IPath.find_last_of('/'));
 
 	ProcessNode(Scene->mRootNode, Scene);
 }
 
-void Model::ProcessNode(aiNode * INode, const aiScene * IScene)
+void Model::ProcessNode(aiNode * n_INode, const aiScene * s_IScene)
 {
-	for (GLuint i = 0; i < INode->mNumMeshes; i++)
+	for (GLuint i = 0; i < n_INode->mNumMeshes; i++)
 	{
-		aiMesh* Mesh = IScene->mMeshes[INode->mMeshes[i]];
+		aiMesh* m_Mesh = s_IScene->mMeshes[n_INode->mMeshes[i]];
 
-		Meshes.push_back(ProcessMesh(Mesh, IScene));
+		vt_Meshes.push_back(ProcessMesh(m_Mesh, s_IScene));
 	}
 
-	for (GLuint i = 0; i < INode->mNumChildren; i++)
+	for (GLuint i = 0; i < n_INode->mNumChildren; i++)
 	{
-		ProcessNode(INode->mChildren[i], IScene);
+		ProcessNode(n_INode->mChildren[i], s_IScene);
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh* IMesh, const aiScene* IScene)
+Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 {
-	std::vector<Vertex> Vertices;
-	std::vector<GLuint> Indices;
-	std::vector<Texture> Textures;
+	std::vector<Vertex> vt_Vertices;
+	std::vector<GLuint> vt_Indices;
+	std::vector<Texture> vt_Textures;
 
-	for (GLuint i = 0; i < IMesh->mNumVertices; i++)
+	vt_Vertices.resize(m_IMesh->mNumVertices);
+	vt_Indices.resize(m_IMesh->mNumFaces*3);
+
+	for (GLuint i = 0; i < m_IMesh->mNumVertices; i++)
 	{
 		Vertex InputVertex;
 		glm::vec3 Vector;
 
-		Vector.x = IMesh->mVertices[i].x;
-		Vector.y = IMesh->mVertices[i].y;
-		Vector.z = IMesh->mVertices[i].z;
-		InputVertex.Position = Vector;
+		Vector.x = m_IMesh->mVertices[i].x;
+		Vector.y = m_IMesh->mVertices[i].y;
+		Vector.z = m_IMesh->mVertices[i].z;
+		InputVertex.v3_Position = Vector;
 		
-		Vector.x = IMesh->mNormals[i].x;
-		Vector.y = IMesh->mNormals[i].y;
-		Vector.z = IMesh->mNormals[i].z;
-		InputVertex.Normal = Vector;
+		//if (IMesh->mNormals[i])
+		//{
+		//	Vector.x = IMesh->mNormals[i].x;
+		//	Vector.y = IMesh->mNormals[i].y;
+		//	Vector.z = IMesh->mNormals[i].z;
+		//	InputVertex.Normal = Vector;
+		//}
+		//else
+		//{
+//
+		//}
 
-		if (IMesh->mTextureCoords[0])
+		if (m_IMesh->mTextureCoords[0])
 		{
 			glm::vec2 TextureVector;
 
-			TextureVector.x = IMesh->mTextureCoords[0][i].x;
-			TextureVector.y = IMesh->mTextureCoords[0][i].y;
-			InputVertex.TextureCoords = TextureVector;
+			TextureVector.x = m_IMesh->mTextureCoords[0][i].x;
+			TextureVector.y = m_IMesh->mTextureCoords[0][i].y;
+			InputVertex.v2_TextureCoords = TextureVector;
 		}
 		else
 		{
-			InputVertex.TextureCoords = glm::vec2(0.0f, 0.0f);
+			InputVertex.v2_TextureCoords = glm::vec2(0.0f, 0.0f);
 		}
 
-		Vertices.push_back(InputVertex);
+		vt_Vertices[i] = InputVertex;
 	}
 
-	for (GLuint i = 0; i < IMesh->mNumFaces; i++)
+	for (GLuint i = 0; i < m_IMesh->mNumFaces; i++)
 	{
-		aiFace Face = IMesh->mFaces[i];
+		aiFace Face = m_IMesh->mFaces[i];
 		for (GLuint j = 0; j < Face.mNumIndices; j++)
 		{
-			Indices.push_back(Face.mIndices[j]);
+			vt_Indices[3 * i + j] = m_IMesh->mFaces[i].mIndices[j];
 		}
 	}
 
-	if (IMesh->mMaterialIndex >= 0)
+	if (m_IMesh->mMaterialIndex >= 0)
 	{
-		aiMaterial* Material = IScene->mMaterials[IMesh->mMaterialIndex];
+		aiMaterial* m_Material = s_IScene->mMaterials[m_IMesh->mMaterialIndex];
 
-		std::vector<Texture> DiffuseMaps = LoadMaterialTextures(Material, aiTextureType_DIFFUSE, "texture_diffuse");
-		Textures.insert(Textures.end(), DiffuseMaps.begin(), DiffuseMaps.end());
+		std::vector<Texture> vt_DiffuseMaps = LoadMaterialTextures(m_Material, aiTextureType_DIFFUSE, "texture_diffuse");
+		vt_Textures.insert(vt_Textures.end(), vt_DiffuseMaps.begin(), vt_DiffuseMaps.end());
 
-		std::vector<Texture> SpecularMaps = LoadMaterialTextures(Material, aiTextureType_DIFFUSE, "texture_specular");
-		Textures.insert(Textures.end(), SpecularMaps.begin(), SpecularMaps.end());
+		std::vector<Texture> vt_SpecularMaps = LoadMaterialTextures(m_Material, aiTextureType_DIFFUSE, "texture_specular");
+		vt_Textures.insert(vt_Textures.end(), vt_SpecularMaps.begin(), vt_SpecularMaps.end());
+
+		std::vector<Texture> vt_NormalMaps = LoadMaterialTextures(m_Material, aiTextureType_NORMALS, "texture_normal");
+
+		std::vector<Texture> vt_HeightMaps = LoadMaterialTextures(m_Material, aiTextureType_HEIGHT, "texture_height");
+	
+		vt_Textures.insert(vt_Textures.end(), vt_DiffuseMaps.begin(), vt_DiffuseMaps.end());
+		vt_Textures.insert(vt_Textures.end(), vt_SpecularMaps.begin(), vt_SpecularMaps.end());
+		vt_Textures.insert(vt_Textures.end(), vt_NormalMaps.begin(), vt_NormalMaps.end());
+		vt_Textures.insert(vt_Textures.end(), vt_HeightMaps.begin(), vt_HeightMaps.end());
 	}
 
-	return Mesh(Vertices, Indices, Textures);
+	return Mesh(vt_Vertices, vt_Indices, vt_Textures);
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * IMaterial, aiTextureType IType, std::string ITypeName)
+std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * m_IMaterial, aiTextureType tt_IType, std::string s_ITypeName)
 {
-	std::vector<Texture> Textures;
+	std::vector<Texture> vt_Textures;
 
-	for (GLuint i = 0; i < IMaterial->GetTextureCount(IType); i++)
+	for (GLuint i = 0; i < m_IMaterial->GetTextureCount(tt_IType); i++)
 	{
-		aiString TextureString;
-		IMaterial->GetTexture(IType, i, &TextureString);
+		aiString s_TextureString;
+		m_IMaterial->GetTexture(tt_IType, i, &s_TextureString);
 
 		GLboolean Skip = false;
 
-		for (GLuint j = 0; j < TexturesLoaded.size(); j++)
+		for (Texture t_IteratorTexture : vt_Textures)
 		{
-			if (TexturesLoaded[j].Path == TextureString)
+			if (t_IteratorTexture.s_Path == s_TextureString)
 			{
-				Textures.push_back(TexturesLoaded[j]);
+				vt_Textures.push_back(t_IteratorTexture);
 				Skip = true;
 
 				break;
@@ -117,55 +136,76 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * IMaterial, aiTextu
 
 		if (!Skip)
 		{
-			Texture InputTexture;
-			InputTexture.ID = TextureFromFile(TextureString.C_Str(), Directory);
-			InputTexture.Type = ITypeName;
-			InputTexture.Path = TextureString;
-			Textures.push_back(InputTexture);
+			Texture t_InputTexture;
+			t_InputTexture.ui_ID = TextureFromFile(s_TextureString.C_Str(), s_Directory);
+			t_InputTexture.s_Type = s_ITypeName;
+			t_InputTexture.s_Path = s_TextureString;
+			vt_Textures.push_back(t_InputTexture);
 
-			TexturesLoaded.push_back(InputTexture);
+			vt_TexturesLoaded.push_back(t_InputTexture);
 		}
 
 	}
-	return Textures;
+	return vt_Textures;
 }
 
-GLint Model::TextureFromFile(const char * IPath, std::string IDirectory)
+GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 {
-	std::string FileName = std::string(IPath);
-	FileName = IDirectory + '/' + FileName;
-	GLuint TextureID;
-	gl::GenTextures(1, &TextureID);
+	std::string s_FileName = std::string(c_IPath);
+	s_FileName = s_IDirectory + '/' + s_FileName;
+	GLuint ui_TextureID;
+	gl::GenTextures(1, &ui_TextureID);
 
-	int Width;
-	int Height;
+	int i_Width;
+	int i_Height;
+	int i_NumComponents;
 
-	unsigned char* Image = SOIL_load_image(FileName.c_str(), &Width, &Height, 0, SOIL_LOAD_RGB);
-
-	gl::BindTexture(gl::TEXTURE_2D, TextureID);
-	gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGB, Width, Height, 0, gl::RGB, gl::UNSIGNED_BYTE, Image);
-
-	gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::REPEAT);
-	gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::REPEAT);
-	gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR_MIPMAP_LINEAR);
-	gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR);
-	gl::BindTexture(gl::TEXTURE_2D, 0);
-	SOIL_free_image_data(Image);
-
-	return TextureID;
-}
-
-Model::Model(GLchar * Path)
-{
-	LoadModel(Path);
-}
-
-void Model::Draw(Shader IShader)
-{
-	for (GLuint i = 0; i < Meshes.size(); i++)
+	unsigned char* uc_Image = SOIL_load_image(s_FileName.c_str(), &i_Width, &i_Height, &i_NumComponents, 0);
+	if (uc_Image)
 	{
-		std::cout << "Model drawing" << std::endl;
-		Meshes[i].Draw(IShader);
-		std::cout << Meshes.size() << std::endl;
+		GLenum n_Format;
+		if (i_NumComponents == 1)
+		{
+			n_Format = gl::RED;
+		}
+		else if (i_NumComponents == 3)
+		{
+			n_Format = gl::RGB;
+		}
+		else if (i_NumComponents == 4)
+		{
+			n_Format = gl::RGBA;
+		}
+
+		gl::BindTexture(gl::TEXTURE_2D, ui_TextureID);
+		gl::TexImage2D(gl::TEXTURE_2D, 0, n_Format, i_Width, i_Height, 0, n_Format, gl::UNSIGNED_BYTE, uc_Image);
+
+		gl::GenerateMipmap(gl::TEXTURE_2D);
+
+		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::REPEAT);
+		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::REPEAT);
+		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR_MIPMAP_LINEAR);
+		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR);
+
+		SOIL_free_image_data(uc_Image);
+	}
+	else
+	{
+		std::cout << "ERROR: Failed to load texture from: " << s_IDirectory << std::endl;
+		SOIL_free_image_data(uc_Image);
+	}
+	return ui_TextureID;
+}
+
+Model::Model(GLchar * c_Path)
+{
+	LoadModel(c_Path);
+}
+
+void Model::Draw(Shader* s_IShader)
+{
+	for (Mesh m_IteratorMesh : vt_Meshes)
+	{
+		m_IteratorMesh.Draw(s_IShader);
 	}
 }

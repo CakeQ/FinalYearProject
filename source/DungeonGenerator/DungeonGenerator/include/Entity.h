@@ -14,15 +14,15 @@ Created by Daniel Thompson, P15230940.
 #include <typeindex>
 
 #include <Component.h>
-#include <MeshComponent.h>
+#include <ModelComponent.h>
 #include <Shader.h>
 
 class Entity
 {
 private:
-	glm::vec3 WorldPos;
+	glm::vec3 v3_WorldPos;
 
-	std::unordered_map<std::type_index, Component*> ComponentList;
+	std::unordered_map<std::type_index, Component*> m_ComponentList;
 
 public:
 	Entity(glm::vec3 IWorldPos);
@@ -34,6 +34,6 @@ public:
 	T* GetComponent();
 
 	void Update();
-	void Draw(Shader IShader);
-	void HandleInput(const std::vector<bool>& KeyBuffer);
+	void Draw(Shader* s_IShader);
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer);
 };
