@@ -42,5 +42,7 @@ public:
 
 	bool InitWindow(int i_IWidth, int i_IHeight, std::string i_IWindowName) override;
 	bool RunEngine(Game& g_IGameID) override;
+
+	Shader* GetShaderProgram() { return s_ShaderProgram; };
 };
 

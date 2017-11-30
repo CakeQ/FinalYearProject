@@ -18,6 +18,8 @@
 class Scene
 {
 private:
+	glm::mat4 m4_ProjectionMatrix;
+	glm::mat4 m4_ViewMatrix;
 
 public:
 	EngineCore* e_GameEngine;
@@ -31,4 +33,5 @@ public:
 	void Draw(Shader* s_IShaderProgram);
 
 	void SetActiveEntity(Entity e_IEntity);
+	Entity GetActiveEntity();
 };

@@ -19,9 +19,9 @@ private:
 
 public:
 	Model m_MeshModel;
-	glm::vec3 v3_Position;
-	glm::quat q_Orientation;
-	glm::vec3 v3_Scale;
+	glm::vec3 v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::quat q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec3 v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	ModelComponent(GLchar* c_IPath);
 

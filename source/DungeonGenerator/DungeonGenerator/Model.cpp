@@ -52,7 +52,7 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		v3_Vector.z = m_IMesh->mVertices[i].z;
 		v_InputVertex.v3_Position = v3_Vector;
 		
-		if (m_IMesh->mNormals[0].x)
+		if (m_IMesh->mNormals[i].x)
 		{
 			v3_Vector.x = m_IMesh->mNormals[i].x;
 			v3_Vector.y = m_IMesh->mNormals[i].y;

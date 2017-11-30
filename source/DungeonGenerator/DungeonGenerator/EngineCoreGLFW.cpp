@@ -9,6 +9,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Game.h>
+#include <Component.h>
+#include <CameraComponent.h>
+#include <Entity.h>
 
 std::vector<bool> EngineCoreGLFW::vt_KeyBuffer;
 glm::vec2 EngineCoreGLFW::v2_MouseBuffer;
@@ -103,6 +106,8 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 		g_IGameID.HandleInput(vt_KeyBuffer, v2_MouseBuffer);																	//!< Handle any input.
 		g_IGameID.Update();																										//!< Handle game updates.
 		g_IGameID.Draw(s_ShaderProgram);																						//!< Draw everything.
+
+
 
 		glfwSwapBuffers(w_WindowID);																							//!< Set window buffer.
 		glfwPollEvents();																										//!< Check for any events.

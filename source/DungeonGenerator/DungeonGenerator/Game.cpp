@@ -2,10 +2,12 @@
 
 #include <Game.h>
 
-Game::Game()
+Game::Game(EngineCore* g_IGameEngine)
 {
-	g_GameEngine = nullptr;
+	g_GameEngine = g_IGameEngine;
 	s_CurrentScene = nullptr;
+
+	SetUpTestScene();
 }
 
 void Game::HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer)
@@ -45,7 +47,7 @@ void Game::SetUpTestScene()
 	Entity e_TestModel(glm::vec3(0.0f, 0.0f, 0.0f));
 	Entity e_Player(glm::vec3(0.0f, 0.0f, 4.0f));
 
-	e_TestModel.AddComponent(new ModelComponent("../../../assets/meshes/simpleCube.obj"));
+	e_TestModel.AddComponent(new ModelComponent("../../../assets/meshes/simpleCubeWithNormals.obj"));
 
 	e_Player.AddComponent(new CameraComponent());
 	e_Player.AddComponent(new MovementComponent());

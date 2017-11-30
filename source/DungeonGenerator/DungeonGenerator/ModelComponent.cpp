@@ -6,7 +6,9 @@
 
 ModelComponent::ModelComponent(GLchar* c_IPath) : m_MeshModel(c_IPath)
 {
-
+	std::cout << v3_Position.x << std::endl;
+	std::cout << v3_Scale.x << std::endl;
+	std::cout << q_Orientation.x << std::endl;
 }
 
 void ModelComponent::Update()
@@ -22,8 +24,9 @@ void ModelComponent::Draw(Shader* s_IShaderProgram)
 
 glm::mat4 ModelComponent::GetModelMatrix()
 {
-	glm::mat4 m4_TranslateMatrix = glm::translate(glm::mat4(1.0f), v3_Position);
-	glm::mat4 m4_ScaleMatrix = glm::scale(glm::mat4(1.0f), v3_Scale);
-	glm::mat4 m4_RotationMatrix = glm::mat4_cast(q_Orientation);
-	return m4_TranslateMatrix * m4_ScaleMatrix * m4_RotationMatrix;
+	glm::mat4 m4_ModelMatrix;
+	m4_ModelMatrix = glm::translate(m4_ModelMatrix, v3_Position);
+	m4_ModelMatrix = glm::scale(m4_ModelMatrix, v3_Scale);
+	m4_ModelMatrix = glm::mat4_cast(q_Orientation);
+	return m4_ModelMatrix;
 }
