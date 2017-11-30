@@ -28,9 +28,7 @@ void Scene::Draw(Shader* s_IShaderProgram)
 	gl::UniformMatrix4fv(gl::GetUniformLocation(s_IShaderProgram->ui_ShaderProgram, "view"), 1, gl::FALSE_, glm::value_ptr(m4_ViewMatrix));
 
 	for (Entity e_IEntity : vt_EntityList)
-	{
-		gl::UniformMatrix4fv(gl::GetUniformLocation(s_IShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(e_IEntity.GetComponent<ModelComponent>()->GetModelMatrix()));
-	
+	{	
 		e_IEntity.GetComponent<ModelComponent>()->Draw(s_IShaderProgram);
 	}
 }

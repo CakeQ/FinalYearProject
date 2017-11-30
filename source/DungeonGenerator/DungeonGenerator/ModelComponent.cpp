@@ -6,6 +6,10 @@
 
 ModelComponent::ModelComponent(GLchar* c_IPath) : m_MeshModel(c_IPath)
 {
+	v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
+	v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+
 	std::cout << v3_Position.x << std::endl;
 	std::cout << v3_Scale.x << std::endl;
 	std::cout << q_Orientation.x << std::endl;
