@@ -22,9 +22,6 @@
     <Filter Include="Source Files\Engines">
       <UniqueIdentifier>{95bba5c4-50b3-4833-9201-54a473cb10b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Components">
-      <UniqueIdentifier>{13acbd46-6365-4175-9b41-4e6f1f3a58bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{70496b92-48bc-4b9d-afd9-d7dc5e9ef9e9}</UniqueIdentifier>
     </Filter>
@@ -34,43 +31,22 @@
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{d780f67c-3363-4b4f-8d75-815fda75ac2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entities">
-      <UniqueIdentifier>{15abd5ff-26c3-41c0-a7de-8103a689c5b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Scenes">
       <UniqueIdentifier>{0991bdb9-86c2-4d05-8e6f-7fff80a2f56c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\External">
+      <UniqueIdentifier>{6107347a-8783-49b2-98f9-f5e3bd262da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\External">
+      <UniqueIdentifier>{377d12c1-bdfd-4daa-9526-f7b2063a6c58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EngineCoreGLFW.cpp">
       <Filter>Source Files\Engines</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_core_4_3.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
@@ -81,20 +57,20 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="ModelComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="include\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gl_core_4_3.cpp">
+      <Filter>Source Files\External</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files\External</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -133,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="include\Scene.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetver.h">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TransformComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

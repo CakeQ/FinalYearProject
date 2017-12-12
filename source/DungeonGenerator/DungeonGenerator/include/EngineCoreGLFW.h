@@ -44,5 +44,10 @@ public:
 	bool RunEngine(Game& g_IGameID) override;
 
 	Shader* GetShaderProgram() { return s_ShaderProgram; };
+
+	void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue);
+	void SetCamera(const CameraComponent* c_ICamera) override;
+	void DrawCube(const glm::mat4& m4_IModelMatrix);
+	void DrawModel(Model* model, glm::mat4& modelMatrix);
 };
 

@@ -10,6 +10,9 @@ Created by Daniel Thompson, P15230940.
 
 #pragma once
 
+#include <Model.h>
+#include <CameraComponent.h>
+
 class Game;
 
 class EngineCore
@@ -22,4 +25,9 @@ public:
 
 	virtual bool InitWindow(int IWidth, int IHeight, std::string IWindowName) = 0;
 	virtual bool RunEngine(Game& IGame) = 0;
+
+	virtual void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue) = 0;
+	virtual void SetCamera(const CameraComponent* c_ICamera) = 0;
+	virtual void DrawCube(const glm::mat4& m4_IModelMatrix) = 0;
+	virtual void DrawModel(Model* model, glm::mat4& modelMatrix) = 0;
 };

@@ -80,14 +80,10 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	glfwSetCursorPosCallback(w_WindowID, MouseMoveCallbackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
 
-	s_ShaderProgram = new Shader("../../../assets/shaders/basic.vs", "../../../assets/shaders/basic.frag");						//!< Loads shaders.
-
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
 
-	b_FirstMouse = true;
-	f_LastX = i_Width / 2;																										
-	f_LastY = i_Height / 2;																									
+	s_ShaderProgram = new Shader("assets/shaders/basic.vs", "assets/shaders/basic.frag");						//!< Loads shaders.																							
 
 	return true;
 }
@@ -95,19 +91,12 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 {
 	g_IGameID.g_GameEngine = this;																								//!< Set game engine type.
+	g_IGameID.SetUpTestScene();
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
-		gl::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
-
-		s_ShaderProgram->Use();																									//!< Set shader program.
-
-		g_IGameID.HandleInput(vt_KeyBuffer, v2_MouseBuffer);																	//!< Handle any input.
 		g_IGameID.Update();																										//!< Handle game updates.
-		g_IGameID.Draw(s_ShaderProgram);																						//!< Draw everything.
-
-
+		g_IGameID.Draw();																										//!< Draw everything.
 
 		glfwSwapBuffers(w_WindowID);																							//!< Set window buffer.
 		glfwPollEvents();																										//!< Check for any events.
@@ -152,4 +141,44 @@ void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPo
 void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
 {
 	gl::Viewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
+}
+
+void EngineCoreGLFW::SetCamera(const CameraComponent* c_ICamera)
+{
+	// set the view and projection components of our shader to the camera values
+	glm::mat4 m4_Projection = glm::perspective(glm::radians(c_ICamera->f_FOV), (float)i_Width / (float)i_Height, 0.1f, 100.0f);
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "projection"), 1, gl::FALSE_, glm::value_ptr(m4_Projection));
+
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "view"), 1, gl::FALSE_, glm::value_ptr(c_ICamera->GetViewMatrix()));
+
+	// be sure to activate shader when setting uniforms/drawing objects
+	gl::Uniform3f(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "objectColour"), 1.0f, 0.6f, 0.61f);
+	gl::Uniform3f(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "lightColour"), 1.0f, 1.0f, 1.0f);
+	gl::Uniform3f(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "lightPos"), 0.0f, 2.0f, -2.0f);
+	gl::Uniform3fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "viewPos"), 1, glm::value_ptr(c_ICamera->GetPosition()));
+
+}
+
+void EngineCoreGLFW::RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue)
+{
+	gl::ClearColor(f_IRed, f_IGreen, f_IBlue, 1.0f);
+	gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+}
+
+void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
+{
+	// set the model component of our shader to the cube model
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(m4_IModelMatrix));
+
+	// the only thing we can draw so far is the cube, so we know it is bound already
+	// this will obviously have to change later
+	gl::DrawArrays(gl::TRIANGLES, 0, 36);
+}
+
+void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
+{
+	// set the model component of our shader to the object model
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(m4_IModelMatrix));
+
+	m_IModel->Draw(s_ShaderProgram);
 }

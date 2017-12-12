@@ -2,11 +2,6 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/mat4x4.hpp>
-
 #include <Component.h>
 #include <Mesh.h>
 #include <Model.h>
@@ -18,15 +13,18 @@ private:
 	GLuint ui_ShaderProgram;
 
 public:
-	Model m_MeshModel;
+	Model* m_Model;
 	glm::vec3 v3_Position;
 	glm::quat q_Orientation;
 	glm::vec3 v3_Scale;
 
-	ModelComponent(GLchar* c_IPath);
+	ModelComponent()
+	{
+		v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
+		v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+	};
 
-	void Update() override;
-	void Draw(Shader* s_IShader);
+	void Update() override {};
 	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) override {};
-	glm::mat4 GetModelMatrix();
 };

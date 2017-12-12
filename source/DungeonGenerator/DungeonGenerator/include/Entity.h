@@ -22,12 +22,10 @@ Created by Daniel Thompson, P15230940.
 class Entity
 {
 private:
-	glm::vec3 v3_WorldPos;
-
 	std::unordered_map<std::type_index, Component*> m_ComponentList;
 
 public:
-	Entity(glm::vec3 IWorldPos);
+	Entity() {};
 
 	template <typename T>
 	void AddComponent(T* t_IComponent)
@@ -48,6 +46,6 @@ public:
 		return nullptr;
 	}
 
-	void Update();
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
+	void Update() {};
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) {};
 };

@@ -14,24 +14,22 @@
 #include <CameraComponent.h>
 #include <ModelComponent.h>
 #include <MovementComponent.h>
+#include <TransformComponent.h>
 
 class Scene
 {
 private:
-	glm::mat4 m4_ProjectionMatrix;
-	glm::mat4 m4_ViewMatrix;
+	CameraComponent* c_CurrentCamera;
 
 public:
 	EngineCore* e_GameEngine;
 	std::vector<Entity> vt_EntityList;
-	Entity e_ActiveEntity;
 
 	Scene(EngineCore* e_IGameEngine);
 
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
-	void Update();
-	void Draw(Shader* s_IShaderProgram);
+	void SetCurrentCamera(CameraComponent* c_ICamera) { c_CurrentCamera = c_ICamera; };
 
-	void SetActiveEntity(Entity e_IEntity);
-	Entity GetActiveEntity();
+	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) {};
+	void Update();
+	void Draw();
 };

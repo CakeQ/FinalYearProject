@@ -31,7 +31,7 @@ public:
 
 	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
 	void Update();
-	void Draw(Shader* s_IShaderProgram);
+	void Draw();
 
 	void SetUpTestScene();
 };
