@@ -27,7 +27,7 @@ public:
 	EngineCore* g_GameEngine;
 	Scene* s_CurrentScene;
 
-	Game(EngineCore* g_IGameEngine);
+	Game();
 
 	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
 	void Update();

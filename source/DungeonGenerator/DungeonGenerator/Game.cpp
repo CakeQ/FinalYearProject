@@ -2,9 +2,9 @@
 
 #include <Game.h>
 
-Game::Game(EngineCore* g_IGameEngine)
+Game::Game()
 {
-	g_GameEngine = g_IGameEngine;
+	g_GameEngine = nullptr;
 	s_CurrentScene = nullptr;
 }
 

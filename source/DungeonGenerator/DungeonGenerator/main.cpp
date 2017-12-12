@@ -22,7 +22,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	if (!EngineController->InitWindow(800, 600, "Window"))
 		return 1;
 
-	Game GameController(EngineController);
+	Game GameController;
 
 	EngineController->RunEngine(GameController);
 
