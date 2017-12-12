@@ -35,50 +35,51 @@ Shader::Shader(const char *c_IVertexPath, const char *c_IFragmentPath)
 		s_FragmentCode = ss_FragmentStream.str();
 	}
 
-	const GLchar *c_VertexShaderCode = s_VertexCode.c_str();
-	const GLchar *c_FragmentShaderCode = s_FragmentCode.c_str();
+	const GLchar *c_VertexShaderCode[] = { s_VertexCode.c_str() };
+	const GLchar *c_FragmentShaderCode[] = { s_FragmentCode.c_str() };
 
-	GLuint ui_Vertex, ui_Fragment;
-	GLint i_Success;
-	GLchar c_InfoLog[512];
+	int i_Success;
+	char c_InfoLog[512];
 
-	ui_Vertex = gl::CreateShader(gl::VERTEX_SHADER);
-	gl::ShaderSource(ui_Vertex, 1, &c_VertexShaderCode, NULL);
-	gl::CompileShader(ui_Vertex);
+	int i_Vertex = gl::CreateShader(gl::VERTEX_SHADER);
+	gl::ShaderSource(i_Vertex, 1, c_VertexShaderCode, NULL);
+	gl::CompileShader(i_Vertex);
 
-	gl::GetShaderiv(ui_Vertex, gl::COMPILE_STATUS, &i_Success);
+	gl::GetShaderiv(i_Vertex, gl::COMPILE_STATUS, &i_Success);
 
 	if (!i_Success)
 	{
-		gl::GetShaderInfoLog(ui_Vertex, 512, NULL, c_InfoLog);
+		gl::GetShaderInfoLog(i_Vertex, 512, NULL, c_InfoLog);
 		std::cout << "ERROR: Vertex compilation failed:" << std::endl << c_InfoLog << std::endl;
 	}
 
-	ui_Fragment = gl::CreateShader(gl::FRAGMENT_SHADER);
-	gl::ShaderSource(ui_Fragment, 1, &c_FragmentShaderCode, NULL);
-	gl::CompileShader(ui_Fragment);
-	gl::GetShaderiv(ui_Fragment, gl::COMPILE_STATUS, &i_Success);
+	int i_Fragment = gl::CreateShader(gl::FRAGMENT_SHADER);
+	gl::ShaderSource(i_Fragment, 1, c_FragmentShaderCode, NULL);
+	gl::CompileShader(i_Fragment);
+	gl::GetShaderiv(i_Fragment, gl::COMPILE_STATUS, &i_Success);
 
 	if (!i_Success)
 	{
-		gl::GetShaderInfoLog(ui_Vertex, 512, NULL, c_InfoLog);
+		gl::GetShaderInfoLog(i_Vertex, 512, NULL, c_InfoLog);
 		std::cout << "ERROR: Fragment compilation failed:" << std::endl << c_InfoLog << std::endl;
 	}
 
 	ui_ShaderProgram = gl::CreateProgram();
-	gl::AttachShader(ui_ShaderProgram, ui_Vertex);
-	gl::AttachShader(ui_ShaderProgram, ui_Fragment);
+	gl::AttachShader(ui_ShaderProgram, i_Vertex);
+	gl::AttachShader(ui_ShaderProgram, i_Fragment);
 	gl::LinkProgram(ui_ShaderProgram);
 
 	gl::GetProgramiv(ui_ShaderProgram, gl::LINK_STATUS, &i_Success);
 	if (!i_Success)
 	{
-		gl::GetShaderInfoLog(ui_Vertex, 512, NULL, c_InfoLog);
+		gl::GetShaderInfoLog(i_Vertex, 512, NULL, c_InfoLog);
 		std::cout << "ERROR: Shader program linking failed:" << std::endl << c_InfoLog << std::endl;
 	}
 
-	gl::DeleteShader(ui_Vertex);
-	gl::DeleteShader(ui_Fragment);
+	gl::DeleteShader(i_Vertex);
+	gl::DeleteShader(i_Fragment);
+
+	Use();
 }
 
 void Shader::Use()

@@ -18,6 +18,8 @@ glm::vec2 EngineCoreGLFW::v2_MouseBuffer;
 bool EngineCoreGLFW::b_FirstMouse;
 float EngineCoreGLFW::f_LastX;
 float EngineCoreGLFW::f_LastY;
+int EngineCore::i_Width;
+int EngineCore::i_Height;
 
 EngineCoreGLFW::EngineCoreGLFW()																								//!< Constructor.
 {
@@ -34,7 +36,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	i_Width = i_IWidth;
 	i_Height = i_IHeight;
 	
-																															//!< Begin GLFW set-up.
+																																//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																				//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																				//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																			//!< Set GLFW forward compatability to true.
@@ -49,7 +51,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 		return false;
 	}
 
-	w_WindowID = glfwCreateWindow(i_Width, i_Height, s_IWindowName.c_str(), nullptr, nullptr);								//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later. Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
+	w_WindowID = glfwCreateWindow(i_Width, i_Height, s_IWindowName.c_str(), nullptr, nullptr);									//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later. Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
 
 	if (!w_WindowID)																											//!< Terminates if there is no window initialisation.
 	{
@@ -83,7 +85,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
 
-	s_ShaderProgram = new Shader("assets/shaders/basic.vs", "assets/shaders/basic.frag");						//!< Loads shaders.																							
+	s_ShaderProgram = new Shader("assets/shaders/basic.vert", "assets/shaders/basic.frag");										//!< Loads shaders.																							
 
 	return true;
 }
@@ -140,6 +142,8 @@ void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPo
 
 void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
 {
+	i_Width = i_IWidth;
+	i_Height = i_IHeight;
 	gl::Viewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
 }
 

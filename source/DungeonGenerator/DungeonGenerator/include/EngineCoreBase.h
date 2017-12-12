@@ -18,8 +18,8 @@ class Game;
 class EngineCore
 {
 public:
-	int i_Width;
-	int i_Height;
+	static int i_Width;
+	static int i_Height;
 
 	virtual ~EngineCore() {};
 

@@ -17,7 +17,7 @@ void Scene::Update()
 
 void Scene::Draw()
 {
-	e_GameEngine->RenderColouredBackground(0.0f, 0.2f, 0.5f);
+	e_GameEngine->RenderColouredBackground(0.0f, 0.3f, 0.5f);
 
 	e_GameEngine->SetCamera(c_CurrentCamera);
 
@@ -26,6 +26,7 @@ void Scene::Draw()
 		if (e_IEntity.GetComponent<ModelComponent>()) 
 		{
 			e_GameEngine->DrawModel(e_IEntity.GetComponent<ModelComponent>()->m_Model, e_IEntity.GetComponent<TransformComponent>()->GetModelMatrix());
+			std::cout << "Drawing Entity " << std::endl;
 		}
 	}
 }

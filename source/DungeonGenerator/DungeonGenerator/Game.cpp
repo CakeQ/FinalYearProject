@@ -52,7 +52,7 @@ void Game::SetUpTestScene()
 
 	TransformComponent* c_TransformComponent = new TransformComponent;
 	c_TransformComponent->v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
-	c_TransformComponent->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+	c_TransformComponent->q_Orientation = glm::quat(0.1f, 0.3f, 0.2f, 1.0f);
 	c_TransformComponent->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	e_TestModel.AddComponent(c_ModelComponent);
@@ -63,12 +63,13 @@ void Game::SetUpTestScene()
 	c_CameraComponent->v3_Position = glm::vec3(0.0f, 0.0f, 4.0f);
 	c_CameraComponent->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
 
-	c_TransformComponent->v3_Position = glm::vec3(0.0f, 0.0f, 10.0f);
-	c_TransformComponent->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
-	c_TransformComponent->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	TransformComponent* c_TransformComponent2 = new TransformComponent;
+	c_TransformComponent2->v3_Position = glm::vec3(0.0f, 0.0f, 4.0f);
+	c_TransformComponent2->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+	c_TransformComponent2->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	e_Player.AddComponent(c_CameraComponent);
-	e_Player.AddComponent(c_TransformComponent);
+	e_Player.AddComponent(c_TransformComponent2);
 
 	s_CurrentScene->vt_EntityList.push_back(e_TestModel);
 	s_CurrentScene->vt_EntityList.push_back(e_Player);
