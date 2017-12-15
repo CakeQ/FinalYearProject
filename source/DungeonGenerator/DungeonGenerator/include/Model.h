@@ -26,7 +26,6 @@ private:
 	std::vector<Texture> LoadMaterialTextures(aiMaterial* m_IMaterial, aiTextureType t_IType, std::string s_ITypeName);
 
 public:
-
 	Model(GLchar* c_Path);
 
 	void Draw(Shader* s_IShader);

@@ -33,5 +33,5 @@ public:
 	void Update();
 	void Draw();
 
-	void SetUpTestScene();
+	void SetUpScene();
 };

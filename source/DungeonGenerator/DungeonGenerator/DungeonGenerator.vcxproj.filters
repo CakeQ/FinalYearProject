@@ -57,9 +57,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="include\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -119,12 +116,15 @@
     <ClInclude Include="include\TransformComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\TestScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\assets\shaders\basic.frag">
+    <None Include="assets\shaders\basic.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\..\assets\shaders\basic.vs">
+    <None Include="assets\shaders\basic.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

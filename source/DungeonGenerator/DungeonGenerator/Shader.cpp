@@ -35,8 +35,8 @@ Shader::Shader(const char *c_IVertexPath, const char *c_IFragmentPath)
 		s_FragmentCode = ss_FragmentStream.str();
 	}
 
-	const GLchar *c_VertexShaderCode[] = { s_VertexCode.c_str() };
-	const GLchar *c_FragmentShaderCode[] = { s_FragmentCode.c_str() };
+	const GLchar* c_VertexShaderCode[] = { s_VertexCode.c_str() };
+	const GLchar* c_FragmentShaderCode[] = { s_FragmentCode.c_str() };
 
 	int i_Success;
 	char c_InfoLog[512];

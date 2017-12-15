@@ -33,16 +33,14 @@ EngineCoreGLFW::~EngineCoreGLFW()
 
 bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWindowName)											//!< Window Initialisation.
 {
-	i_Width = i_IWidth;
-	i_Height = i_IHeight;
-	
 																																//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																				//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																				//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																			//!< Set GLFW forward compatability to true.
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);																//!< Set OpenGL profile to the core profile.
 																																//!< End GLFW set-up.
-
+	i_Width = i_IWidth;
+	i_Height = i_IHeight;
 																																//!< Begin Error handling.
 	if (!glfwInit())																											//!< Terminates if there is no GLFW initialisation.
 	{
@@ -87,13 +85,15 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 
 	s_ShaderProgram = new Shader("assets/shaders/basic.vert", "assets/shaders/basic.frag");										//!< Loads shaders.																							
 
+	gl::Enable(gl::DEPTH_TEST);																									//!< Enable depth testing.
+
 	return true;
 }
 
 bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 {
 	g_IGameID.g_GameEngine = this;																								//!< Set game engine type.
-	g_IGameID.SetUpTestScene();
+	g_IGameID.SetUpScene();
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{

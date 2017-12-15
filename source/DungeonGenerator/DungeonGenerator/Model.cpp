@@ -128,7 +128,8 @@ GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 {
 	std::string s_FileName = std::string(c_IPath);
 	s_FileName = s_IDirectory + '/' + s_FileName;
-	GLuint ui_TextureID;
+
+	unsigned int ui_TextureID;
 	gl::GenTextures(1, &ui_TextureID);
 
 	int i_Width;

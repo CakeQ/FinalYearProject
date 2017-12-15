@@ -1,6 +1,7 @@
 #include <stdafx.h>
 
 #include <Game.h>
+#include <TestScene.h>
 
 Game::Game()
 {
@@ -39,39 +40,8 @@ void Game::Draw()
 	s_CurrentScene->Draw();
 }
 
-void Game::SetUpTestScene()
+void Game::SetUpScene()
 {
-	Model* m_NewModel = new Model("assets/meshes/simpleCubeWithNormals.obj");
-	s_CurrentScene = new Scene(g_GameEngine);
-
-	Entity e_TestModel;
-	Entity e_Player;
-
-	ModelComponent* c_ModelComponent = new ModelComponent;
-	c_ModelComponent->m_Model = m_NewModel;
-
-	TransformComponent* c_TransformComponent = new TransformComponent;
-	c_TransformComponent->v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
-	c_TransformComponent->q_Orientation = glm::quat(0.1f, 0.3f, 0.2f, 1.0f);
-	c_TransformComponent->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	e_TestModel.AddComponent(c_ModelComponent);
-	e_TestModel.AddComponent(c_TransformComponent);
-
-	CameraComponent* c_CameraComponent = new CameraComponent;
-	c_CameraComponent->LookAt(c_TransformComponent->GetPosition());
-	c_CameraComponent->v3_Position = glm::vec3(0.0f, 0.0f, 4.0f);
-	c_CameraComponent->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
-
-	TransformComponent* c_TransformComponent2 = new TransformComponent;
-	c_TransformComponent2->v3_Position = glm::vec3(0.0f, 0.0f, 4.0f);
-	c_TransformComponent2->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
-	c_TransformComponent2->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	e_Player.AddComponent(c_CameraComponent);
-	e_Player.AddComponent(c_TransformComponent2);
-
-	s_CurrentScene->vt_EntityList.push_back(e_TestModel);
-	s_CurrentScene->vt_EntityList.push_back(e_Player);
-	s_CurrentScene->SetCurrentCamera(c_CameraComponent);
+	s_CurrentScene = new TestScene(g_GameEngine);
+	s_CurrentScene->SetUpScene();
 }

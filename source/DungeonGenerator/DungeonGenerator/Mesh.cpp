@@ -18,10 +18,10 @@ Mesh::Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, st
 
 void Mesh::Draw(Shader* s_IShader)
 {
-	GLuint ui_DiffuseNum = 1;
-	GLuint ui_SpecularNum = 1;
+	unsigned int ui_DiffuseNum = 1;
+	unsigned int ui_SpecularNum = 1;
 
-	for (GLuint i = 0; i < vt_Textures.size(); i++)
+	for (unsigned int i = 0; i < vt_Textures.size(); i++)
 	{
 		gl::ActiveTexture(gl::TEXTURE0 + i);
 		std::stringstream SS;
@@ -54,7 +54,6 @@ void Mesh::Draw(Shader* s_IShader)
 		gl::ActiveTexture(gl::TEXTURE0 + i);
 		gl::BindTexture(gl::TEXTURE_2D, 0);
 	}
-
 }
 
 
