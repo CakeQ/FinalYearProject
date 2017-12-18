@@ -19,7 +19,7 @@
 class Scene
 {
 private:
-	CameraComponent c_CurrentCamera;
+	CameraComponent* c_CurrentCamera;
 
 public:
 	EngineCore* e_GameEngine;
@@ -29,9 +29,8 @@ public:
 
 	void SetCurrentCamera(CameraComponent* c_ICamera) 
 	{ 
-		c_CurrentCamera.v3_Position = c_ICamera->v3_Position;
-		c_CurrentCamera.q_Orientation = c_ICamera->q_Orientation;
-		c_CurrentCamera.f_FOV = c_ICamera->f_FOV;
+		c_CurrentCamera = c_ICamera;
+		e_GameEngine->SetCamera(c_CurrentCamera);
 	};
 
 	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) {};
@@ -48,7 +47,7 @@ public:
 	{
 		e_GameEngine->RenderColouredBackground(0.0f, 0.0f, 0.0f);
 
-		e_GameEngine->SetCamera(&c_CurrentCamera);
+		e_GameEngine->SetCamera(c_CurrentCamera);
 
 		for (Entity e_IEntity : vt_EntityList)
 		{

@@ -9,7 +9,7 @@ public:
 
 	void SetUpScene() override 
 	{
-		Model* m_NewModel = new Model("assets/meshes/nanosuit.obj");
+		Model* m_NewModel = new Model("assets/meshes/walls/Wall.fbx");
 
 		Entity e_TestModel;
 		Entity e_Player;

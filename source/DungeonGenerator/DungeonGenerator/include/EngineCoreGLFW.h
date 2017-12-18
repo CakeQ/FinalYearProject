@@ -14,7 +14,9 @@ Created by Daniel Thompson, P15230940.
 
 #include <EngineCoreBase.h>
 
+#include <Model.h>
 #include <Shader.h>
+#include <CameraComponent.h>
 
 class Game;
 

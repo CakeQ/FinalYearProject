@@ -10,10 +10,9 @@ Created by Daniel Thompson, P15230940.
 
 #pragma once
 
-#include <Model.h>
-#include <CameraComponent.h>
-
 class Game;
+class CameraComponent;
+class Model;
 
 class EngineCore
 {
