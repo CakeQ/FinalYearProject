@@ -14,17 +14,13 @@ private:
 
 public:
 	Model* m_Model;
-	glm::vec3 v3_Position;
-	glm::quat q_Orientation;
-	glm::vec3 v3_Scale;
+	bool b_Hidden = false;
 
-	ModelComponent()
+	void SetHidden(bool b_IState)
 	{
-		v3_Position = glm::vec3(0.0f, 0.0f, 0.0f);
-		v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-		q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 1.0f);
+		b_Hidden = b_IState;
 	};
 
 	void Update() override {};
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) override {};
+	void Message(const std::string s_IMessage) override {};
 };

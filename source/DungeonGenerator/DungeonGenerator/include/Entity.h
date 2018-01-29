@@ -16,16 +16,12 @@ Created by Daniel Thompson, P15230940.
 #include <Component.h>
 #include <ModelComponent.h>
 #include <CameraComponent.h>
-#include <MovementComponent.h>
 #include <Shader.h>
 
 class Entity
 {
-private:
-	std::unordered_map<std::type_index, Component*> m_ComponentList;
-
 public:
-	Entity() {};
+	std::unordered_map<std::type_index, Component*> m_ComponentList;
 
 	template <typename T>
 	void AddComponent(T* t_IComponent)

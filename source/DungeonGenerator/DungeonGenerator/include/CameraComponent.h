@@ -1,5 +1,10 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 #include <Component.h>
 
 class CameraComponent : public Component
@@ -14,7 +19,7 @@ public:
 	CameraComponent(const glm::vec3& v3_IPos) : v3_Position(v3_IPos), q_Orientation(1, 0, 0, 0), f_FOV(45) {};
 	CameraComponent(const glm::vec3& v3_IPos, const glm::quat& q_IOrient) : v3_Position(v3_IPos), q_Orientation(q_IOrient), f_FOV(45) {};
 
-	void LookAt(const glm::vec3& target) { q_Orientation = (glm::toQuat(glm::lookAt(v3_Position, target, glm::vec3(0, 1, 0)))); }
+	void LookAt(const glm::vec3& v3_ITarget) { q_Orientation = (glm::toQuat(glm::lookAt(v3_Position, v3_ITarget, glm::vec3(0, 1, 0)))); }
 
 	glm::mat4 GetViewMatrix() const { return glm::translate(glm::mat4_cast(q_Orientation), v3_Position); }
 
@@ -33,6 +38,21 @@ public:
 
 	void SetFOV(float f_IFOV) { f_FOV = f_IFOV; }
 
-	void Update() override {};
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) override {};
+	void Update() override 
+	{
+		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
+		if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
+	};
+
+	void Message(const std::string s_IMessage) override
+	{
+		if (s_IMessage.compare(0, 4, "Look") == 0)
+		{
+			float TranslationAngle = 0;
+
+			if (s_IMessage == "LookUp")TranslationAngle = -10;
+			else if (s_IMessage == "LookDown")TranslationAngle = 10;
+			Pitch(TranslationAngle);
+		}
+	};
 };

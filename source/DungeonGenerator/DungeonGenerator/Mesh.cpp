@@ -1,6 +1,6 @@
-#include <stdafx.h>
-
 #include <Mesh.h>
+
+#include <gl_core_4_3.hpp>
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -72,13 +72,13 @@ void Mesh::SetUpMesh()
 	gl::BufferData(gl::ELEMENT_ARRAY_BUFFER, (vt_Indices.size() * sizeof(GLuint)), &vt_Indices[0], gl::STATIC_DRAW);
 																														//!< Create a vertex array object.
 	gl::EnableVertexAttribArray(0);																						//!< Enable the VAO.
-	gl::VertexAttribPointer(0, 3, gl::FLOAT, FALSE, sizeof(Vertex), (GLvoid * )0);
+	gl::VertexAttribPointer(0, 3, gl::FLOAT, false, sizeof(Vertex), (GLvoid * )0);
 
 	gl::EnableVertexAttribArray(1);																						//!< Apply normals.
-	gl::VertexAttribPointer(1, 3, gl::FLOAT, FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v3_Normal));
+	gl::VertexAttribPointer(1, 3, gl::FLOAT, false, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v3_Normal));
 
 	gl::EnableVertexAttribArray(2);																						//!< Apply Texture coords.
-	gl::VertexAttribPointer(2, 2, gl::FLOAT, FALSE, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v2_TextureCoords));
+	gl::VertexAttribPointer(2, 2, gl::FLOAT, false, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v2_TextureCoords));
 
 	gl::BindVertexArray(0);
 }

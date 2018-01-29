@@ -2,8 +2,10 @@
 
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <map>
 
+#include <gl_core_4_3.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <SOIL2\SOIL2.h>
 #include <assimp\Importer.hpp>
@@ -16,9 +18,7 @@
 class Model
 {
 private:
-	std::vector<Mesh> vt_Meshes;
 	std::string s_Directory;
-	std::vector<Texture> vt_TexturesLoaded;
 
 	void LoadModel(std::string s_IPath);
 	void ProcessNode(aiNode* n_INode, const aiScene* s_IScene);
@@ -26,9 +26,10 @@ private:
 	std::vector<Texture> LoadMaterialTextures(aiMaterial* m_IMaterial, aiTextureType t_IType, std::string s_ITypeName);
 
 public:
-	Model(GLchar* c_Path);
+	std::vector<Texture> vt_TexturesLoaded;
+	std::vector<Mesh> vt_Meshes;
 
+	Model(std::string filepath);
 	void Draw(Shader* s_IShader);
-
 	GLint TextureFromFile(const char *c_IPath, std::string s_IDirectory);
 };

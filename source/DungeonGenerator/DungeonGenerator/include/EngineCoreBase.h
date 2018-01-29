@@ -10,6 +10,10 @@ Created by Daniel Thompson, P15230940.
 
 #pragma once
 
+#include <string>
+
+#include <glm\glm.hpp>
+
 class Game;
 class CameraComponent;
 class Model;

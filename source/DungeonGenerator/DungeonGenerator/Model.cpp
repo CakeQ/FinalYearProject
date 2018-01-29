@@ -1,10 +1,14 @@
-#include <stdafx.h>
-
 #include <Model.h>
 
-Model::Model(GLchar* c_Path)
+#include <string>
+#include <iostream>
+#include <vector>
+
+#include <gl_core_4_3.hpp>
+
+Model::Model(std::string s_IPath)
 {
-	LoadModel(c_Path);
+	LoadModel(s_IPath);
 }
 
 void Model::LoadModel(std::string s_IPath)
@@ -25,14 +29,14 @@ void Model::LoadModel(std::string s_IPath)
 
 void Model::ProcessNode(aiNode * n_INode, const aiScene * s_IScene)
 {
-	for (int i = 0; i < n_INode->mNumMeshes; i++)
+	for (unsigned int i = 0; i < n_INode->mNumMeshes; i++)
 	{
 		int i_SceneMeshIndex = n_INode->mMeshes[i];
 		aiMesh* m_Mesh = s_IScene->mMeshes[i_SceneMeshIndex];
 		vt_Meshes.push_back(ProcessMesh(m_Mesh, s_IScene));
 	}
 
-	for (int i = 0; i < n_INode->mNumChildren; i++)
+	for (unsigned int i = 0; i < n_INode->mNumChildren; i++)
 	{
 		ProcessNode(n_INode->mChildren[i], s_IScene);
 	}
@@ -62,10 +66,10 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		}
 	}
 
-	for (int i = 0; i < m_IMesh->mNumFaces; i++)
+	for (unsigned int i = 0; i < m_IMesh->mNumFaces; i++)
 	{
 		aiFace Face = m_IMesh->mFaces[i];
-		for (int j = 0; j < Face.mNumIndices; j++)
+		for (unsigned int j = 0; j < Face.mNumIndices; j++)
 		{
 			vt_Indices[3 * i + j] = m_IMesh->mFaces[i].mIndices[j];
 		}
@@ -93,7 +97,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * m_IMaterial, aiTex
 {
 	std::vector<Texture> vt_Textures;
 
-	for (int i = 0; i < m_IMaterial->GetTextureCount(tt_IType); i++)
+	for (unsigned int i = 0; i < m_IMaterial->GetTextureCount(tt_IType); i++)
 	{
 		aiString s_TextureString;
 		m_IMaterial->GetTexture(tt_IType, i, &s_TextureString);

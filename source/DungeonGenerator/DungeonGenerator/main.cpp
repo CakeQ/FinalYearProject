@@ -7,11 +7,17 @@
 Main code file that contains the program's loop used to run everything else.
 Created by Daniel Thompson, P15230940.
 */
-#include <stdafx.h>
+
+#define USE_GLFW 1
+
+#ifdef USE_GLFW
+#include <EngineCoreBase.h>
+#include <EngineCoreGLFW.h>
+#endif
 
 #include <Game.h>
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	EngineCore* EngineController;
 

@@ -1,6 +1,6 @@
-#include <stdafx.h>
-
 #include <Shader.h>
+
+#include <iostream>
 
 Shader::Shader(const char *c_IVertexPath, const char *c_IFragmentPath)
 {

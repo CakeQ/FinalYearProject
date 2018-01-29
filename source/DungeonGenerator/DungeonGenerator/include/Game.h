@@ -11,27 +11,49 @@ Created by Daniel Thompson, P15230940.
 #pragma once
 
 #include <EngineCoreBase.h>
-#include <Entity.h>
-#include <Component.h>
-#include <ModelComponent.h>
-#include <CameraComponent.h>
-#include <MovementComponent.h>
-#include <Shader.h>
 #include <Scene.h>
 
 class Game
 {
-private:
-
 public:
-	EngineCore* g_GameEngine;
+	EngineCore* e_GameEngine;
 	Scene* s_CurrentScene;
 
-	Game();
+	Game() 
+	{
+		e_GameEngine = nullptr;
+		s_CurrentScene = nullptr;
+	};
 
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer);
-	void Update();
-	void Draw();
+	void Update()
+	{
+		if (!s_CurrentScene)
+		{
+			std::cout << "ERROR: Scene does not exist!" << std::endl;
+			return;
+		}
+		s_CurrentScene->Update();
+	}
 
-	void SetUpScene();
+	void Draw()
+	{
+		if (!s_CurrentScene)
+		{
+			std::cout << "ERROR: Scene does not exist!" << std::endl;
+			return;
+		}
+
+		s_CurrentScene->Draw();
+	}
+
+	void SetUpScene()
+	{
+		if (s_CurrentScene)
+		{
+			s_CurrentScene->~Scene();
+			s_CurrentScene = nullptr;
+		}
+
+		s_CurrentScene = new Scene(e_GameEngine);
+	}
 };

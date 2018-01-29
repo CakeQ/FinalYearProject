@@ -40,5 +40,17 @@ public:
 	void Roll(float f_IAngle) { Rotate(f_IAngle, 0.0f, 0.0f, 1.0f); }
 
 	void Update() override {};
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) override {};
+	void Message(const std::string s_IMessage) override
+	{
+		if (s_IMessage.compare(0, 10, "MovePlayer") == 0)
+		{
+			glm::vec3 v3_Translation(0, 0, 0);
+
+			if (s_IMessage == "MovePlayerForward")v3_Translation.z = -10;
+			else if (s_IMessage == "MovePlayerBackward")v3_Translation.z = 10;
+			else if (s_IMessage == "MovePlayerLeft")v3_Translation.x = -10;
+			else if (s_IMessage == "MovePlayerRight")v3_Translation.x = 10;
+			Translate(v3_Translation * inverse(q_Orientation));
+		}
+	}
 };

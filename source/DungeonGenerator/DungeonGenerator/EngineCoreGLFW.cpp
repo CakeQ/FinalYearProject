@@ -1,6 +1,3 @@
-
-#include <stdafx.h>
-
 #include <EngineCoreGLFW.h>
 
 #include <glm/detail/type_vec3.hpp>
@@ -20,11 +17,6 @@ float EngineCoreGLFW::f_LastX;
 float EngineCoreGLFW::f_LastY;
 int EngineCore::i_Width;
 int EngineCore::i_Height;
-
-EngineCoreGLFW::EngineCoreGLFW()																								//!< Constructor.
-{
-
-}
 
 EngineCoreGLFW::~EngineCoreGLFW()
 {
@@ -92,7 +84,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 
 bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 {
-	g_IGameID.g_GameEngine = this;																								//!< Set game engine type.
+	g_IGameID.e_GameEngine = this;																								//!< Set game engine type.
 	g_IGameID.SetUpScene();
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.

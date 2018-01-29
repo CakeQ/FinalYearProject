@@ -38,13 +38,10 @@
       <UniqueIdentifier>{6107347a-8783-49b2-98f9-f5e3bd262da3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\External">
-      <UniqueIdentifier>{377d12c1-bdfd-4daa-9526-f7b2063a6c58}</UniqueIdentifier>
+      <UniqueIdentifier>{018af4ce-d88a-4b34-84b0-fb3392309cd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EngineCoreGLFW.cpp">
       <Filter>Source Files\Engines</Filter>
     </ClCompile>
@@ -63,8 +60,8 @@
     <ClCompile Include="gl_core_4_3.cpp">
       <Filter>Source Files\External</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files\External</Filter>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,14 +80,8 @@
     <ClInclude Include="include\CameraComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\gl_core_4_3.hpp">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="include\Entity.h">
       <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MovementComponent.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Mesh.h">
       <Filter>Header Files</Filter>
@@ -107,17 +98,20 @@
     <ClInclude Include="include\Scene.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="include\stdafx.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
-    <ClInclude Include="include\targetver.h">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
     <ClInclude Include="include\TransformComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\TestScene.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="include\InputHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl_core_4_3.hpp">
+      <Filter>Header Files\External</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ModelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ColourComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

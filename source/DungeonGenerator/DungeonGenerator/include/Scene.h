@@ -3,60 +3,49 @@
 #include <vector>
 
 #include <json/json.h>
-#include <glm/detail/type_vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include <EngineCoreBase.h>
+
 #include <Entity.h>
+
 #include <Component.h>
 #include <CameraComponent.h>
+#include <ColourComponent.h>
 #include <ModelComponent.h>
-#include <MovementComponent.h>
 #include <TransformComponent.h>
+
+#include <InputHandler.h>
+#include <ModelManager.h>
+
+struct SceneText
+{
+	glm::vec3 v3_TextColor;
+	glm::vec2 v2_ScreenPos;
+	std::string s_Text;
+	std::string s_Font;
+	float f_TextSize;
+};
 
 class Scene
 {
 private:
-	CameraComponent* c_CurrentCamera;
+	std::vector<Entity*> vt_EntityList;
+	Entity* e_Background;
 
 public:
-	EngineCore* e_GameEngine;
-	std::vector<Entity> vt_EntityList;
+	std::vector<SceneText*> vt_SceneTextList;
 
-	Scene(EngineCore* e_IGameEngine) { e_GameEngine = e_IGameEngine; };
+	Entity* e_PlayerEntity;
+	CameraComponent* c_SceneCamera;
+	EngineCore* e_EngineCore;
+	InputHandler* ih_InputHandler;
+	ModelManager* mm_ModelManager;
 
-	void SetCurrentCamera(CameraComponent* c_ICamera) 
-	{ 
-		c_CurrentCamera = c_ICamera;
-		e_GameEngine->SetCamera(c_CurrentCamera);
-	};
+	Scene(EngineCore* e_IEngine);
+	~Scene();
 
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) {};
-	
-	void Update()
-	{
-		for (Entity e_IEntity : vt_EntityList)
-		{
-			e_IEntity.Update();
-		}
-	};
-
-	void Draw() 
-	{
-		e_GameEngine->RenderColouredBackground(0.0f, 0.0f, 0.0f);
-
-		e_GameEngine->SetCamera(c_CurrentCamera);
-
-		for (Entity e_IEntity : vt_EntityList)
-		{
-			if (e_IEntity.GetComponent<ModelComponent>())
-			{
-				e_GameEngine->DrawModel(e_IEntity.GetComponent<ModelComponent>()->m_Model, e_IEntity.GetComponent<TransformComponent>()->GetModelMatrix());
-			}
-		}
-	};
-
-	virtual void SetUpScene() = 0;
+	void Update();
+	void Draw();
+	void SetUpScene();
+	void SetCurrentCamera(CameraComponent* c_ICamera);
 };
