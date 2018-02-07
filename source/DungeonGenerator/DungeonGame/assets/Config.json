@@ -1,0 +1,46 @@
+{
+  "Input": [
+    {
+      "command": "MoveForwardCommand", 
+      "keys": [
+        87
+      ]
+    }, 
+    {
+      "command": "MoveBackwardCommand", 
+      "keys": [
+        83
+      ]
+    }, 
+    {
+     "command": "MoveLeftCommand", 
+      "keys": [
+        65
+      ]
+    }, 
+    {
+     "command": "MoveRightCommand", 
+      "keys": [
+        68
+      ]
+    }, 
+    {
+     "command": "SetCameraFirstPersonCommand", 
+      "keys": [
+        49
+      ]
+    },
+    {
+      "command": "SetCameraThirdPersonCommand",
+      "keys": [
+        50
+      ]
+    }, 
+    {
+     "command": "SetCameraCommand", 
+      "keys": [
+        9
+      ]
+    }
+  ]
+}

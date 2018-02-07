@@ -5,7 +5,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include <Component.h>
+#include <iostream>
+
+#include "Component.h"
 
 class CameraComponent : public Component
 {
@@ -19,7 +21,7 @@ public:
 	CameraComponent(const glm::vec3& v3_IPos) : v3_Position(v3_IPos), q_Orientation(1, 0, 0, 0), f_FOV(45) {};
 	CameraComponent(const glm::vec3& v3_IPos, const glm::quat& q_IOrient) : v3_Position(v3_IPos), q_Orientation(q_IOrient), f_FOV(45) {};
 
-	void LookAt(const glm::vec3& v3_ITarget) { q_Orientation = (glm::toQuat(glm::lookAt(v3_Position, v3_ITarget, glm::vec3(0, 1, 0)))); }
+	void LookAt(const glm::vec3& v3_ITarget) { q_Orientation = (glm::toQuat(glm::lookAt(v3_Position, v3_ITarget, glm::vec3(0, 1, 0)))); } // Doesn't work
 
 	glm::mat4 GetViewMatrix() const { return glm::translate(glm::mat4_cast(q_Orientation), v3_Position); }
 
@@ -42,6 +44,7 @@ public:
 	{
 		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
 		if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
+		std::cout << v3_Position.x << ", " << v3_Position.y << ", " << v3_Position.z << std::endl;
 	};
 
 	void Message(const std::string s_IMessage) override

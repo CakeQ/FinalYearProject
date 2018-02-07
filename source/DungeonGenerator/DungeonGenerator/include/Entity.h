@@ -13,10 +13,10 @@ Created by Daniel Thompson, P15230940.
 #include <unordered_map>
 #include <typeindex>
 
-#include <Component.h>
-#include <ModelComponent.h>
-#include <CameraComponent.h>
-#include <Shader.h>
+#include "Component.h"
+#include "ModelComponent.h"
+#include "CameraComponent.h"
+#include "Shader.h"
 
 class Entity
 {
@@ -42,6 +42,6 @@ public:
 		return nullptr;
 	}
 
-	void Update() {};
-	void HandleInput(const std::vector<bool>& vt_IKeyBuffer, const glm::vec2 v2_IMousebuffer) {};
+	virtual void Update(float f_IDeltaTime) = 0;
+	virtual void Message(const std::string s_IMessage) = 0;
 };

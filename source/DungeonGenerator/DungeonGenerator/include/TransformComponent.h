@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Component.h>
+#include "Component.h"
 
 class TransformComponent : public Component
 {
@@ -39,7 +39,11 @@ public:
 	void Pitch(float f_IAngle) { Rotate(f_IAngle, 1.0f, 0.0f, 0.0f); }
 	void Roll(float f_IAngle) { Rotate(f_IAngle, 0.0f, 0.0f, 1.0f); }
 
-	void Update() override {};
+	void Update() override 
+	{
+
+	};
+
 	void Message(const std::string s_IMessage) override
 	{
 		if (s_IMessage.compare(0, 10, "MovePlayer") == 0)

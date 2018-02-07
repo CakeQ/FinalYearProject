@@ -54,14 +54,14 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gl_core_4_3.cpp">
       <Filter>Source Files\External</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp.cpp">
+      <Filter>Source Files\External</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,13 +113,11 @@
     <ClInclude Include="include\ColourComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\basic.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="assets\shaders\basic.vert">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClInclude Include="include\StaticEntity.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PlayerEntity.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

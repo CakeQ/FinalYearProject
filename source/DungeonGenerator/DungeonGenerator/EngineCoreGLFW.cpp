@@ -5,16 +5,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Game.h>
-#include <Component.h>
-#include <CameraComponent.h>
-#include <Entity.h>
+#include "Game.h"
+#include "Component.h"
+#include "CameraComponent.h"
+#include "Entity.h"
 
 std::vector<bool> EngineCoreGLFW::vt_KeyBuffer;
 glm::vec2 EngineCoreGLFW::v2_MouseBuffer;
+glm::vec2 EngineCoreGLFW::v2_LastMousePos;
 bool EngineCoreGLFW::b_FirstMouse;
-float EngineCoreGLFW::f_LastX;
-float EngineCoreGLFW::f_LastY;
+
 int EngineCore::i_Width;
 int EngineCore::i_Height;
 
@@ -68,31 +68,39 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	}																															//!< End error handling.
 
 	glfwSetFramebufferSizeCallback(w_WindowID, WindowResizeCallbackEvent);
-	
 	glfwSetCursorPosCallback(w_WindowID, MouseMoveCallbackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
+
+	glfwSetInputMode(w_WindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
 
-	s_ShaderProgram = new Shader("assets/shaders/basic.vert", "assets/shaders/basic.frag");										//!< Loads shaders.																							
+	s_ShaderProgram = new Shader("assets/shaders/defaultShader.vert", "assets/shaders/defaultShader.frag");						//!< Loads shaders.																							
 
 	gl::Enable(gl::DEPTH_TEST);																									//!< Enable depth testing.
+
+	gl::Enable(gl::BLEND);
+	gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
 
 	return true;
 }
 
 bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 {
+	float f_DeltaTime = 0.0f;
 	g_IGameID.e_GameEngine = this;																								//!< Set game engine type.
-	g_IGameID.SetUpScene();
+	g_IGameID.Initialise();
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
-		g_IGameID.Update();																										//!< Handle game updates.
+		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);
+		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);
+
+		g_IGameID.Update(f_DeltaTime);																							//!< Handle game updates.
 		g_IGameID.Draw();																										//!< Draw everything.
 
-		glfwSwapBuffers(w_WindowID);																							//!< Set window buffer.
+		glfwSwapBuffers(w_WindowID);																							//!< Swap window buffer.
 		glfwPollEvents();																										//!< Check for any events.
 	}
 
@@ -118,18 +126,15 @@ void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPo
 {
 	if (b_FirstMouse)
 	{
-		f_LastX = d_IXPos;
-		f_LastY = d_IYPos;
+		v2_LastMousePos = glm::vec2(d_IXPos, d_IYPos);
 		b_FirstMouse = false;
 	}
 
-	GLfloat f_XOffset = d_IXPos - f_LastX;
-	GLfloat f_YOffset = f_LastY - d_IYPos;  // Reversed since y-coordinates go from bottom to left
+	glm::vec2 v2_Offset = glm::vec2(d_IXPos - v2_LastMousePos.x, v2_LastMousePos.y - d_IYPos);
 
-	f_LastX = d_IXPos;
-	f_LastY = d_IYPos;
+	v2_LastMousePos = glm::vec2(d_IXPos, d_IYPos);
 
-	v2_MouseBuffer = glm::vec2(f_XOffset, f_YOffset);
+	v2_MouseBuffer = v2_Offset;
 }
 
 void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
@@ -142,7 +147,7 @@ void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWid
 void EngineCoreGLFW::SetCamera(const CameraComponent* c_ICamera)
 {
 	// set the view and projection components of our shader to the camera values
-	glm::mat4 m4_Projection = glm::perspective(glm::radians(c_ICamera->f_FOV), (float)i_Width / (float)i_Height, 0.1f, 100.0f);
+	glm::mat4 m4_Projection = glm::perspective(glm::radians(c_ICamera->f_FOV), (float)i_Width / (float)i_Height, 0.1f, 10000.0f);
 	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "projection"), 1, gl::FALSE_, glm::value_ptr(m4_Projection));
 
 	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "view"), 1, gl::FALSE_, glm::value_ptr(c_ICamera->GetViewMatrix()));
@@ -173,8 +178,12 @@ void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 
 void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
 {
-	// set the model component of our shader to the object model
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_ShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(m4_IModelMatrix));
-
-	m_IModel->Draw(s_ShaderProgram);
+	if (m_IModel)
+	{
+		m_IModel->Draw(s_ShaderProgram, m4_IModelMatrix);
+	}
+	else
+	{
+		std::cout << "ERROR: Model is NULL" << std::endl;
+	}
 }

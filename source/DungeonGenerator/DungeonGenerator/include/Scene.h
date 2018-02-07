@@ -1,21 +1,27 @@
 #pragma once
 
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 #include <json/json.h>
 
-#include <EngineCoreBase.h>
+#include "EngineCoreBase.h"
 
-#include <Entity.h>
+#include "Component.h"
+#include "CameraComponent.h"
+#include "ColourComponent.h"
+#include "ModelComponent.h"
+#include "TransformComponent.h"
 
-#include <Component.h>
-#include <CameraComponent.h>
-#include <ColourComponent.h>
-#include <ModelComponent.h>
-#include <TransformComponent.h>
+#include "InputHandler.h"
+#include "ModelManager.h"
 
-#include <InputHandler.h>
-#include <ModelManager.h>
+#include "Model.h"
+#include "Entity.h"
+#include "StaticEntity.h"
+#include "PlayerEntity.h"
+
 
 struct SceneText
 {
@@ -29,10 +35,10 @@ struct SceneText
 class Scene
 {
 private:
-	std::vector<Entity*> vt_EntityList;
-	Entity* e_Background;
+	//Entity* e_Background;
 
 public:
+	std::vector<Entity*> vt_EntityList;
 	std::vector<SceneText*> vt_SceneTextList;
 
 	Entity* e_PlayerEntity;
@@ -44,8 +50,8 @@ public:
 	Scene(EngineCore* e_IEngine);
 	~Scene();
 
-	void Update();
+	void Update(float f_IDeltaTime);
 	void Draw();
-	void SetUpScene();
+	virtual void SetUpScene() = 0;
 	void SetCurrentCamera(CameraComponent* c_ICamera);
 };

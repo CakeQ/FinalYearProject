@@ -1,10 +1,5 @@
 #include <Scene.h>
 
-#include <fstream>
-#include <sstream>
-
-#include "Model.h"
-
 Scene::Scene(EngineCore* e_IEngine)
 {
 	mm_ModelManager = new ModelManager;
@@ -21,26 +16,26 @@ Scene::~Scene()
 
 	c_SceneCamera = nullptr;
 	e_EngineCore = nullptr;
-	e_Background->~Entity();
+	//e_Background->~Entity();
 }
 
-void Scene::Update()
+void Scene::Update(float f_IDeltaTime)
 {
 	for (Entity* o_Iterator : vt_EntityList)
 	{
-		o_Iterator->Update();
+		o_Iterator->Update(f_IDeltaTime);
 	}
 }
 
 void Scene::Draw()
 {
 	float f_RedValue = 0, f_GreenValue = 0, f_BlueValue = 0;
-	if (e_Background->GetComponent<RedComponent>())
+	/*if (e_Background->GetComponent<RedComponent>())
 		f_RedValue = e_Background->GetComponent<RedComponent>()->f_ColourValue;
 	if (e_Background->GetComponent<GreenComponent>())
 		f_GreenValue = e_Background->GetComponent<GreenComponent>()->f_ColourValue;
 	if (e_Background->GetComponent<BlueComponent>())
-		f_BlueValue = e_Background->GetComponent<BlueComponent>()->f_ColourValue;
+		f_BlueValue = e_Background->GetComponent<BlueComponent>()->f_ColourValue;*/
 
 	// e.g. pass object details to the engine to render the next frame
 	e_EngineCore->RenderColouredBackground(f_RedValue, f_GreenValue, f_BlueValue);
@@ -50,7 +45,7 @@ void Scene::Draw()
 
 	for (Entity* e_EntityIterator : vt_EntityList)
 	{
-		if (e_EntityIterator->GetComponent<ModelComponent>())
+		if (e_EntityIterator->GetComponent<ModelComponent>() != nullptr)
 		{
 			for (Texture texture : e_EntityIterator->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
 			{
@@ -74,36 +69,3 @@ void Scene::SetCurrentCamera(CameraComponent* c_ICamera)
 {
 	c_SceneCamera = c_ICamera;
 }
-
-void Scene::SetUpScene()
-{
-	Model* m_NewModel = new Model("assets/meshes/walls/Wall.obj");
-
-	Entity* e_TestModel = new Entity();
-	Entity* e_Player = new Entity();
-
-	ModelComponent* c_ModelComponent = new ModelComponent;
-	c_ModelComponent->m_Model = m_NewModel;
-
-	TransformComponent* c_TransformComponent = new TransformComponent;
-	c_TransformComponent->v3_Position = glm::vec3(0.0f, -8.0f, -25.0f);
-	c_TransformComponent->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
-	c_TransformComponent->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	e_TestModel->AddComponent(c_ModelComponent);
-	e_TestModel->AddComponent(c_TransformComponent);
-
-	CameraComponent* c_CameraComponent = new CameraComponent;
-
-	TransformComponent* c_TransformComponent2 = new TransformComponent;
-	c_TransformComponent2->v3_Position = glm::vec3(0.0f, 0.0f, 4.0f);
-	c_TransformComponent2->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
-	c_TransformComponent2->v3_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
-
-	e_Player->AddComponent(c_CameraComponent);
-	e_Player->AddComponent(c_TransformComponent2);
-
-	vt_EntityList.push_back(e_TestModel);
-	vt_EntityList.push_back(e_Player);
-	SetCurrentCamera(c_CameraComponent);
-};

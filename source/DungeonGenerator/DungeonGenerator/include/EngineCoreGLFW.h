@@ -12,11 +12,11 @@ Created by Daniel Thompson, P15230940.
 
 #include <vector>
 
-#include <EngineCoreBase.h>
+#include "EngineCoreBase.h"
 
-#include <Model.h>
-#include <Shader.h>
-#include <CameraComponent.h>
+#include "Model.h"
+#include "Shader.h"
+#include "CameraComponent.h"
 
 class Game;
 
@@ -29,8 +29,7 @@ private:
 	
 	static glm::vec2 v2_MouseBuffer;
 	static bool b_FirstMouse;
-	static float f_LastX;
-	static float f_LastY;
+	static glm::vec2 v2_LastMousePos;
 
 	Shader* s_ShaderProgram;
 

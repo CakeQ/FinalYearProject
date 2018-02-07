@@ -1,0 +1,32 @@
+{
+  "Assets": [
+    {
+      "name": "wall_s",
+      "model": "assets/models/walls/Wall.obj",
+      "texture_diffuse": [
+        "assets/textures/testMat.tga"
+      ]
+    },
+	{
+      "name": "wall_c",
+      "model": "assets/models/walls/Wall_Corner.obj",
+      "texture_diffuse": [
+        "assets/textures/testMat.tga"
+      ]
+    },
+	{
+      "name": "floor_s",
+      "model": "assets/models/walls/Floor.obj",
+      "texture_diffuse": [
+        "assets/textures/testMat.tga"
+      ]
+    },
+	{
+      "name": "floor_c",
+      "model": "assets/models/walls/Floor_Corner.obj",
+      "texture_diffuse": [
+        "assets/textures/testMat.tga"
+      ]
+    }
+  ]
+}

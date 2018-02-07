@@ -2,10 +2,10 @@
 
 #include <vector>
 
-#include <Component.h>
-#include <Mesh.h>
-#include <Model.h>
-#include <Shader.h>
+#include "Component.h"
+#include "Mesh.h"
+#include "Model.h"
+#include "Shader.h"
 
 class ModelComponent : public Component
 {

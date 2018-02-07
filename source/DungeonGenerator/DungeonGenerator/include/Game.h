@@ -10,8 +10,8 @@ Created by Daniel Thompson, P15230940.
 
 #pragma once
 
-#include <EngineCoreBase.h>
-#include <Scene.h>
+#include "EngineCoreBase.h"
+#include "Scene.h"
 
 class Game
 {
@@ -25,35 +25,8 @@ public:
 		s_CurrentScene = nullptr;
 	};
 
-	void Update()
-	{
-		if (!s_CurrentScene)
-		{
-			std::cout << "ERROR: Scene does not exist!" << std::endl;
-			return;
-		}
-		s_CurrentScene->Update();
-	}
-
-	void Draw()
-	{
-		if (!s_CurrentScene)
-		{
-			std::cout << "ERROR: Scene does not exist!" << std::endl;
-			return;
-		}
-
-		s_CurrentScene->Draw();
-	}
-
-	void SetUpScene()
-	{
-		if (s_CurrentScene)
-		{
-			s_CurrentScene->~Scene();
-			s_CurrentScene = nullptr;
-		}
-
-		s_CurrentScene = new Scene(e_GameEngine);
-	}
+	virtual void Update(float f_IDeltaTime) = 0;
+	virtual void Draw() = 0;
+	virtual void SetUpScene() = 0;
+	virtual void Initialise() = 0;
 };

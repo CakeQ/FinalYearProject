@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 #include "Entity.h"
 #include "TransformComponent.h"
@@ -36,6 +37,7 @@ struct InputHandler
 				if (v2_IMousePos.x != 0)
 				{
 					e_AttatchedEntity->GetComponent<TransformComponent>()->Yaw(v2_IMousePos.x * -0.00025f);
+					std::cout << "rotating camera" << std::endl;
 				}
 			}
 			if (e_AttatchedEntity->GetComponent<CameraComponent>())

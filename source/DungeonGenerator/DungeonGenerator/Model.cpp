@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-#include <gl_core_4_3.hpp>
+#include "gl_core_4_3.hpp"
 
 Model::Model(std::string s_IPath)
 {
@@ -44,25 +44,25 @@ void Model::ProcessNode(aiNode * n_INode, const aiScene * s_IScene)
 
 Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 {
-	std::vector<Vertex> vt_Vertices;
-	std::vector<unsigned int> vt_Indices;
-	std::vector<Texture> vt_Textures;
+	std::vector<Vertex> vt_NewVertices;
+	std::vector<unsigned int> vt_NewIndices;
+	std::vector<Texture> vt_NewTextures;
 
-	vt_Vertices.resize(m_IMesh->mNumVertices);
-	vt_Indices.resize(m_IMesh->mNumFaces*3);
+	vt_NewVertices.resize(m_IMesh->mNumVertices);
+	vt_NewIndices.resize(m_IMesh->mNumFaces*3);
 
 	for (unsigned int i = 0; i < m_IMesh->mNumVertices; i++)
 	{
-		vt_Vertices[i].v3_Position = glm::vec3(m_IMesh->mVertices[i].x, m_IMesh->mVertices[i].y, m_IMesh->mVertices[i].z);
-		vt_Vertices[i].v3_Normal = glm::vec3(m_IMesh->mNormals[i].x, m_IMesh->mNormals[i].y, m_IMesh->mNormals[i].z);
+		vt_NewVertices[i].v3_Position = glm::vec3(m_IMesh->mVertices[i].x, m_IMesh->mVertices[i].y, m_IMesh->mVertices[i].z);
+		vt_NewVertices[i].v3_Normal = glm::vec3(m_IMesh->mNormals[i].x, m_IMesh->mNormals[i].y, m_IMesh->mNormals[i].z);
 
 		if (m_IMesh->mTextureCoords[0])
 		{
-			vt_Vertices[i].v2_TextureCoords = glm::vec2(m_IMesh->mTextureCoords[0][i].x, m_IMesh->mTextureCoords[0][i].y);
+			vt_NewVertices[i].v2_TextureCoords = glm::vec2(m_IMesh->mTextureCoords[0][i].x, m_IMesh->mTextureCoords[0][i].y);
 		}
 		else
 		{
-			vt_Vertices[i].v2_TextureCoords = glm::vec2(0.0f, 0.0f);
+			vt_NewVertices[i].v2_TextureCoords = glm::vec2(0.0f, 0.0f);
 		}
 	}
 
@@ -71,7 +71,7 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		aiFace Face = m_IMesh->mFaces[i];
 		for (unsigned int j = 0; j < Face.mNumIndices; j++)
 		{
-			vt_Indices[3 * i + j] = m_IMesh->mFaces[i].mIndices[j];
+			vt_NewIndices[3 * i + j] = m_IMesh->mFaces[i].mIndices[j];
 		}
 	}
 
@@ -84,13 +84,13 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		std::vector<Texture> vt_NormalMaps = LoadMaterialTextures(m_Material, aiTextureType_NORMALS, "texture_normal");
 		std::vector<Texture> vt_HeightMaps = LoadMaterialTextures(m_Material, aiTextureType_HEIGHT, "texture_height");
 	
-		vt_Textures.insert(vt_Textures.end(), vt_DiffuseMaps.begin(), vt_DiffuseMaps.end());
-		vt_Textures.insert(vt_Textures.end(), vt_SpecularMaps.begin(), vt_SpecularMaps.end());
-		vt_Textures.insert(vt_Textures.end(), vt_NormalMaps.begin(), vt_NormalMaps.end());
-		vt_Textures.insert(vt_Textures.end(), vt_HeightMaps.begin(), vt_HeightMaps.end());
+		vt_NewTextures.insert(vt_NewTextures.end(), vt_DiffuseMaps.begin(), vt_DiffuseMaps.end());
+		vt_NewTextures.insert(vt_NewTextures.end(), vt_SpecularMaps.begin(), vt_SpecularMaps.end());
+		vt_NewTextures.insert(vt_NewTextures.end(), vt_NormalMaps.begin(), vt_NormalMaps.end());
+		vt_NewTextures.insert(vt_NewTextures.end(), vt_HeightMaps.begin(), vt_HeightMaps.end());
 	}
 
-	return Mesh(vt_Vertices, vt_Indices, vt_Textures);
+	return Mesh(vt_NewVertices, vt_NewIndices, vt_NewTextures);
 }
 
 std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * m_IMaterial, aiTextureType tt_IType, std::string s_ITypeName)
@@ -131,6 +131,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial * m_IMaterial, aiTex
 GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 {
 	std::string s_FileName = std::string(c_IPath);
+	s_FileName = s_FileName.substr(s_FileName.find_last_of('/') + 1, s_FileName.length());
 	s_FileName = s_IDirectory + '/' + s_FileName;
 
 	unsigned int ui_TextureID;
@@ -177,10 +178,10 @@ GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 	return ui_TextureID;
 }
 
-void Model::Draw(Shader* s_IShader)
+void Model::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
 {
 	for (Mesh m_IteratorMesh : vt_Meshes)
 	{
-		m_IteratorMesh.Draw(s_IShader);
+		m_IteratorMesh.Draw(s_IShader, m4_IModelMatrix);
 	}
 }

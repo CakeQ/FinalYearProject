@@ -16,40 +16,44 @@ Mesh::Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, st
 }
 
 
-void Mesh::Draw(Shader* s_IShader)
+void Mesh::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
 {
-	unsigned int ui_DiffuseNum = 1;
-	unsigned int ui_SpecularNum = 1;
-
+	// bind the appropriate textures
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	unsigned int normalNr = 1;
+	unsigned int heightNr = 1;
 	for (unsigned int i = 0; i < vt_Textures.size(); i++)
 	{
 		gl::ActiveTexture(gl::TEXTURE0 + i);
-		std::stringstream SS;
-		std::string Number;
-		std::string Name = vt_Textures[i].s_Type;
 
-		if (Name == "texture_diffuse")
-		{
-			SS << ui_DiffuseNum++;
-		}
-		else if (Name == "texture_specular")
-		{
-			SS << ui_SpecularNum++;
-		}
+		std::string number;
+		std::string name = vt_Textures[i].s_Type;
+		if (name == "texture_diffuse")
+			number = std::to_string(diffuseNr++);
+		else if (name == "texture_specular")
+			number = std::to_string(specularNr++);
+		else if (name == "texture_normal")
+			number = std::to_string(normalNr++);
+		else if (name == "texture_height")
+			number = std::to_string(heightNr++);
 
-		Number = SS.str();
-
-		gl::Uniform1i(gl::GetUniformLocation(s_IShader->ui_ShaderProgram, (Name + Number).c_str()), i);
+		// now set the sampler to the correct texture unit
+		gl::Uniform1i(gl::GetUniformLocation(s_IShader->ui_ShaderProgram, (name + number).c_str()), i);
+		// and finally bind the texture
 		gl::BindTexture(gl::TEXTURE_2D, vt_Textures[i].ui_ID);
 	}
-	
-	gl::Uniform1f(gl::GetUniformLocation(s_IShader->ui_ShaderProgram, "material.shininess"), 16.0f);
 
+	// set the model component of our shader to the object model
+	gl::UniformMatrix4fv(gl::GetUniformLocation(s_IShader->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(m4_IModelMatrix));
+
+	// draw mesh
 	gl::BindVertexArray(ui_VAO);
 	gl::DrawElements(gl::TRIANGLES, vt_Indices.size(), gl::UNSIGNED_INT, 0);
 	gl::BindVertexArray(0);
 
-	for (GLuint i = 0; i < vt_Textures.size(); i++)
+	// return to default texture
+	for (unsigned int i = 0; i < vt_Textures.size(); i++)
 	{
 		gl::ActiveTexture(gl::TEXTURE0 + i);
 		gl::BindTexture(gl::TEXTURE_2D, 0);
