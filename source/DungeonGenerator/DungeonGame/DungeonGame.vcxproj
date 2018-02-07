@@ -159,9 +159,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Dungeon.h" />
     <ClInclude Include="include\DungeonGame.h" />
     <ClInclude Include="include\DungeonInputHandler.h" />
     <ClInclude Include="include\DungeonScene.h" />
+    <ClInclude Include="include\Room.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\defaultShader.frag" />

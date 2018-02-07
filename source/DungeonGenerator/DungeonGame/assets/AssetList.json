@@ -2,21 +2,21 @@
   "Assets": [
     {
       "name": "wall_s",
-      "model": "assets/models/walls/Wall.obj",
+      "model": "assets/models/walls/Wall.fbx",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
       ]
     },
 	{
       "name": "wall_c",
-      "model": "assets/models/walls/Wall_Corner.obj",
+      "model": "assets/models/walls/Corner.fbx",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
       ]
     },
 	{
       "name": "floor_s",
-      "model": "assets/models/walls/Floor.obj",
+      "model": "assets/models/walls/Floor.fbx",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
       ]
