@@ -2,7 +2,7 @@
   "Assets": [
     {
       "name": "wall_s",
-      "model": "assets/models/walls/Wall.fbx",
+      "model": "assets/models/Wall.fbx",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
       ]

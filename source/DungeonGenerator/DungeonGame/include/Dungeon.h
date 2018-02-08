@@ -11,10 +11,15 @@ class Dungeon
 {
 public:
 	std::vector<Room> vt_RoomList;
+	glm::vec2 v2_RoomSize;
+	glm::vec3 v3_DungeonOrigin;
+	int i_Seed;
+
 
 	Dungeon(int i_ISeed)
 	{
-		srand(i_ISeed);
+		i_Seed = i_ISeed;
+		srand(i_Seed);
 		GenerateDungeon();
 	};
 
@@ -24,25 +29,20 @@ public:
 
 		for (int i; i > i_Rooms; i++)
 		{
-			Room* r_NewRoom = new Room;
-
+			Room* r_NewRoom = new Room(); //Fill with stuff
 		}
 	};
 
 	glm::vec2 GetRandomPointInCircle(float f_IRadius)
 	{
+		float f_R = f_IRadius - glm::sqrt(rand() % 2) * f_IRadius;
 		
-		/*float t = 2 * glm::pi() * rand();
-		float u = math.random() + math.random();
-		float r;
-		if (u > 1)
-		{
-			r = 2 - u;
-		}
-		else
-		{
-			r = u;
-		}
-		return radius*r*math.cos(t), radius*r*math.sin(t);*/ //WORK IN PROGRESS
+		int i_TwoPi = rand() % 62831;									//< Generate a pseudo random of 2*pi because rand doesn't work with floats
+		float f_A = i_TwoPi / (glm::two_pi<float>() * 10000);			//< Divide pseudo random by actual 2*pi to get a similar effect of actually generating a rand of 2*pi.
+
+		float f_X = f_IRadius * glm::cos(f_R) * f_R;
+		float f_Y = f_IRadius * glm::sin(f_A) * f_R;
+
+		return glm::vec2(f_X, f_Y);
 	}
 };
