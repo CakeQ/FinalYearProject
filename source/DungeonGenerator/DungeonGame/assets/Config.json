@@ -17,11 +17,23 @@
       "keys": [
         65
       ]
-    }, 
+    },
     {
-     "command": "MoveRightCommand", 
+      "command": "MoveRightCommand",
       "keys": [
         68
+      ]
+    },
+    {
+      "command": "MoveUpwardCommand",
+      "keys": [
+        32
+      ]
+    }, 
+    {
+     "command": "MoveDownwardCommand", 
+      "keys": [
+        67
       ]
     }, 
     {

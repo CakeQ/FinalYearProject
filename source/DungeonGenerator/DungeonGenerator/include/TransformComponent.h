@@ -54,6 +54,8 @@ public:
 			else if (s_IMessage == "MovePlayerBackward")v3_Translation.z = 10;
 			else if (s_IMessage == "MovePlayerLeft")v3_Translation.x = -10;
 			else if (s_IMessage == "MovePlayerRight")v3_Translation.x = 10;
+			else if (s_IMessage == "MovePlayerUp")v3_Translation.y = 10;
+			else if (s_IMessage == "MovePlayerDown")v3_Translation.y = -10;
 			Translate(v3_Translation * inverse(q_Orientation));
 		}
 	}

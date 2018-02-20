@@ -44,7 +44,6 @@ public:
 	{
 		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
 		if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
-		std::cout << v3_Position.x << ", " << v3_Position.y << ", " << v3_Position.z << std::endl;
 	};
 
 	void Message(const std::string s_IMessage) override

@@ -27,42 +27,54 @@ public:
 
 		v2_RoomSize = v2_IRoomSize;
 		v3_TileSize = v3_ITileSize;
-		v3_TileOffset = v3_IPosition - glm::vec3(((v2_IRoomSize.x * v3_TileSize.x)/2), ((v2_IRoomSize.y * v3_TileSize.y)/2), 0);
+		v3_TileOffset = v3_IPosition - glm::vec3(((v2_IRoomSize.x * v3_TileSize.x)/2.0f), ((v2_IRoomSize.y * v3_TileSize.y)/2.0f), 0.0f);
 
 		GenerateRoom(mm_IModelManager);
 	};
 
 	void GenerateRoom(ModelManager* mm_IModelManager)
 	{
-		for (int i = 0; i > v2_RoomSize.x; i++)
+		std::cout << "Room position: " << v3_TileOffset.x << "," << v3_TileOffset.y << std::endl;
+
+		for (int i_Layer = 0; i_Layer < 2; i_Layer++)
 		{
-			for (int j = 0; j > v2_RoomSize.y; j++)
+			for (int i = 0; i < v2_RoomSize.x; i++)
 			{
-				std::string s_WallType;
-				int i_WallRotation;
-
-				if ((i == 0 || i == v2_RoomSize.x - 1) && (j == 0 || j == v2_RoomSize.y - 1))
+				for (int j = 0; j < v2_RoomSize.y; j++)
 				{
-					s_WallType = "wall_s";
-				}
-				else
-				{
-					s_WallType = "floor_s";
-				}
+					std::cout << i_Layer;
 
-				StaticEntity* e_NewWall = new StaticEntity;
+					std::string s_WallType;
+					int i_WallRotation;
 
-				for (Asset* a_IteratorAsset : mm_IModelManager->vt_AssetList)
-				{
-					if (s_WallType == a_IteratorAsset->s_ModelName)
+					if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 					{
-						e_NewWall->GetComponent<ModelComponent>()->m_Model = a_IteratorAsset->m_Model;
+						s_WallType = "wall_s";
+					}
+					else if (i_Layer == 0)
+					{
+						s_WallType = "floor_s";
+					}
+					else
+					{
 						continue;
 					}
-				}
 
-				e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_TileOffset + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), 0.0f);
-				s_ParentScene->vt_EntityList.push_back(e_NewWall);
+					StaticEntity* e_NewWall = new StaticEntity;
+
+					for (Asset* a_IteratorAsset : mm_IModelManager->vt_AssetList)
+					{
+						if (s_WallType == a_IteratorAsset->s_ModelName)
+						{
+							e_NewWall->GetComponent<ModelComponent>()->m_Model = a_IteratorAsset->m_Model;
+							continue;
+						}
+					}
+
+					std::cout << "Spawning " << s_WallType << std::endl;
+					e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_TileOffset + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
+					s_ParentScene->vt_EntityList.push_back(e_NewWall);
+				}
 			}
 		}
 	};

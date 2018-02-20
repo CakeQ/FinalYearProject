@@ -2,30 +2,37 @@
   "Assets": [
     {
       "name": "wall_s",
-      "model": "assets/models/Wall.fbx",
+      "model": "assets/models/walls/Wall.fbx",
       "texture_diffuse": [
-        "assets/textures/testMat.tga"
+        "assets/textures/512x512.png"
       ]
     },
-	{
+	  {
       "name": "wall_c",
       "model": "assets/models/walls/Corner.fbx",
       "texture_diffuse": [
-        "assets/textures/testMat.tga"
+        "assets/textures/512x512.png"
       ]
     },
-	{
+	  {
       "name": "floor_s",
       "model": "assets/models/walls/Floor.fbx",
       "texture_diffuse": [
-        "assets/textures/testMat.tga"
+        "assets/textures/512x512.png"
       ]
     },
-	{
+	  {
       "name": "floor_c",
       "model": "assets/models/walls/Floor_Corner.obj",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
+      ]
+    },
+	  {
+      "name": "duck",
+      "model": "assets/models/Duck.fbx",
+      "texture_diffuse": [
+        "assets/textures/duckCM.tga"
       ]
     }
   ]

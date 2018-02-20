@@ -31,7 +31,18 @@ private:
 	static bool b_FirstMouse;
 	static glm::vec2 v2_LastMousePos;
 
-	Shader* s_ShaderProgram;
+	Shader* s_DefaultShaderProgram;
+	Shader* s_FontshaderProgram;
+
+	struct Character {
+		GLuint ui_TextureID;   // ID handle of the glyph texture
+		glm::ivec2 v2_Size;    // Size of glyph
+		glm::ivec2 v2_Bearing;  // Offset from baseline to left/top of glyph
+		GLuint ui_Advance;    // Horizontal offset to advance to next glyph
+	};
+
+	std::map<GLchar, Character> m_Characters;
+	GLuint ui_FontVAO, ui_FontVBO;
 
 	static void MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPos, double d_IYPos);
 	static void KeyCallbackEvent(GLFWwindow* w_IWindow, int i_IKey, int i_IScanCode, int i_IAction, int i_IMods);
@@ -42,13 +53,14 @@ public:
 
 	bool InitWindow(int i_IWidth, int i_IHeight, std::string i_IWindowName) override;
 	bool RunEngine(Game& g_IGameID) override;
-
-	void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue);
-
 	void SetCamera(const CameraComponent* c_ICamera) override;
-	void DrawCube(const glm::mat4& m4_IModelMatrix);
-	void DrawModel(Model* model, glm::mat4& modelMatrix);
 
-	Shader* GetShaderProgram() { return s_ShaderProgram; };
+	void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue) override;
+	void RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) override;
+
+	void DrawCube(const glm::mat4& m4_IModelMatrix) override;
+	void DrawModel(Model* model, glm::mat4& modelMatrix) override;
+
+	void EngineCoreGLFW::SetupDefaultFont();
 };
 

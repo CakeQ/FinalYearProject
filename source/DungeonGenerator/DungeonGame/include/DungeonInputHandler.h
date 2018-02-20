@@ -44,6 +44,24 @@ public:
 	};
 };
 
+class MoveUpCommand : public InputCommand
+{
+public:
+	void Execute(Entity& e_IEntity)
+	{
+		e_IEntity.Message("MovePlayerUp");
+	};
+};
+
+class MoveDowncommand : public InputCommand
+{
+public:
+	void Execute(Entity& e_IEntity)
+	{
+		e_IEntity.Message("MovePlayerDown");
+	};
+};
+
 class ChangeViewCommand : public InputCommand
 {
 public:
@@ -114,6 +132,8 @@ struct DungeonInputHandler : public InputHandler
 					else if (CommandType == "MoveLeftCommand") m_ControlMapping[Keys[i].asInt()] = new MoveLeftCommand;
 					else if (CommandType == "MoveBackwardCommand") m_ControlMapping[Keys[i].asInt()] = new MoveBackwardCommand;
 					else if (CommandType == "MoveRightCommand") m_ControlMapping[Keys[i].asInt()] = new MoveRightCommand;
+					else if (CommandType == "MoveUpwardCommand") m_ControlMapping[Keys[i].asInt()] = new MoveUpCommand;
+					else if (CommandType == "MoveDownwardCommand") m_ControlMapping[Keys[i].asInt()] = new MoveDowncommand;
 					else if (CommandType == "SetCameraCommand") m_ControlMapping[Keys[i].asInt()] = new ChangeViewCommand;
 					else if (CommandType == "SetCameraFirstPersonCommand") m_ControlMapping[Keys[i].asInt()] = new ChangeViewFirstPersonCommand;
 					else if (CommandType == "SetCameraThirdPersonCommand") m_ControlMapping[Keys[i].asInt()] = new ChangeViewThirdPersonCommand;

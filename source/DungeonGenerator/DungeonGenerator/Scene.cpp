@@ -25,6 +25,8 @@ void Scene::Update(float f_IDeltaTime)
 	{
 		o_Iterator->Update(f_IDeltaTime);
 	}
+	//glm::vec3 Pos = e_PlayerEntity->GetComponent<TransformComponent>()->v3_Position;
+	//std::cout << Pos.x << ", " << Pos.y << ", " << Pos.z << std::endl;
 }
 
 void Scene::Draw()

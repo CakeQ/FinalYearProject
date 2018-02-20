@@ -27,11 +27,6 @@ public:
 		TransformComponent* c_Transform = GetComponent<TransformComponent>();
 		GetComponent<CameraComponent>()->v3_Position = -1.0f * (c_Transform->v3_Position + glm::vec3(0.0f, 0.0f, 0.0f));
 		GetComponent<CameraComponent>()->q_Orientation = inverse(c_Transform->q_Orientation);
-
-		for (auto a_Iterator = m_ComponentList.begin(); a_Iterator != m_ComponentList.end(); a_Iterator++)
-		{
-			a_Iterator->second->Update();
-		}
 	};
 
 	void Message(const std::string s_IMessage) override
