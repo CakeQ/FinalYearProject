@@ -14,7 +14,7 @@ public:
 	std::vector<Entity*> vt_RoomContents;
 	glm::vec2 v2_RoomSize;
 	glm::vec3 v3_TileSize;
-	glm::vec3 v3_TileOffset;
+	glm::vec3 v3_Position;
 
 	Scene* s_ParentScene;
 	ModelManager* mm_ModelManager;
@@ -27,14 +27,15 @@ public:
 
 		v2_RoomSize = v2_IRoomSize;
 		v3_TileSize = v3_ITileSize;
-		v3_TileOffset = v3_IPosition - glm::vec3(((v2_IRoomSize.x * v3_TileSize.x)/2.0f), ((v2_IRoomSize.y * v3_TileSize.y)/2.0f), 0.0f);
+		v3_Position = v3_IPosition;
+
+		std::cout << "Room position: " << v3_Position.x << "," << v3_Position.y << std::endl;
 
 		GenerateRoom(mm_IModelManager);
 	};
 
 	void GenerateRoom(ModelManager* mm_IModelManager)
 	{
-		std::cout << "Room position: " << v3_TileOffset.x << "," << v3_TileOffset.y << std::endl;
 
 		for (int i_Layer = 0; i_Layer < 2; i_Layer++)
 		{
@@ -72,7 +73,7 @@ public:
 					}
 
 					std::cout << "Spawning " << s_WallType << std::endl;
-					e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_TileOffset + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
+					e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
 					s_ParentScene->vt_EntityList.push_back(e_NewWall);
 				}
 			}

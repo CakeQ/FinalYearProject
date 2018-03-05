@@ -22,7 +22,7 @@ public:
 		vt_EntityList.push_back(e_PlayerEntity);
 		SetCurrentCamera(e_PlayerEntity->GetComponent<CameraComponent>());
 
-		int i_TestSeed = rand();
+		int i_TestSeed = glfwGetTime();
 		d_CurrentDungeon = new Dungeon(i_TestSeed, mm_ModelManager, this);
 	}
 };

@@ -92,25 +92,33 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 
 bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 {
-	double d_OldTime, d_NewTime, d_FrameRate;
-	float f_DeltaTime = 0.0f;
+	double d_SimulationTime = glfwGetTime();
+	double d_DeltaTime = 1.0 / 60.0;
+	int i_FrameRate = 0;
+
 	g_IGameID.e_GameEngine = this;																								//!< Set game engine type.
-	g_IGameID.Initialise();
+	g_IGameID.Initialise();																										//!< Initialise game.
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
-		d_NewTime = glfwGetTime();
-		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);
-		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);
+		double d_RealTime = glfwGetTime();																						//!< Get current CPU time.																	//!< Get delta time.
 
-		g_IGameID.Update(f_DeltaTime);																							//!< Handle game updates.
+		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);									//!< Handle game input.
+		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);																					//!< Reset mouse buffer.
+
+		while (d_SimulationTime < d_RealTime)
+		{
+			d_SimulationTime += d_DeltaTime;
+			g_IGameID.Update(d_DeltaTime);																						//!< Handle game updates.
+			i_FrameRate++;																										//!< Incriment framerate count.
+		}
+
 		g_IGameID.Draw();																										//!< Draw everything.
-
-		d_OldTime = d_NewTime;
-		d_NewTime = glfwGetTime();
-		d_FrameRate = (d_NewTime - d_OldTime) * 10000;
+		
+		double d_FrameRate = 1000.0 / double(i_FrameRate);
 		std::string s_FrameText = std::to_string(d_FrameRate) + " FPS";
 		//RenderText(s_FrameText, 0.005f, 0.95f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		i_FrameRate = 0;
 
 		glfwSwapBuffers(w_WindowID);																							//!< Swap window buffer.
 		glfwPollEvents();																										//!< Check for any events.

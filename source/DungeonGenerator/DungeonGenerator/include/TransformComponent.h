@@ -57,6 +57,7 @@ public:
 			else if (s_IMessage == "MovePlayerUp")v3_Translation.y = 10;
 			else if (s_IMessage == "MovePlayerDown")v3_Translation.y = -10;
 			Translate(v3_Translation * inverse(q_Orientation));
+			//std::cout << v3_Position.x << ", " << v3_Position.y << std::endl;
 		}
 	}
 };
