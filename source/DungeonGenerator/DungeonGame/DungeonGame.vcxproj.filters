@@ -41,6 +41,9 @@
     <ClInclude Include="include\Room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\defaultShader.frag">
@@ -53,6 +56,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="assets\shaders\fontShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\AssetList.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="assets\Config.json">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

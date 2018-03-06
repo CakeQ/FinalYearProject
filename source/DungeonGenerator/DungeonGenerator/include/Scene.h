@@ -35,7 +35,7 @@ struct SceneText
 class Scene
 {
 private:
-	//Entity* e_Background;
+	EngineCore* e_GameEngine;
 
 public:
 	std::vector<Entity*> vt_EntityList;
@@ -43,7 +43,7 @@ public:
 
 	Entity* e_PlayerEntity;
 	CameraComponent* c_SceneCamera;
-	EngineCore* e_EngineCore;
+	
 	InputHandler* ih_InputHandler;
 	ModelManager* mm_ModelManager;
 

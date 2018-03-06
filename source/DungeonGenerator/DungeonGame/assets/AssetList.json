@@ -4,35 +4,28 @@
       "name": "wall_s",
       "model": "assets/models/walls/Wall.fbx",
       "texture_diffuse": [
-        "assets/textures/512x512.png"
+        "assets/textures/Wall.png"
       ]
     },
 	  {
       "name": "wall_c",
-      "model": "assets/models/walls/Corner.fbx",
+      "model": "assets/models/walls/Wall.fbx",
       "texture_diffuse": [
-        "assets/textures/512x512.png"
+        "assets/textures/Wall.png"
       ]
     },
 	  {
       "name": "floor_s",
       "model": "assets/models/walls/Floor.fbx",
       "texture_diffuse": [
-        "assets/textures/512x512.png"
+        "assets/textures/Floor.png"
       ]
     },
 	  {
       "name": "floor_c",
-      "model": "assets/models/walls/Floor_Corner.obj",
+      "model": "assets/models/walls/Floor_Corner.fbx",
       "texture_diffuse": [
         "assets/textures/testMat.tga"
-      ]
-    },
-	  {
-      "name": "duck",
-      "model": "assets/models/Duck.fbx",
-      "texture_diffuse": [
-        "assets/textures/duckCM.tga"
       ]
     }
   ]

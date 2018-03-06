@@ -3,7 +3,7 @@
 Scene::Scene(EngineCore* e_IEngine)
 {
 	mm_ModelManager = new ModelManager;
-	e_EngineCore = e_IEngine;
+	e_GameEngine = e_IEngine;
 }
 
 Scene::~Scene()
@@ -15,7 +15,7 @@ Scene::~Scene()
 	}
 
 	c_SceneCamera = nullptr;
-	e_EngineCore = nullptr;
+	e_GameEngine = nullptr;
 	//e_Background->~Entity();
 }
 
@@ -40,10 +40,10 @@ void Scene::Draw()
 		f_BlueValue = e_Background->GetComponent<BlueComponent>()->f_ColourValue;*/
 
 	// e.g. pass object details to the engine to render the next frame
-	e_EngineCore->RenderColouredBackground(f_RedValue, f_GreenValue, f_BlueValue);
+	e_GameEngine->RenderColouredBackground(f_RedValue, f_GreenValue, f_BlueValue);
 
 	// update the camera (probably don't need to do this each frame)
-	e_EngineCore->SetCamera(c_SceneCamera);
+	e_GameEngine->SetCamera(c_SceneCamera);
 
 	for (Entity* e_EntityIterator : vt_EntityList)
 	{
@@ -56,7 +56,7 @@ void Scene::Draw()
 
 			if (!e_EntityIterator->GetComponent<ModelComponent>()->b_Hidden)
 			{
-				e_EngineCore->DrawModel(e_EntityIterator->GetComponent<ModelComponent>()->m_Model, e_EntityIterator->GetComponent<TransformComponent>()->GetModelMatrix());
+				e_GameEngine->DrawModel(e_EntityIterator->GetComponent<ModelComponent>()->m_Model, e_EntityIterator->GetComponent<TransformComponent>()->GetModelMatrix());
 			}
 		}
 	}

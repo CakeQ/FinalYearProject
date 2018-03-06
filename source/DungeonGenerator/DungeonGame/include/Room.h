@@ -29,8 +29,6 @@ public:
 		v3_TileSize = v3_ITileSize;
 		v3_Position = v3_IPosition;
 
-		std::cout << "Room position: " << v3_Position.x << "," << v3_Position.y << std::endl;
-
 		GenerateRoom(mm_IModelManager);
 	};
 
@@ -50,7 +48,14 @@ public:
 
 					if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 					{
-						s_WallType = "wall_s";
+						if ((i == 0 && j == 0) || (i == 0 && j == v2_RoomSize.y - 1) || (i == v2_RoomSize.x - 1 && j == 0) || (i == v2_RoomSize.x - 1 && j == v2_RoomSize.y - 1))
+						{
+							s_WallType = "wall_c";
+						}
+						else
+						{
+							s_WallType = "wall_s";
+						}
 					}
 					else if (i_Layer == 0)
 					{
@@ -71,8 +76,6 @@ public:
 							continue;
 						}
 					}
-
-					std::cout << "Spawning " << s_WallType << std::endl;
 					e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
 					s_ParentScene->vt_EntityList.push_back(e_NewWall);
 				}

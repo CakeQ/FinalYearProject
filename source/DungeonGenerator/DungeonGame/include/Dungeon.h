@@ -36,29 +36,25 @@ public:
 	void GenerateDungeon()
 	{
 		int i_Rooms = rand()%5 + 5;
-
-		std::cout << "Generating " << i_Rooms << " rooms." << std::endl;
+		//int i_Rooms = 1;
 
 		for (int i = 0; i < i_Rooms; i++)
 		{
 			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 3, rand() % 6 + 3);
 			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(20.0f));
 			Room* r_NewRoom = new Room(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize, glm::vec3(v2_Grid, 0.0f), s_ParentScene, mm_ModelManager);
-			std::cout << "Room " << i + 1 << " generated. (" << v2_RoomSize.x << ", " << v2_RoomSize.y << ")" << std::endl;
 		}
 	};
 
 	glm::vec2 GetRandomPointInCircle(float f_IRadius)
 	{
 		float f_R = f_IRadius - glm::sqrt(rand() % 2) * f_IRadius;
-		
+
 		int i_TwoPi = rand() % 62831;									//< Generate a pseudo random of 2*pi because rand doesn't work with floats.
 		float f_A = i_TwoPi / 10000.0f;									//< Divide pseudo random by 10000 to achieve actual floated pseudo pi.
 
 		float f_X = f_IRadius * glm::cos(f_R) * f_R;
 		float f_Y = f_IRadius * glm::sin(f_A) * f_R;
-
-		std::cout << "Point in circle: " << f_X << ", " << f_Y << std::endl;
 
 		return glm::vec2(f_X, f_Y);
 	}
@@ -66,9 +62,6 @@ public:
 	glm::vec2 SnapToGrid(glm::vec2 v2_IPos)
 	{
 		glm::vec2 v2_SnappedPos = glm::vec2(floor(v2_IPos.x / v2_Grid.x + 0.5) * v2_Grid.x, floor(v2_IPos.y / v2_Grid.y + 0.5) * v2_Grid.y);
-	
-		std::cout << v2_SnappedPos.x << ", " << v2_SnappedPos.y << std::endl;
-
 		return v2_SnappedPos;
 	}
 };

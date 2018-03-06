@@ -231,3 +231,6 @@ $RECYCLE.BIN/
 *.lnk
 *.opendb
 *.db
+
+# All output files
+bin/

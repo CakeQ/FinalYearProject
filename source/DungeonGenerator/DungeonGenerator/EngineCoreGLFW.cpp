@@ -101,7 +101,7 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
-		double d_RealTime = glfwGetTime();																						//!< Get current CPU time.																	//!< Get delta time.
+		double d_RealTime = glfwGetTime();																						//!< Get current CPU time.
 
 		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);									//!< Handle game input.
 		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);																					//!< Reset mouse buffer.
