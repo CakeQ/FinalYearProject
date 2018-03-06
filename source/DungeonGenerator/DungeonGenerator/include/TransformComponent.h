@@ -50,13 +50,14 @@ public:
 		{
 			glm::vec3 v3_Translation(0, 0, 0);
 
-			if (s_IMessage == "MovePlayerForward")v3_Translation.z = -10;
-			else if (s_IMessage == "MovePlayerBackward")v3_Translation.z = 10;
+			if (s_IMessage == "MovePlayerForward")v3_Translation.y = 10;
+			else if (s_IMessage == "MovePlayerBackward")v3_Translation.y = -10;
 			else if (s_IMessage == "MovePlayerLeft")v3_Translation.x = -10;
 			else if (s_IMessage == "MovePlayerRight")v3_Translation.x = 10;
-			else if (s_IMessage == "MovePlayerUp")v3_Translation.y = 10;
-			else if (s_IMessage == "MovePlayerDown")v3_Translation.y = -10;
-			Translate(v3_Translation * inverse(q_Orientation));
+			else if (s_IMessage == "MovePlayerUp")v3_Translation.z = -10;
+			else if (s_IMessage == "MovePlayerDown")v3_Translation.z = 10;
+			//Translate(v3_Translation * inverse(q_Orientation));
+			Translate(v3_Translation);
 			//std::cout << v3_Position.x << ", " << v3_Position.y << std::endl;
 		}
 	}

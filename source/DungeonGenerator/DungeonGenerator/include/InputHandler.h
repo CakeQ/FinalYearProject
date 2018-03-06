@@ -32,17 +32,14 @@ struct InputHandler
 				a_MapEntry.second->Execute(*e_AttatchedEntity);
 			}
 
-			if (e_AttatchedEntity->GetComponent<TransformComponent>())
+			if (e_AttatchedEntity->GetComponent<TransformComponent>() && e_AttatchedEntity->GetComponent<CameraComponent>())
 			{
-				if (v2_IMousePos.x != 0)
+				if ((v2_IMousePos.x != 0) || (v2_IMousePos.y != 0))
 				{
-					e_AttatchedEntity->GetComponent<TransformComponent>()->Yaw(v2_IMousePos.x * -0.00025f);
+					glm::vec3 v3_Forward = e_AttatchedEntity->GetComponent<CameraComponent>()->GetCameraForward();
+					//TODO: Figure out how to manipulate forward vector to rotate camera on both axes
+					e_AttatchedEntity->GetComponent<TransformComponent>()->Rotate(-0.00025f, v3_Forward);
 				}
-			}
-			if (e_AttatchedEntity->GetComponent<CameraComponent>())
-			{
-				if (v2_IMousePos.y > 1) e_AttatchedEntity->GetComponent<CameraComponent>()->Message("LookUp");
-				else if (v2_IMousePos.y < -1) e_AttatchedEntity->GetComponent<CameraComponent>()->Message("LookDown");
 			}
 		}
 	};

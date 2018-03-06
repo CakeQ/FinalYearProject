@@ -12,6 +12,18 @@ Created by Daniel Thompson, P15230940.
 
 #include <vector>
 
+#include <glm/detail/type_vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw_gl3.h>
+#include <imgui/imgui_internal.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "EngineCoreBase.h"
 
 #include "Model.h"
@@ -45,6 +57,7 @@ private:
 	GLuint ui_FontVAO, ui_FontVBO;
 
 	static void MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPos, double d_IYPos);
+	static void MouseButtonCallBackEvent(GLFWwindow* w_IWindow, int i_IButton, int i_IAction, int i_iMods);
 	static void KeyCallbackEvent(GLFWwindow* w_IWindow, int i_IKey, int i_IScanCode, int i_IAction, int i_IMods);
 	static void WindowResizeCallbackEvent(GLFWwindow* i_IWindow, int i_IWidth, int i_IHeight);
 

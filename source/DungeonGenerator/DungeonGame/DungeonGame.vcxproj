@@ -167,7 +167,6 @@
     <ClInclude Include="include\DungeonGame.h" />
     <ClInclude Include="include\DungeonInputHandler.h" />
     <ClInclude Include="include\DungeonScene.h" />
-    <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\Room.h" />
   </ItemGroup>
   <ItemGroup>

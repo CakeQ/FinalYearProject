@@ -14,6 +14,7 @@ class CameraComponent : public Component
 public:
 	glm::vec3 v3_Position;
 	glm::quat q_Orientation;
+	glm::vec3 v3_Forward;
 
 	float f_FOV;
 
@@ -24,6 +25,16 @@ public:
 	void LookAt(const glm::vec3& v3_ITarget) { q_Orientation = (glm::toQuat(glm::lookAt(v3_Position, v3_ITarget, glm::vec3(0, 1, 0)))); } // Doesn't work
 
 	glm::mat4 GetViewMatrix() const { return glm::translate(glm::mat4_cast(q_Orientation), v3_Position); }
+	
+	glm::vec3 GetCameraForward()
+	{
+		glm::vec3 v3_NewForward;
+		v3_NewForward.x = cos(glm::radians(q_Orientation.y)) * cos(glm::radians(q_Orientation.x));
+		v3_NewForward.y = sin(glm::radians(q_Orientation.x));
+		v3_NewForward.z = sin(glm::radians(q_Orientation.y));
+		v3_Forward = glm::normalize(v3_NewForward);
+		return v3_Forward;
+	}
 
 	const glm::vec3& GetPosition() const { return v3_Position; }
 	const glm::quat& GetOrientation() const { return q_Orientation; }
@@ -43,7 +54,7 @@ public:
 	void Update() override 
 	{
 		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
-		if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
+		else if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
 	};
 
 	void Message(const std::string s_IMessage) override

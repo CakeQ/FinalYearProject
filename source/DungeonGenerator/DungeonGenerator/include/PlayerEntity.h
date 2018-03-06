@@ -25,8 +25,9 @@ public:
 	void Update(float f_IDeltaTime) override
 	{
 		TransformComponent* c_Transform = GetComponent<TransformComponent>();
-		GetComponent<CameraComponent>()->v3_Position = -1.0f * (c_Transform->v3_Position + glm::vec3(0.0f, 0.0f, 0.0f));
-		GetComponent<CameraComponent>()->q_Orientation = inverse(c_Transform->q_Orientation);
+		glm::quat q_InverseOrientation = inverse(c_Transform->q_Orientation);
+		GetComponent<CameraComponent>()->v3_Position = -1.0f * (c_Transform->v3_Position + glm::vec3(0.0f, 0, 300.0f) * q_InverseOrientation);
+		GetComponent<CameraComponent>()->q_Orientation = q_InverseOrientation;
 	};
 
 	void Message(const std::string s_IMessage) override

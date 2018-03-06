@@ -1,12 +1,5 @@
 #include <EngineCoreGLFW.h>
 
-#include <glm/detail/type_vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "Game.h"
 #include "Component.h"
 #include "CameraComponent.h"
@@ -27,7 +20,7 @@ EngineCoreGLFW::~EngineCoreGLFW()
 
 bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWindowName)											//!< Window Initialisation.
 {
-																																//!< Begin GLFW set-up.
+	//!< Begin GLFW Initialization																															//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																				//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																				//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																			//!< Set GLFW forward compatability to true.
@@ -71,6 +64,7 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 
 	glfwSetFramebufferSizeCallback(w_WindowID, WindowResizeCallbackEvent);
 	glfwSetCursorPosCallback(w_WindowID, MouseMoveCallbackEvent);
+	glfwSetMouseButtonCallback(w_WindowID, MouseButtonCallBackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
 
 	glfwSetInputMode(w_WindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -87,6 +81,9 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	gl::Enable(gl::BLEND);
 	gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
 
+	//!< Begin ImGUI Initialization
+	//ImGui::CreateContext();
+	//ImGui_ImplGlfwGL3_Init(w_WindowID, true);
 	return true;
 }
 
@@ -101,6 +98,7 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
+		//ImGui_ImplGlfwGL3_NewFrame();
 		double d_RealTime = glfwGetTime();																						//!< Get current CPU time.
 
 		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);									//!< Handle game input.
@@ -115,6 +113,9 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 		g_IGameID.Draw();																										//!< Draw everything.
 		
+		//ImGui::Render();
+		//ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
 		double d_FrameRate = 1000.0 / double(i_FrameRate);
 		std::string s_FrameText = std::to_string(d_FrameRate) + " FPS";
 		//RenderText(s_FrameText, 0.005f, 0.95f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -155,6 +156,13 @@ void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPo
 	v2_LastMousePos = glm::vec2(d_IXPos, d_IYPos);
 
 	v2_MouseBuffer = v2_Offset;
+}
+
+void EngineCoreGLFW::MouseButtonCallBackEvent(GLFWwindow * w_IWindow, int i_IButton, int i_IAction, int i_iMods)
+{
+	std::cout << i_IButton << ", " << i_IAction << std::endl;
+	int i_State;
+	
 }
 
 void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
