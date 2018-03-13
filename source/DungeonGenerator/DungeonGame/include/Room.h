@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "StaticEntity.h"
+#include "WallEntity.h"
+#include "FloorEntity.h"
 #include "ModelManager.h"
 
 class Room : public Entity
@@ -41,43 +43,42 @@ public:
 			{
 				for (int j = 0; j < v2_RoomSize.y; j++)
 				{
-					std::cout << i_Layer;
-
 					std::string s_WallType;
 					int i_WallRotation;
+					StaticEntity* e_NewTile;
 
 					if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 					{
-						if ((i == 0 && j == 0) || (i == 0 && j == v2_RoomSize.y - 1) || (i == v2_RoomSize.x - 1 && j == 0) || (i == v2_RoomSize.x - 1 && j == v2_RoomSize.y - 1))
+						/*if ((i == 0 && j == 0) || (i == 0 && j == v2_RoomSize.y - 1) || (i == v2_RoomSize.x - 1 && j == 0) || (i == v2_RoomSize.x - 1 && j == v2_RoomSize.y - 1))
 						{
 							s_WallType = "wall_c";
 						}
 						else
 						{
 							s_WallType = "wall_s";
-						}
+						}*/
+						e_NewTile = new WallEntity(mm_IModelManager);
 					}
 					else if (i_Layer == 0)
 					{
-						s_WallType = "floor_s";
+						//s_WallType = "floor_s";
+						e_NewTile = new FloorEntity(mm_IModelManager);
 					}
 					else
 					{
 						continue;
 					}
 
-					StaticEntity* e_NewWall = new StaticEntity;
-
-					for (Asset* a_IteratorAsset : mm_IModelManager->vt_AssetList)
+					/*for (Asset* a_IteratorAsset : mm_IModelManager->vt_AssetList)
 					{
 						if (s_WallType == a_IteratorAsset->s_ModelName)
 						{
-							e_NewWall->GetComponent<ModelComponent>()->m_Model = a_IteratorAsset->m_Model;
+							e_NewTile->GetComponent<ModelComponent>()->m_Model = a_IteratorAsset->m_Model;
 							continue;
 						}
-					}
-					e_NewWall->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
-					s_ParentScene->vt_EntityList.push_back(e_NewWall);
+					}*/
+					e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
+					s_ParentScene->vt_EntityList.push_back(e_NewTile);
 				}
 			}
 		}

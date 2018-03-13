@@ -1,7 +1,42 @@
 {
   "Assets": [
     {
-      "name": "wall_s",
+      "name": "wall_s_a",
+      "model": "assets/models/walls/Wall_TwoSided_A.fbx",
+      "texture_diffuse": [
+        "assets/textures/Wall.png"
+      ]
+    },
+    {
+      "name": "wall_s_b",
+      "model": "assets/models/walls/Wall_TwoSided_B.fbx",
+      "texture_diffuse": [
+        "assets/textures/Wall.png"
+      ]
+    },
+    {
+      "name": "wall_s_c",
+      "model": "assets/models/walls/Wall_TwoSided_C.fbx",
+      "texture_diffuse": [
+        "assets/textures/Wall.png"
+      ]
+    },
+    {
+      "name": "wall_t",
+      "model": "assets/models/walls/Wall.fbx",
+      "texture_diffuse": [
+        "assets/textures/Wall.png"
+      ]
+    },
+    {
+      "name": "wall_i",
+      "model": "assets/models/walls/Wall_Pillar.fbx",
+      "texture_diffuse": [
+        "assets/textures/Wall.png"
+      ]
+    },
+    {
+      "name": "wall_m",
       "model": "assets/models/walls/Wall.fbx",
       "texture_diffuse": [
         "assets/textures/Wall.png"
@@ -9,14 +44,56 @@
     },
 	  {
       "name": "wall_c",
-      "model": "assets/models/walls/Wall.fbx",
+      "model": "assets/models/walls/Wall_Corner.fbx",
       "texture_diffuse": [
         "assets/textures/Wall.png"
       ]
     },
-	  {
-      "name": "floor_s",
-      "model": "assets/models/walls/Floor.fbx",
+    {
+      "name": "floor_s_a",
+      "model": "assets/models/walls/Floor_A.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_b",
+      "model": "assets/models/walls/Floor_B.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_c",
+      "model": "assets/models/walls/Floor_C.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_d",
+      "model": "assets/models/walls/Floor_D.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_e",
+      "model": "assets/models/walls/Floor_E.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_f",
+      "model": "assets/models/walls/Floor_F.fbx",
+      "texture_diffuse": [
+        "assets/textures/Floor.png"
+      ]
+    },
+    {
+      "name": "floor_s_g",
+      "model": "assets/models/walls/Floor_G.fbx",
       "texture_diffuse": [
         "assets/textures/Floor.png"
       ]
@@ -25,7 +102,7 @@
       "name": "floor_c",
       "model": "assets/models/walls/Floor_Corner.fbx",
       "texture_diffuse": [
-        "assets/textures/testMat.tga"
+        "assets/textures/Floor.png"
       ]
     }
   ]

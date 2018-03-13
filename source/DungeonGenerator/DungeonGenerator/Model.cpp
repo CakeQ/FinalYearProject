@@ -75,7 +75,7 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		}
 	}
 
-	if (m_IMesh->mMaterialIndex >= 0)
+	/*if (m_IMesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* m_Material = s_IScene->mMaterials[m_IMesh->mMaterialIndex];
 
@@ -88,7 +88,7 @@ Mesh Model::ProcessMesh(aiMesh* m_IMesh, const aiScene* s_IScene)
 		vt_NewTextures.insert(vt_NewTextures.end(), vt_SpecularMaps.begin(), vt_SpecularMaps.end());
 		vt_NewTextures.insert(vt_NewTextures.end(), vt_NormalMaps.begin(), vt_NormalMaps.end());
 		vt_NewTextures.insert(vt_NewTextures.end(), vt_HeightMaps.begin(), vt_HeightMaps.end());
-	}
+	}*/
 
 	return Mesh(vt_NewVertices, vt_NewIndices, vt_NewTextures);
 }
@@ -172,7 +172,7 @@ GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 	}
 	else
 	{
-		std::cout << "ERROR: Failed to load texture from: " << s_IDirectory << std::endl;
+		std::cout << "ERROR: Failed to load texture from: " << s_IDirectory << " (" << c_IPath << ")" << std::endl;
 		SOIL_free_image_data(uc_Image);
 	}
 	return ui_TextureID;

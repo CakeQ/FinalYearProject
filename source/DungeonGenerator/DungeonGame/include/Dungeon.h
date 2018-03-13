@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <glm\glm.hpp>
+#include <Box2D\Box2D.h>
 
 #include "Scene.h"
 #include "ModelManager.h"
@@ -16,7 +17,7 @@ private:
 	Scene* s_ParentScene;
 
 public:
-	std::vector<Room> vt_RoomList;
+	std::vector<Room*> vt_RoomList;
 	glm::vec2 v2_RoomSize;
 	glm::vec2 v2_Grid = glm::vec2(39.25f, 39.25f);
 	glm::vec3 v3_DungeonOrigin;
@@ -42,8 +43,10 @@ public:
 		{
 			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 3, rand() % 6 + 3);
 			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(20.0f));
-			Room* r_NewRoom = new Room(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize, glm::vec3(v2_Grid, 0.0f), s_ParentScene, mm_ModelManager);
+			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize);
 		}
+
+
 	};
 
 	glm::vec2 GetRandomPointInCircle(float f_IRadius)
@@ -63,5 +66,23 @@ public:
 	{
 		glm::vec2 v2_SnappedPos = glm::vec2(floor(v2_IPos.x / v2_Grid.x + 0.5) * v2_Grid.x, floor(v2_IPos.y / v2_Grid.y + 0.5) * v2_Grid.y);
 		return v2_SnappedPos;
+	}
+
+	void SpawnRoom(glm::vec3 v3_IRoomPos, glm::vec2 v2_IRoomSize)
+	{
+		Room* r_NewRoom = new Room(v3_IRoomPos, v2_IRoomSize, glm::vec3(v2_Grid, 0.0f), s_ParentScene, mm_ModelManager);
+		vt_RoomList.push_back(r_NewRoom);
+	}
+
+	void SimulatePhysics()
+	{
+		//attach physics box to every room
+		//simulate physics collisions until no more collisions
+		//
+	}
+
+	void InitialiseTiles()
+	{
+
 	}
 };
