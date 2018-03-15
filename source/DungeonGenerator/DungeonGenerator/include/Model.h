@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 
-#include <gl_core_4_3.hpp>
+#include <glad\glad.h>
 #include <glm\gtc\matrix_transform.hpp>
 #include <SOIL2\SOIL2.h>
 #include <assimp\Importer.hpp>

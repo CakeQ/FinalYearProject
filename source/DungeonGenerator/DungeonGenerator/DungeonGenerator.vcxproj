@@ -22,14 +22,14 @@
     <ProjectGuid>{C05164CF-7682-4486-A323-D2E1A21962D8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DungeonGenerator</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>DungineCore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -171,11 +171,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="ImGUI\imgui.cpp" />
+    <ClCompile Include="ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="ImGUI\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="EngineCoreGLFW.cpp" />
-    <ClCompile Include="gl_core_4_3.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
@@ -186,13 +190,14 @@
     <ClInclude Include="include\EngineCoreBase.h" />
     <ClInclude Include="include\EngineCoreGLFW.h" />
     <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\gl_core_4_3.hpp" />
     <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\GUI.h" />
     <ClInclude Include="include\InputHandler.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\ModelComponent.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\ModelManager.h" />
+    <ClInclude Include="include\PhysicsComponent.h" />
     <ClInclude Include="include\PlayerEntity.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\Shader.h" />

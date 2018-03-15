@@ -6,6 +6,8 @@
 
 #include <json/json.h>
 
+#include <Box2D\Box2D.h>
+
 #include "EngineCoreBase.h"
 
 #include "Component.h"
@@ -34,10 +36,9 @@ struct SceneText
 
 class Scene
 {
-private:
+public:
 	EngineCore* e_GameEngine;
 
-public:
 	std::vector<Entity*> vt_EntityList;
 	std::vector<SceneText*> vt_SceneTextList;
 
@@ -47,11 +48,13 @@ public:
 	InputHandler* ih_InputHandler;
 	ModelManager* mm_ModelManager;
 
+	b2World* b2_World;
+
 	Scene(EngineCore* e_IEngine);
 	~Scene();
 
-	void Update(float f_IDeltaTime);
-	void Draw();
+	virtual void Update(float f_IDeltaTime) = 0;
+	virtual void Draw() = 0;
 	virtual void SetUpScene() = 0;
 	void SetCurrentCamera(CameraComponent* c_ICamera);
 };

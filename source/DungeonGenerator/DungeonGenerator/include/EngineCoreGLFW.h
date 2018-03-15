@@ -17,9 +17,8 @@ Created by Daniel Thompson, P15230940.
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw_gl3.h>
-#include <imgui/imgui_internal.h>
+#include <ImGUI/imgui.h>
+#include <ImGUI/imgui_impl_glfw_gl3.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -72,6 +71,7 @@ public:
 	void RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) override;
 
 	void DrawCube(const glm::mat4& m4_IModelMatrix) override;
+	void DrawDebug(const glm::mat4& m4_IModelMatrix) override;
 	void DrawModel(Model* model, glm::mat4& modelMatrix) override;
 
 	void EngineCoreGLFW::SetupDefaultFont();

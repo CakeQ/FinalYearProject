@@ -21,6 +21,6 @@ public:
 		b_Hidden = b_IState;
 	};
 
-	void Update() override {};
+	void Update(float f_IDeltaTime) override {};
 	void Message(const std::string s_IMessage) override {};
 };

@@ -2,6 +2,9 @@
 
 #include "Game.h"
 
+#include <ImGUI/imgui.h>
+#include <ImGUI/imgui_impl_glfw_gl3.h>
+
 #include "DungeonInputHandler.h"
 #include "DungeonScene.h"
 
@@ -20,7 +23,7 @@ public:
 		}
 
 		s_CurrentScene->Update(f_IDeltaTime);
-	};
+	}
 
 	void Draw() override
 	{
@@ -31,8 +34,16 @@ public:
 		}
 
 		s_CurrentScene->Draw();
-	};
+	}
 
+	void DrawGUI() override
+	{
+		ImGui::Begin("main");
+
+		ImGui::Button("myFirstButton");
+
+		ImGui::End();
+	}
 
 	void Initialise() override
 	{
@@ -50,5 +61,5 @@ public:
 
 		s_CurrentScene = new DungeonScene(e_GameEngine);
 		s_CurrentScene->SetUpScene();
-	};
+	}
 };

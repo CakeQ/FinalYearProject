@@ -11,7 +11,7 @@ public:
 
 	ColourComponent() : f_ColourValue(0) {};
 
-	void Update() override
+	void Update(float f_IDeltaTime) override
 	{
 
 	}

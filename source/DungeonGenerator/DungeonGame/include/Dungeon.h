@@ -4,7 +4,6 @@
 #include <vector>
 
 #include <glm\glm.hpp>
-#include <Box2D\Box2D.h>
 
 #include "Scene.h"
 #include "ModelManager.h"
@@ -18,9 +17,12 @@ private:
 
 public:
 	std::vector<Room*> vt_RoomList;
+	std::vector<b2Body*> vt_RoomBodyList;
 	glm::vec2 v2_RoomSize;
 	glm::vec2 v2_Grid = glm::vec2(39.25f, 39.25f);
 	glm::vec3 v3_DungeonOrigin;
+	bool b_Spreading = false;
+	bool b_Initialised = false;
 	int i_Seed;
 
 
@@ -46,7 +48,12 @@ public:
 			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize);
 		}
 
+		for (Room* e_IteratorRoom : vt_RoomList)
+		{
+			e_IteratorRoom->AddPhysics();
+		}
 
+		b_Spreading = true;
 	};
 
 	glm::vec2 GetRandomPointInCircle(float f_IRadius)
@@ -74,15 +81,27 @@ public:
 		vt_RoomList.push_back(r_NewRoom);
 	}
 
-	void SimulatePhysics()
-	{
-		//attach physics box to every room
-		//simulate physics collisions until no more collisions
-		//
-	}
-
 	void InitialiseTiles()
 	{
 
+	}
+
+	void Update(float f_IDeltaTime)
+	{
+		b_Spreading = false;
+		for (Room* e_IteratorRoom : vt_RoomList)
+		{
+			e_IteratorRoom->Update(f_IDeltaTime);
+			if (e_IteratorRoom->GetComponent<PhysicsComponent>()->b2_Body->IsAwake())
+			{
+				b_Spreading = true;
+			}
+		}
+		if (b_Spreading == false && b_Initialised == false)
+		{
+			InitialiseTiles();
+			b_Initialised = true;
+			std::cout << "No longer spreading" << std::endl;
+		}
 	}
 };

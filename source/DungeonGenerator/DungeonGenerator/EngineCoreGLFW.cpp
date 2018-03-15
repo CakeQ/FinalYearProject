@@ -45,29 +45,24 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 		return false;
 	}
 
+	ImGui::CreateContext();																										//!< Set-Up ImGUI binding.
+	ImGui_ImplGlfwGL3_Init(w_WindowID, true);																					//!< Initialise ImGUI.
+
 	glfwMakeContextCurrent(w_WindowID);																							//!< Sets all future contexts to refer to current window until another context is made.
 
-	gl::exts::LoadTest lt_DidLoad = gl::sys::LoadFunctions();																	//!< Attempt to load all GL functions.
-
-	if (!lt_DidLoad)																											//!< Terminates if GL functions fail to load.
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		fprintf(stderr, "ERROR: GLLoadGen failed to load functions\n");
-
-		glfwTerminate();
+		std::cout << "Failed to initialise GLAD" << std::endl;
 		return false;
-	}
-
-	if (lt_DidLoad.GetNumMissing() > 0)
-	{
-		printf("Number of functions that failed to load : %i.\n", lt_DidLoad.GetNumMissing());									//!< Output number of GL functions that failed to load.
-	}																															//!< End error handling.
+	}																											
+																																//!< End error handling.
 
 	glfwSetFramebufferSizeCallback(w_WindowID, WindowResizeCallbackEvent);
 	glfwSetCursorPosCallback(w_WindowID, MouseMoveCallbackEvent);
 	glfwSetMouseButtonCallback(w_WindowID, MouseButtonCallBackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
 
-	glfwSetInputMode(w_WindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(w_WindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
@@ -76,14 +71,12 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	//s_FontshaderProgram = new Shader("assets/shaders/fontShader.vert", "assets/shaders/fontShader.frag");						//!< Loads font shaders.
 	SetupDefaultFont();
 
-	gl::Enable(gl::DEPTH_TEST);																									//!< Enable depth testing.
+	glEnable(GL_DEPTH_TEST);																									//!< Enable depth testing.
 
-	gl::Enable(gl::BLEND);
-	gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
 
-	//!< Begin ImGUI Initialization
-	//ImGui::CreateContext();
-	//ImGui_ImplGlfwGL3_Init(w_WindowID, true);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	return true;
 }
 
@@ -98,11 +91,14 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 	while (!glfwWindowShouldClose(w_WindowID))																					//!< Game loop.
 	{
-		//ImGui_ImplGlfwGL3_NewFrame();
+		ImGui_ImplGlfwGL3_NewFrame();																							//!< Call new ImGUI frame.
 		double d_RealTime = glfwGetTime();																						//!< Get current CPU time.
 
 		g_IGameID.s_CurrentScene->ih_InputHandler->handleInputs(vt_KeyBuffer, v2_MouseBuffer);									//!< Handle game input.
 		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);																					//!< Reset mouse buffer.
+		glfwGetFramebufferSize(w_WindowID, &i_Width, &i_Height);																//!< Update window dimensions.
+
+		g_IGameID.DrawGUI();
 
 		while (d_SimulationTime < d_RealTime)
 		{
@@ -113,8 +109,8 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 		g_IGameID.Draw();																										//!< Draw everything.
 		
-		//ImGui::Render();
-		//ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+		ImGui::Render();																										//!< Render ImGUI.
+		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());																	//!< Render GLFW ImGUI implementation.
 
 		double d_FrameRate = 1000.0 / double(i_FrameRate);
 		std::string s_FrameText = std::to_string(d_FrameRate) + " FPS";
@@ -169,29 +165,29 @@ void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWid
 {
 	i_Width = i_IWidth;
 	i_Height = i_IHeight;
-	gl::Viewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
+	glViewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
 }
 
 void EngineCoreGLFW::SetCamera(const CameraComponent* c_ICamera)
 {
 	// set the view and projection components of our shader to the camera values
 	glm::mat4 m4_Projection = glm::perspective(glm::radians(c_ICamera->f_FOV), (float)i_Width / (float)i_Height, 0.1f, 100000.0f);
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "projection"), 1, gl::FALSE_, glm::value_ptr(m4_Projection));
+	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(m4_Projection));
 
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "view"), 1, gl::FALSE_, glm::value_ptr(c_ICamera->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(c_ICamera->GetViewMatrix()));
 
 	// be sure to activate shader when setting uniforms/drawing objects
-	gl::Uniform3f(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "objectColour"), 1.0f, 0.6f, 0.61f);
-	gl::Uniform3f(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "lightColour"), 1.0f, 1.0f, 1.0f);
-	gl::Uniform3f(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "lightPos"), 0.0f, 2.0f, -2.0f);
-	gl::Uniform3fv(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "viewPos"), 1, glm::value_ptr(c_ICamera->GetPosition()));
+	glUniform3f(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "objectColour"), 1.0f, 0.6f, 0.61f);
+	glUniform3f(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "lightColour"), 1.0f, 1.0f, 1.0f);
+	glUniform3f(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "lightPos"), 0.0f, 2.0f, -2.0f);
+	glUniform3fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "viewPos"), 1, glm::value_ptr(c_ICamera->GetPosition()));
 
 }
 
 void EngineCoreGLFW::RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue)
 {
-	gl::ClearColor(f_IRed, f_IGreen, f_IBlue, 1.0f);
-	gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+	glClearColor(f_IRed, f_IGreen, f_IBlue, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void EngineCoreGLFW::RenderText(std::string text, float x, float y, float scale, glm::vec3 colour)
@@ -202,13 +198,13 @@ void EngineCoreGLFW::RenderText(std::string text, float x, float y, float scale,
 	float f_PixelValueX = x * i_Width;
 	float f_PixelValueY = y * i_Height;
 
-	gl::UseProgram(s_FontshaderProgram->ui_ShaderProgram);
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "projection"), 1, gl::FALSE_, glm::value_ptr(projection));
+	glUseProgram(s_FontshaderProgram->ui_ShaderProgram);
+	glUniformMatrix4fv(glGetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 	// Activate corresponding render state	
-	gl::Uniform3f(gl::GetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "textColour"), colour.x, colour.y, colour.z);
-	gl::ActiveTexture(gl::TEXTURE0);
-	gl::BindVertexArray(ui_FontVAO);
+	glUniform3f(glGetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "textColour"), colour.x, colour.y, colour.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(ui_FontVAO);
 
 	// Iterate through all characters
 	std::string::const_iterator c;
@@ -232,31 +228,46 @@ void EngineCoreGLFW::RenderText(std::string text, float x, float y, float scale,
 			{ f_XPos + w, f_Ypos + h,   1.0, 0.0 }
 		};
 		// Render glyph texture over quad
-		gl::BindTexture(gl::TEXTURE_2D, ch.ui_TextureID);
+		glBindTexture(GL_TEXTURE_2D, ch.ui_TextureID);
 		// Update content of VBO memory
-		gl::BindBuffer(gl::ARRAY_BUFFER, ui_FontVBO);
-		gl::BufferSubData(gl::ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, ui_FontVBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		// Render quad
-		gl::DrawArrays(gl::TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 		f_PixelValueX += (ch.ui_Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
 	}
-	gl::BindVertexArray(0);
-	gl::BindTexture(gl::TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// go back to default shader
-	gl::UseProgram(s_DefaultShaderProgram->ui_ShaderProgram);
+	glUseProgram(s_DefaultShaderProgram->ui_ShaderProgram);
 }
 
 void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 {
 	// set the model component of our shader to the cube model
-	gl::UniformMatrix4fv(gl::GetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, gl::FALSE_, glm::value_ptr(m4_IModelMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
 
 	// the only thing we can draw so far is the cube, so we know it is bound already
 	// this will obviously have to change later
-	gl::DrawArrays(gl::TRIANGLES, 0, 36);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void EngineCoreGLFW::DrawDebug(const glm::mat4& m4_IModelMatrix)
+{
+	// set the model component of our shader to the cube model
+	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
+
+	// the only thing we can draw so far is the cube, so we know it is bound already
+	// this will obviously have to change later
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
@@ -294,7 +305,7 @@ void EngineCoreGLFW::SetupDefaultFont()
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
 	// Disable byte-alignment restriction
-	gl::PixelStorei(gl::UNPACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	// Load first 128 characters of ASCII set
 	for (GLubyte c = 0; c < 128; c++)
@@ -307,26 +318,27 @@ void EngineCoreGLFW::SetupDefaultFont()
 		}
 		// Generate texture
 		GLuint texture;
-		gl::GenTextures(1, &texture);
-		gl::BindTexture(gl::TEXTURE_2D, texture);
-		gl::TexImage2D(
-			gl::TEXTURE_2D,
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
 			0,
-			gl::RED,
+			GL_RED,
 			face->glyph->bitmap.width,
 			face->glyph->bitmap.rows,
 			0,
-			gl::RED,
-			gl::UNSIGNED_BYTE,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
 			face->glyph->bitmap.buffer
 		);
 		// Set texture options
-		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::CLAMP_TO_EDGE);
-		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::CLAMP_TO_EDGE);
-		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR);
-		gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// Now store character for later use
-		Character character = {
+		Character character = 
+		{
 			texture,
 			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
@@ -334,21 +346,21 @@ void EngineCoreGLFW::SetupDefaultFont()
 		};
 		m_Characters.insert(std::pair<GLchar, Character>(c, character));
 	}
-	gl::BindTexture(gl::TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	// Destroy FreeType once we're finished
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
 
 
 	// Configure VAO/VBO for texture quads
-	gl::GenVertexArrays(1, &ui_FontVAO);
-	gl::GenBuffers(1, &ui_FontVBO);
-	gl::BindVertexArray(ui_FontVBO);
-	gl::BindBuffer(gl::ARRAY_BUFFER, ui_FontVBO);
+	glGenVertexArrays(1, &ui_FontVAO);
+	glGenBuffers(1, &ui_FontVBO);
+	glBindVertexArray(ui_FontVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, ui_FontVBO);
 	// dynamic draw as the text may change frequently
-	gl::BufferData(gl::ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, gl::DYNAMIC_DRAW);
-	gl::EnableVertexAttribArray(0);
-	gl::VertexAttribPointer(0, 4, gl::FLOAT, gl::FALSE_, 4 * sizeof(GLfloat), 0);
-	gl::BindBuffer(gl::ARRAY_BUFFER, 0);
-	gl::BindVertexArray(0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }

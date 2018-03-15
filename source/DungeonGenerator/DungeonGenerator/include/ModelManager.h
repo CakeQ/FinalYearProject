@@ -142,7 +142,7 @@ public:
 	GLint TextureFromFile(const std::string s_IDirectory)
 	{
 		unsigned int ui_TextureID;
-		gl::GenTextures(1, &ui_TextureID);
+		glGenTextures(1, &ui_TextureID);
 
 		int i_Width;
 		int i_Height;
@@ -154,28 +154,28 @@ public:
 			GLenum n_Format;
 			if (i_NumComponents == 1)
 			{
-				n_Format = gl::RED;
+				n_Format = GL_RED;
 			}
 			else if (i_NumComponents == 3)
 			{
-				n_Format = gl::RGB;
+				n_Format = GL_RGB;
 			}
 			else if (i_NumComponents == 4)
 			{
-				n_Format = gl::RGBA;
-				gl::Enable(gl::BLEND);
-				gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+				n_Format = GL_RGBA;
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
 
-			gl::BindTexture(gl::TEXTURE_2D, ui_TextureID);
-			gl::TexImage2D(gl::TEXTURE_2D, 0, n_Format, i_Width, i_Height, 0, n_Format, gl::UNSIGNED_BYTE, uc_Image);
+			glBindTexture(GL_TEXTURE_2D, ui_TextureID);
+			glTexImage2D(GL_TEXTURE_2D, 0, n_Format, i_Width, i_Height, 0, n_Format, GL_UNSIGNED_BYTE, uc_Image);
 
-			gl::GenerateMipmap(gl::TEXTURE_2D);
+			glGenerateMipmap(GL_TEXTURE_2D);
 
-			gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, gl::REPEAT);
-			gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::REPEAT);
-			gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR_MIPMAP_LINEAR);
-			gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 			SOIL_free_image_data(uc_Image);
 		}

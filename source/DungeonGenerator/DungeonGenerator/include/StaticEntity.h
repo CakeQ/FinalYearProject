@@ -23,7 +23,7 @@ public:
 	{
 		for (auto a_Iterator = m_ComponentList.begin(); a_Iterator != m_ComponentList.end(); a_Iterator++)
 		{
-			a_Iterator->second->Update();
+			a_Iterator->second->Update(f_IDeltaTime);
 		}
 	};
 

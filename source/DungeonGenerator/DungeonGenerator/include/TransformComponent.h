@@ -39,7 +39,7 @@ public:
 	void Pitch(float f_IAngle) { Rotate(f_IAngle, 1.0f, 0.0f, 0.0f); }
 	void Roll(float f_IAngle) { Rotate(f_IAngle, 0.0f, 0.0f, 1.0f); }
 
-	void Update() override 
+	void Update(float f_IDeltaTime) override
 	{
 
 	};

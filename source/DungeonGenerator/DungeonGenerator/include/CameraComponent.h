@@ -51,7 +51,7 @@ public:
 
 	void SetFOV(float f_IFOV) { f_FOV = f_IFOV; }
 
-	void Update() override 
+	void Update(float f_IDeltaTime) override
 	{
 		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
 		else if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;

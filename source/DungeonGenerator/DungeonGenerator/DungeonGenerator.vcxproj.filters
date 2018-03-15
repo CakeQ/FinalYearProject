@@ -37,8 +37,8 @@
     <Filter Include="Source Files\External">
       <UniqueIdentifier>{6107347a-8783-49b2-98f9-f5e3bd262da3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\External">
-      <UniqueIdentifier>{018af4ce-d88a-4b34-84b0-fb3392309cd7}</UniqueIdentifier>
+    <Filter Include="Source Files\ImGUI">
+      <UniqueIdentifier>{2e7c1107-1177-4722-ba5f-c1fc918bfaa3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,13 +54,25 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="gl_core_4_3.cpp">
-      <Filter>Source Files\External</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="jsoncpp.cpp">
+      <Filter>Source Files\External</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui.cpp">
+      <Filter>Source Files\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_demo.cpp">
+      <Filter>Source Files\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_draw.cpp">
+      <Filter>Source Files\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGUI\imgui_impl_glfw_gl3.cpp">
+      <Filter>Source Files\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
       <Filter>Source Files\External</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,9 +116,6 @@
     <ClInclude Include="include\InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gl_core_4_3.hpp">
-      <Filter>Header Files\External</Filter>
-    </ClInclude>
     <ClInclude Include="include\ModelManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -118,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="include\PlayerEntity.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PhysicsComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
