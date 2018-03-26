@@ -24,9 +24,11 @@ public:
 	std::unordered_map<std::type_index, Component*> m_ComponentList;
 
 	template <typename T>
-	void AddComponent(T* t_IComponent)
+	T* AddComponent(T* t_IComponent)
 	{
 		m_ComponentList[typeid(T)] = t_IComponent;
+
+		return t_IComponent;
 	}
 
 	template <typename T>

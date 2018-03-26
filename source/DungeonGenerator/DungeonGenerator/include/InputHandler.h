@@ -38,7 +38,7 @@ struct InputHandler
 				{
 					glm::vec3 v3_Forward = e_AttatchedEntity->GetComponent<CameraComponent>()->GetCameraForward();
 					//TODO: Figure out how to manipulate forward vector to rotate camera on both axes
-					e_AttatchedEntity->GetComponent<TransformComponent>()->Rotate(-0.00025f, v3_Forward);
+					//e_AttatchedEntity->GetComponent<TransformComponent>()->Rotate(-0.00025f, v3_Forward);
 				}
 			}
 		}

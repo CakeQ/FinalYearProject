@@ -17,7 +17,6 @@ private:
 
 public:
 	std::vector<Room*> vt_RoomList;
-	std::vector<b2Body*> vt_RoomBodyList;
 	glm::vec2 v2_RoomSize;
 	glm::vec2 v2_Grid = glm::vec2(39.25f, 39.25f);
 	glm::vec3 v3_DungeonOrigin;
@@ -35,6 +34,15 @@ public:
 		srand(i_Seed);
 		GenerateDungeon();
 	};
+
+	~Dungeon()
+	{
+		for (Room* e_IteratorRoom : vt_RoomList)
+		{
+			vt_RoomList.pop_back();
+			e_IteratorRoom->~Room();
+		}
+	}
 
 	void GenerateDungeon()
 	{
@@ -92,9 +100,12 @@ public:
 		for (Room* e_IteratorRoom : vt_RoomList)
 		{
 			e_IteratorRoom->Update(f_IDeltaTime);
-			if (e_IteratorRoom->GetComponent<PhysicsComponent>()->b2_Body->IsAwake())
+			if (e_IteratorRoom->GetComponent<PhysicsComponent>())
 			{
-				b_Spreading = true;
+				if (e_IteratorRoom->GetComponent<PhysicsComponent>()->b2_Body->IsAwake())
+				{
+					b_Spreading = true;
+				}
 			}
 		}
 		if (b_Spreading == false && b_Initialised == false)
@@ -102,6 +113,11 @@ public:
 			InitialiseTiles();
 			b_Initialised = true;
 			std::cout << "No longer spreading" << std::endl;
+			for (Room* e_IteratorRoom : vt_RoomList)
+			{
+				e_IteratorRoom->b_Moving = false;
+				e_IteratorRoom->RemovePhysics();
+			}
 		}
 	}
 };

@@ -98,7 +98,7 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 		v2_MouseBuffer = glm::vec2(0.0f, 0.0f);																					//!< Reset mouse buffer.
 		glfwGetFramebufferSize(w_WindowID, &i_Width, &i_Height);																//!< Update window dimensions.
 
-		g_IGameID.DrawGUI();
+		g_IGameID.s_CurrentScene->DrawGUI();
 
 		while (d_SimulationTime < d_RealTime)
 		{

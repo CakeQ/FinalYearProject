@@ -1,5 +1,8 @@
 #pragma once
 
+#include <ImGUI/imgui.h>
+#include <ImGUI/imgui_impl_glfw_gl3.h>
+
 #include "Scene.h"
 #include "Dungeon.h"
 
@@ -9,6 +12,7 @@ public:
 	Dungeon* d_CurrentDungeon;
 
 	bool b_Debug = true;
+	int i_DungeonSeed;
 
 	DungeonScene(EngineCore* e_IEngine) : Scene(e_IEngine)
 	{
@@ -29,7 +33,7 @@ public:
 
 		//int i_TestSeed = glfwGetTime();
 		int i_TestSeed = 413;
-		d_CurrentDungeon = new Dungeon(i_TestSeed, mm_ModelManager, this);
+		//d_CurrentDungeon = new Dungeon(i_TestSeed, mm_ModelManager, this);
 	}
 
 	void Update(float f_IDeltaTime) override
@@ -43,8 +47,12 @@ public:
 		{
 			b2_World->Step(f_IDeltaTime, 8, 3);
 		} 
+		if (d_CurrentDungeon)
+		{
+			d_CurrentDungeon->Update(f_IDeltaTime);
+		}
 
-		d_CurrentDungeon->Update(f_IDeltaTime);
+		std::cout << b2_World->GetBodyCount() << std::endl;
 	}
 
 	void Draw() override
@@ -81,5 +89,44 @@ public:
 		{
 		e_EngineCore->RenderText(t_Iterator->s_Text, t_Iterator->v2_ScreenPos.x, t_Iterator->v2_ScreenPos.y, t_Iterator->f_TextSize, t_Iterator->v3_TextColor);
 		}*/
+	}
+
+	void DrawGUI() override
+	{
+		ImGui::Begin("Debug Window");
+
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		ImGui::SetWindowSize(ImVec2(e_GameEngine->i_Width*0.1, e_GameEngine->i_Height*0.5));
+
+		ImGui::InputInt("Seed", &i_DungeonSeed);
+
+		if (ImGui::Button("Generate Seeded Dungeon"))
+		{	
+			if (d_CurrentDungeon)
+			{
+				for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
+				{
+					if (d_CurrentDungeon->b_Spreading)
+					{
+						e_IteratorRoom->RemovePhysics();
+					}
+				}
+
+				d_CurrentDungeon->~Dungeon();		
+			}
+			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
+		}
+
+		if (ImGui::Button("Generate Random Dungeon"))
+		{
+			if (d_CurrentDungeon)
+			{
+				d_CurrentDungeon->~Dungeon();
+			}
+			i_DungeonSeed = glfwGetTime();
+			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
+		}
+
+		ImGui::End();
 	}
 };

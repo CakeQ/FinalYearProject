@@ -55,6 +55,7 @@ public:
 
 	virtual void Update(float f_IDeltaTime) = 0;
 	virtual void Draw() = 0;
+	virtual void DrawGUI() = 0;
 	virtual void SetUpScene() = 0;
 	void SetCurrentCamera(CameraComponent* c_ICamera);
 };

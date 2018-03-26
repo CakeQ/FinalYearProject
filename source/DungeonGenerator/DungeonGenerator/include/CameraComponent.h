@@ -53,8 +53,8 @@ public:
 
 	void Update(float f_IDeltaTime) override
 	{
-		if (q_Orientation.y > 85.0f) q_Orientation.y = 85.0f;
-		else if (q_Orientation.y < -85.0f) q_Orientation.y = -85.0f;
+		if (q_Orientation.y > glm::radians(85.0f)) q_Orientation.y = glm::radians(85.0f);
+		else if (q_Orientation.y < glm::radians(-85.0f)) q_Orientation.y = glm::radians(-85.0f);
 	};
 
 	void Message(const std::string s_IMessage) override

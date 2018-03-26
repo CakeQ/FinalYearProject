@@ -10,10 +10,10 @@
 
 class Room : public Entity
 {
-private:
-	bool b_Generated = false;	
-
 public:
+	bool b_Generated = false;
+	bool b_Moving = true;
+
 	std::vector<Entity*> vt_RoomContents;
 	glm::vec2 v2_RoomSize;
 	glm::vec3 v3_TileSize;
@@ -21,8 +21,6 @@ public:
 
 	Scene* s_ParentScene;
 	ModelManager* mm_ModelManager;
-
-
 
 	Room(glm::vec3 v3_IPosition, glm::vec2 v2_IRoomSize, glm::vec3 v3_ITileSize, Scene* s_IScene, ModelManager* mm_IModelManager)
 	{
@@ -39,6 +37,15 @@ public:
 		GenerateRoom();
 	}
 
+	~Room()
+	{
+		for (Entity* e_IteratorEntity : vt_RoomContents)
+		{
+			vt_RoomContents.pop_back();
+			s_ParentScene->vt_EntityList.pop_back();
+		}
+	}
+
 	void GenerateRoom()
 	{
 		if (!b_Generated)
@@ -51,23 +58,14 @@ public:
 					{
 						std::string s_WallType;
 						int i_WallRotation;
-						StaticEntity* e_NewTile;
+						Entity* e_NewTile;
 
 						if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 						{
-							/*if ((i == 0 && j == 0) || (i == 0 && j == v2_RoomSize.y - 1) || (i == v2_RoomSize.x - 1 && j == 0) || (i == v2_RoomSize.x - 1 && j == v2_RoomSize.y - 1))
-							{
-								s_WallType = "wall_c";
-							}
-							else
-							{
-								s_WallType = "wall_s";
-							}*/
 							e_NewTile = new WallEntity(mm_ModelManager);
 						}
 						else if (i_Layer == 0)
 						{
-							//s_WallType = "floor_s";
 							e_NewTile = new FloorEntity(mm_ModelManager);
 						}
 						else
@@ -75,14 +73,6 @@ public:
 							continue;
 						}
 
-						/*for (Asset* a_IteratorAsset : mm_ModelManager->vt_AssetList)
-						{
-							if (s_WallType == a_IteratorAsset->s_ModelName)
-							{
-								e_NewTile->GetComponent<ModelComponent>()->m_Model = a_IteratorAsset->m_Model;
-								continue;
-							}
-						}*/
 						e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
 						e_NewTile->GetComponent<TransformComponent>()->q_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 						vt_RoomContents.push_back(e_NewTile);
@@ -112,7 +102,10 @@ public:
 
 	void RemovePhysics()
 	{
-
+		if (GetComponent<PhysicsComponent>()->b2_Body)
+		{
+			s_ParentScene->b2_World->DestroyBody(GetComponent<PhysicsComponent>()->b2_Body);
+		}
 	}
 
 	glm::vec2 SnapToGrid(glm::vec2 v2_IPos)
@@ -121,14 +114,16 @@ public:
 		return v2_SnappedPos;   
 	}
 
-	void Update(float f_IDeltaTime) override 
+	void Update(float f_IDeltaTime) override
 	{
-		glm::vec2 v2_NewPos = SnapToGrid(glm::vec2(GetComponent<PhysicsComponent>()->b2_Body->GetPosition().x - GetComponent<TransformComponent>()->v3_Position.x, GetComponent<PhysicsComponent>()->b2_Body->GetPosition().y - GetComponent<TransformComponent>()->v3_Position.y));
-		//glm::vec2 v2_NewPos = glm::vec2(b2_Body->GetPosition().x - GetComponent<TransformComponent>()->v3_Position.x, b2_Body->GetPosition().y - GetComponent<TransformComponent>()->v3_Position.y);
-		GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
-		for (Entity* e_IteratorEntity : vt_RoomContents)
+		if (b_Moving)
 		{
-			e_IteratorEntity->GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
+			glm::vec2 v2_NewPos = SnapToGrid(glm::vec2(GetComponent<PhysicsComponent>()->b2_Body->GetPosition().x - GetComponent<TransformComponent>()->v3_Position.x, GetComponent<PhysicsComponent>()->b2_Body->GetPosition().y - GetComponent<TransformComponent>()->v3_Position.y));
+			GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
+			for (Entity* e_IteratorEntity : vt_RoomContents)
+			{
+				e_IteratorEntity->GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
+			}
 		}
 	}
 
