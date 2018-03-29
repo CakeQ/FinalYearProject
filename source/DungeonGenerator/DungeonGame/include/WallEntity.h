@@ -1,9 +1,9 @@
 #pragma once
 
-#include "StaticEntity.h"
+#include "DungeonEntity.h"
 #include "ModelManager.h"
 
-class WallEntity : public StaticEntity
+class WallEntity : public DungeonEntity
 {
 
 public:
@@ -16,7 +16,12 @@ public:
 		ChangeState();
 	}
 
-	void ChangeState() //You need to change this to work with neighbor system
+	void CalculateState() override
+	{
+
+	}
+
+	void ChangeState() override //You need to change this to work with neighbor system
 	{
 		std::string s_Variation;
 		float f_Rotation = 0.0f;
@@ -106,15 +111,5 @@ public:
 		}
 
 		GetComponent<TransformComponent>()->Roll(glm::radians(f_Rotation));
-	}
-
-	void Update(float f_IDeltaTime) override
-	{
-	
-	}
-
-	void Message(const std::string s_IMessage) override
-	{
-	
 	}
 };

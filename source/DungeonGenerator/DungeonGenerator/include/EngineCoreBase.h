@@ -16,6 +16,7 @@ Created by Daniel Thompson, P15230940.
 
 class Game;
 class CameraComponent;
+class PhysicsComponent;
 class Model;
 
 class EngineCore
@@ -34,6 +35,6 @@ public:
 	virtual void RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) = 0;
 
 	virtual void DrawCube(const glm::mat4& m4_IModelMatrix) = 0;
-	virtual void DrawDebug(const glm::mat4& m4_IModelMatrix) = 0;
+	virtual void DrawDebug(PhysicsComponent* c_PhysicsComponent, const glm::mat4& m4_IModelMatrix) = 0;
 	virtual void DrawModel(Model* model, glm::mat4& modelMatrix) = 0;
 };

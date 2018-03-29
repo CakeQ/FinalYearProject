@@ -1,8 +1,8 @@
 #pragma once
 
-#include <StaticEntity.h>
+#include <DungeonEntity.h>
 
-class FloorEntity : public StaticEntity
+class FloorEntity : public DungeonEntity
 {
 public:
 	int i_State = 0;
@@ -11,11 +11,16 @@ public:
 	FloorEntity(ModelManager* mm_IModelManager)
 	{
 		mm_ModelManager = mm_IModelManager;
-		i_State = rand() % 7;
+		CalculateState();
 		ChangeState();
 	}
 
-	void ChangeState()
+	void CalculateState() override
+	{
+		i_State = rand() % 7;
+	}
+
+	void ChangeState() override
 	{
 		std::string s_Variation;
 
@@ -56,16 +61,6 @@ public:
 			}
 		}
 
-		GetComponent<TransformComponent>()->Pitch(glm::radians(90.0f));
-	}
-
-	void Update(float f_IDeltaTime) override
-	{
-
-	}
-
-	void Message(const std::string s_IMessage) override
-	{
-
+		//GetComponent<TransformComponent>()->Pitch(glm::radians(90.0f));
 	}
 };

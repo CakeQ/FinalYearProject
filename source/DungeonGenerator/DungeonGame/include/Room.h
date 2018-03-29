@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Scene.h"
-#include "Entity.h"
+#include "DungeonEntity.h"
 #include "StaticEntity.h"
 #include "WallEntity.h"
 #include "FloorEntity.h"
@@ -14,7 +14,9 @@ public:
 	bool b_Generated = false;
 	bool b_Moving = true;
 
-	std::vector<Entity*> vt_RoomContents;
+	int i_RoomID = 0;
+
+	std::vector<DungeonEntity*> vt_RoomContents;
 	glm::vec2 v2_RoomSize;
 	glm::vec3 v3_TileSize;
 	glm::vec3 v3_Position;
@@ -39,7 +41,7 @@ public:
 
 	~Room()
 	{
-		for (Entity* e_IteratorEntity : vt_RoomContents)
+		for (DungeonEntity* e_IteratorEntity : vt_RoomContents)
 		{
 			vt_RoomContents.pop_back();
 			s_ParentScene->vt_EntityList.pop_back();
@@ -58,7 +60,7 @@ public:
 					{
 						std::string s_WallType;
 						int i_WallRotation;
-						Entity* e_NewTile;
+						DungeonEntity* e_NewTile;
 
 						if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 						{
@@ -87,11 +89,11 @@ public:
 	void AddPhysics()
 	{
 		PhysicsComponent* c_PhysicsComponent = GetComponent<PhysicsComponent>();
-		c_PhysicsComponent->b2_BodyDef.position = b2Vec2(v3_Position.x, v3_Position.y);
+		c_PhysicsComponent->b2_BodyDef.position = b2Vec2(v3_Position.x / 30, v3_Position.y / 30);
 		c_PhysicsComponent->b2_BodyDef.type = b2_dynamicBody;
 		c_PhysicsComponent->b2_Body = s_ParentScene->b2_World->CreateBody(&c_PhysicsComponent->b2_BodyDef);
 
-		c_PhysicsComponent->b2_Shape.SetAsBox(((v3_TileSize.x * v2_RoomSize.x) / 2), ((v3_TileSize.y * v2_RoomSize.y) / 2));
+		c_PhysicsComponent->b2_Shape.SetAsBox((((v3_TileSize.x * v2_RoomSize.x) / 2 + 15) / 30), (((v3_TileSize.y * v2_RoomSize.y) / 2 + 15) / 30));
 		c_PhysicsComponent->b2_FixtureDef.density = 1.0f;
 		c_PhysicsComponent->b2_FixtureDef.friction = 0.7f;
 		c_PhysicsComponent->b2_FixtureDef.shape = &c_PhysicsComponent->b2_Shape;
@@ -118,9 +120,9 @@ public:
 	{
 		if (b_Moving)
 		{
-			glm::vec2 v2_NewPos = SnapToGrid(glm::vec2(GetComponent<PhysicsComponent>()->b2_Body->GetPosition().x - GetComponent<TransformComponent>()->v3_Position.x, GetComponent<PhysicsComponent>()->b2_Body->GetPosition().y - GetComponent<TransformComponent>()->v3_Position.y));
+			glm::vec2 v2_NewPos = SnapToGrid(glm::vec2((GetComponent<PhysicsComponent>()->b2_Body->GetPosition().x * 30) - GetComponent<TransformComponent>()->v3_Position.x, (GetComponent<PhysicsComponent>()->b2_Body->GetPosition().y * 30) - GetComponent<TransformComponent>()->v3_Position.y));
 			GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
-			for (Entity* e_IteratorEntity : vt_RoomContents)
+			for (DungeonEntity* e_IteratorEntity : vt_RoomContents)
 			{
 				e_IteratorEntity->GetComponent<TransformComponent>()->v3_Position += glm::vec3(v2_NewPos, 0.0f);
 			}

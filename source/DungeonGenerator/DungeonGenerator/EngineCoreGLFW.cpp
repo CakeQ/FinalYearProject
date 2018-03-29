@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Component.h"
 #include "CameraComponent.h"
+#include "PhysicsComponent.h"
 #include "Entity.h"
 
 std::vector<bool> EngineCoreGLFW::vt_KeyBuffer;
@@ -255,7 +256,7 @@ void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void EngineCoreGLFW::DrawDebug(const glm::mat4& m4_IModelMatrix)
+void EngineCoreGLFW::DrawDebug(PhysicsComponent* c_PhysicsComponent, const glm::mat4& m4_IModelMatrix)
 {
 	// set the model component of our shader to the cube model
 	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
@@ -268,6 +269,15 @@ void EngineCoreGLFW::DrawDebug(const glm::mat4& m4_IModelMatrix)
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	if (c_PhysicsComponent)
+	{
+		c_PhysicsComponent->Draw(s_DefaultShaderProgram, m4_IModelMatrix);
+	}
+	else
+	{
+		std::cout << "ERROR: Model is NULL" << std::endl;
+	}
 }
 
 void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)

@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include "ModelManager.h"
+#include "DungeonEntity.h"
 #include "Room.h"
 
 class Dungeon
@@ -17,6 +18,7 @@ private:
 
 public:
 	std::vector<Room*> vt_RoomList;
+	std::vector<DungeonEntity*> vt_Tiles;
 	glm::vec2 v2_RoomSize;
 	glm::vec2 v2_Grid = glm::vec2(39.25f, 39.25f);
 	glm::vec3 v3_DungeonOrigin;
@@ -32,7 +34,7 @@ public:
 		s_ParentScene = s_IScene;
 
 		srand(i_Seed);
-		GenerateDungeon();
+		SpawnDungeon();
 	};
 
 	~Dungeon()
@@ -44,7 +46,7 @@ public:
 		}
 	}
 
-	void GenerateDungeon()
+	void SpawnDungeon()
 	{
 		int i_Rooms = rand()%5 + 5;
 		//int i_Rooms = 1;
@@ -52,8 +54,16 @@ public:
 		for (int i = 0; i < i_Rooms; i++)
 		{
 			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 3, rand() % 6 + 3);
-			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(20.0f));
-			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize);
+			/*if ((int(v2_RoomSize.x) % 2) == 0)
+			{
+				v2_RoomSize.x += 1;
+			}
+			if ((int(v2_RoomSize.y) % 2) == 0)
+			{
+				v2_RoomSize.y += 1;
+			}*/
+			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(5.0f));
+			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize, i);
 		}
 
 		for (Room* e_IteratorRoom : vt_RoomList)
@@ -83,9 +93,10 @@ public:
 		return v2_SnappedPos;
 	}
 
-	void SpawnRoom(glm::vec3 v3_IRoomPos, glm::vec2 v2_IRoomSize)
+	void SpawnRoom(glm::vec3 v3_IRoomPos, glm::vec2 v2_IRoomSize, int i_IID)
 	{
 		Room* r_NewRoom = new Room(v3_IRoomPos, v2_IRoomSize, glm::vec3(v2_Grid, 0.0f), s_ParentScene, mm_ModelManager);
+		r_NewRoom->i_RoomID = i_IID;
 		vt_RoomList.push_back(r_NewRoom);
 	}
 
@@ -117,6 +128,15 @@ public:
 			{
 				e_IteratorRoom->b_Moving = false;
 				e_IteratorRoom->RemovePhysics();
+				for (DungeonEntity* e_IteratorEntity : e_IteratorRoom->vt_RoomContents)
+				{
+					vt_Tiles.push_back(e_IteratorEntity);
+				}
+			}
+
+			for (DungeonEntity* e_IteratorEntity : vt_Tiles)
+			{
+				e_IteratorEntity->ChangeState();
 			}
 		}
 	}

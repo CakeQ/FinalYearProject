@@ -6,10 +6,13 @@
 #include "Scene.h"
 #include "Dungeon.h"
 
+#include "DebugDraw.h"
+
 class DungeonScene : public Scene
 {
 public:
 	Dungeon* d_CurrentDungeon;
+	DebugDraw* d_DebugDraw;
 
 	bool b_Debug = true;
 	int i_DungeonSeed;
@@ -34,6 +37,13 @@ public:
 		//int i_TestSeed = glfwGetTime();
 		int i_TestSeed = 413;
 		//d_CurrentDungeon = new Dungeon(i_TestSeed, mm_ModelManager, this);
+
+		if (b_Debug == true)
+		{
+			d_DebugDraw = new DebugDraw;
+			b2_World->SetDebugDraw(d_DebugDraw);
+			d_DebugDraw->SetFlags(b2Draw::e_shapeBit);
+		}
 	}
 
 	void Update(float f_IDeltaTime) override
@@ -51,8 +61,6 @@ public:
 		{
 			d_CurrentDungeon->Update(f_IDeltaTime);
 		}
-
-		std::cout << b2_World->GetBodyCount() << std::endl;
 	}
 
 	void Draw() override
@@ -82,9 +90,15 @@ public:
 
 		if (b_Debug)
 		{
-
+			for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
+			{
+				if (e_IteratorRoom->GetComponent<PhysicsComponent>())
+				{
+					e_GameEngine->DrawDebug(e_IteratorRoom->GetComponent<PhysicsComponent>(), e_IteratorRoom->GetComponent<TransformComponent>()->GetModelMatrix());
+				}
+			}
 		}
-
+		
 		/*for (SceneText* t_Iterator : vt_SceneTextList)
 		{
 		e_EngineCore->RenderText(t_Iterator->s_Text, t_Iterator->v2_ScreenPos.x, t_Iterator->v2_ScreenPos.y, t_Iterator->f_TextSize, t_Iterator->v3_TextColor);

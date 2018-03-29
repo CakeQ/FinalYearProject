@@ -71,7 +71,7 @@ public:
 	void RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) override;
 
 	void DrawCube(const glm::mat4& m4_IModelMatrix) override;
-	void DrawDebug(const glm::mat4& m4_IModelMatrix) override;
+	void DrawDebug(PhysicsComponent* c_PhysicsComponent, const glm::mat4& m4_IModelMatrix) override;
 	void DrawModel(Model* model, glm::mat4& modelMatrix) override;
 
 	void EngineCoreGLFW::SetupDefaultFont();
