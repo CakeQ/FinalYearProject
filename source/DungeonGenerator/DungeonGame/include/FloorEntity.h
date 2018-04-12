@@ -1,23 +1,30 @@
 #pragma once
 
-#include <DungeonEntity.h>
+#include "DungeonEntity.h"
+#include "Room.h"
+#include "ModelManager.h"
 
 class FloorEntity : public DungeonEntity
 {
 public:
 	int i_State = 0;
-	ModelManager* mm_ModelManager;
-
-	FloorEntity(ModelManager* mm_IModelManager)
+	FloorEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
-		mm_ModelManager = mm_IModelManager;
 		CalculateState();
 		ChangeState();
 	}
 
 	void CalculateState() override
 	{
-		i_State = rand() % 7;
+		if ((rand() % 2) < 1)
+		{
+			//i_State = rand() % 3;
+			i_State = 2;
+		}
+		else
+		{
+			i_State = rand() % 7;
+		}
 	}
 
 	void ChangeState() override

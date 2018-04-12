@@ -2,13 +2,18 @@
 
 #include "Entity.h"
 
+class Room;
+
 class DungeonEntity : public Entity
 {
 public:
-	DungeonEntity()
+	ModelManager* mm_ModelManager;
+	DungeonEntity(ModelManager* mm_IModelManager)
 	{
 		AddComponent(new TransformComponent);
 		AddComponent(new ModelComponent);
+
+		mm_ModelManager = mm_IModelManager;
 	}
 
 	~DungeonEntity()

@@ -25,7 +25,7 @@ public:
 			glverts[i * 2 + 1] = vertices[i].y;
 		}
 
-		glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
+		//glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
 
 		//draw solid area
 		glColor4f(color.r, color.g, color.b, 1);

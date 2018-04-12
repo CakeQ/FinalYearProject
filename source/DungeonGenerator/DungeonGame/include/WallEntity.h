@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DungeonEntity.h"
+#include "Room.h"
 #include "ModelManager.h"
 
 class WallEntity : public DungeonEntity
@@ -8,11 +9,8 @@ class WallEntity : public DungeonEntity
 
 public:
 	int i_State = 0;
-	ModelManager* mm_ModelManager;
-
-	WallEntity(ModelManager* mm_IModelManager)
+	WallEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
-		mm_ModelManager = mm_IModelManager;
 		ChangeState();
 	}
 

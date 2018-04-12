@@ -69,20 +69,44 @@ public:
 		e_GameEngine->RenderColouredBackground(f_RedValue, f_GreenValue, f_BlueValue);
 		e_GameEngine->SetCamera(c_SceneCamera);
 
-		for (Entity* e_EntityIterator : vt_EntityList)
+		for (Entity* e_IteratorEntity : vt_EntityList)
 		{
-			if (e_EntityIterator->GetComponent<ModelComponent>() != nullptr)
+			if (e_IteratorEntity->GetComponent<ModelComponent>() != nullptr)
 			{
-				for (Texture texture : e_EntityIterator->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
+				for (Texture texture : e_IteratorEntity->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
 				{
 					glBindTexture(GL_TEXTURE_2D, texture.ui_ID);
 				}
 
-				if (!e_EntityIterator->GetComponent<ModelComponent>()->b_Hidden)
+				if (!e_IteratorEntity->GetComponent<ModelComponent>()->b_Hidden)
 				{
-					if (e_EntityIterator->GetComponent<ModelComponent>()->m_Model)
+					if (e_IteratorEntity->GetComponent<ModelComponent>()->m_Model)
 					{
-						e_GameEngine->DrawModel(e_EntityIterator->GetComponent<ModelComponent>()->m_Model, e_EntityIterator->GetComponent<TransformComponent>()->GetModelMatrix());
+						e_GameEngine->DrawModel(e_IteratorEntity->GetComponent<ModelComponent>()->m_Model, e_IteratorEntity->GetComponent<TransformComponent>()->GetModelMatrix());
+					}
+				}
+			}
+		}
+		if (d_CurrentDungeon)
+		{
+			for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
+			{
+				for (DungeonEntity* e_IteratorEntity : e_IteratorRoom->vt_RoomContents)
+				{
+					if (e_IteratorEntity->GetComponent<ModelComponent>() != nullptr)
+					{
+						for (Texture texture : e_IteratorEntity->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
+						{
+							glBindTexture(GL_TEXTURE_2D, texture.ui_ID);
+						}
+
+						if (!e_IteratorEntity->GetComponent<ModelComponent>()->b_Hidden)
+						{
+							if (e_IteratorEntity->GetComponent<ModelComponent>()->m_Model)
+							{
+								e_GameEngine->DrawModel(e_IteratorEntity->GetComponent<ModelComponent>()->m_Model, e_IteratorEntity->GetComponent<TransformComponent>()->GetModelMatrix());
+							}
+						}
 					}
 				}
 			}
@@ -90,13 +114,13 @@ public:
 
 		if (b_Debug)
 		{
-			for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
+			/*for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
 			{
 				if (e_IteratorRoom->GetComponent<PhysicsComponent>())
 				{
 					e_GameEngine->DrawDebug(e_IteratorRoom->GetComponent<PhysicsComponent>(), e_IteratorRoom->GetComponent<TransformComponent>()->GetModelMatrix());
 				}
-			}
+			}*/
 		}
 		
 		/*for (SceneText* t_Iterator : vt_SceneTextList)
@@ -124,23 +148,31 @@ public:
 					{
 						e_IteratorRoom->RemovePhysics();
 					}
-				}
-
-				d_CurrentDungeon->~Dungeon();		
+				}	
 			}
 			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
 		}
 
 		if (ImGui::Button("Generate Random Dungeon"))
 		{
-			if (d_CurrentDungeon)
-			{
-				d_CurrentDungeon->~Dungeon();
-			}
 			i_DungeonSeed = glfwGetTime();
 			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
 		}
 
+		//static int i_ListBoxIndex = -1;
+
+		//ImGui::ListBox("", &i_ListBoxIndex, GetRoom(), static_cast<void*>(&d_CurrentDungeon->vt_RoomList.size(), 30);
+
 		ImGui::End();
 	}
+
+	/*static auto GetRoom = [](void* Vec, int Index, const char** OutText)
+	{
+		std::vector<Room*>* vt_TempList = static_cast<std::vector<Room*>*>(Vec);
+
+		if (Index < 0 || Index >= vt_TempList->size())
+			return false;
+		*OutText = "Room " + vt_TempList->at(Index)->i_RoomID;
+			return true;
+	}*/
 };

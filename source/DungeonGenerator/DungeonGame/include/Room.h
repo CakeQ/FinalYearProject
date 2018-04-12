@@ -44,7 +44,6 @@ public:
 		for (DungeonEntity* e_IteratorEntity : vt_RoomContents)
 		{
 			vt_RoomContents.pop_back();
-			s_ParentScene->vt_EntityList.pop_back();
 		}
 	}
 
@@ -78,11 +77,22 @@ public:
 						e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
 						e_NewTile->GetComponent<TransformComponent>()->q_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 						vt_RoomContents.push_back(e_NewTile);
-						s_ParentScene->vt_EntityList.push_back(e_NewTile);
 					}
 				}
 			}
 			b_Generated = true;
+		}
+	}
+
+	void RemoveTile(DungeonEntity* e_ITile)
+	{
+		for (int i = 0; i < vt_RoomContents.size(); i++)
+		{
+			if (e_ITile == vt_RoomContents[i])
+			{
+				vt_RoomContents.erase(vt_RoomContents.begin() + i);
+				delete e_ITile;
+			}
 		}
 	}
 

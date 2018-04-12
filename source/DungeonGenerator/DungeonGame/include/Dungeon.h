@@ -18,7 +18,6 @@ private:
 
 public:
 	std::vector<Room*> vt_RoomList;
-	std::vector<DungeonEntity*> vt_Tiles;
 	glm::vec2 v2_RoomSize;
 	glm::vec2 v2_Grid = glm::vec2(39.25f, 39.25f);
 	glm::vec3 v3_DungeonOrigin;
@@ -42,7 +41,6 @@ public:
 		for (Room* e_IteratorRoom : vt_RoomList)
 		{
 			vt_RoomList.pop_back();
-			e_IteratorRoom->~Room();
 		}
 	}
 
@@ -54,14 +52,14 @@ public:
 		for (int i = 0; i < i_Rooms; i++)
 		{
 			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 3, rand() % 6 + 3);
-			/*if ((int(v2_RoomSize.x) % 2) == 0)
+			if ((int(v2_RoomSize.x) % 2) == 0)
 			{
 				v2_RoomSize.x += 1;
 			}
 			if ((int(v2_RoomSize.y) % 2) == 0)
 			{
 				v2_RoomSize.y += 1;
-			}*/
+			}
 			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(5.0f));
 			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize, i);
 		}
@@ -100,11 +98,6 @@ public:
 		vt_RoomList.push_back(r_NewRoom);
 	}
 
-	void InitialiseTiles()
-	{
-
-	}
-
 	void Update(float f_IDeltaTime)
 	{
 		b_Spreading = false;
@@ -121,23 +114,15 @@ public:
 		}
 		if (b_Spreading == false && b_Initialised == false)
 		{
-			InitialiseTiles();
-			b_Initialised = true;
-			std::cout << "No longer spreading" << std::endl;
 			for (Room* e_IteratorRoom : vt_RoomList)
 			{
 				e_IteratorRoom->b_Moving = false;
 				e_IteratorRoom->RemovePhysics();
-				for (DungeonEntity* e_IteratorEntity : e_IteratorRoom->vt_RoomContents)
-				{
-					vt_Tiles.push_back(e_IteratorEntity);
-				}
+
+				std::cout << std::endl;
 			}
 
-			for (DungeonEntity* e_IteratorEntity : vt_Tiles)
-			{
-				e_IteratorEntity->ChangeState();
-			}
+			b_Initialised = true;
 		}
 	}
 };

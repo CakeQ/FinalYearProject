@@ -24,7 +24,7 @@ public:
 
 	void Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
 	{
-		std::cout << "drawing debug" << std::endl;
+		/*std::cout << "drawing debug" << std::endl;
 		//set up vertex array
 		GLfloat glverts[16]; //allow for polygons up to 8 vertices
 		glVertexPointer(2, GL_FLOAT, 0, glverts); //tell OpenGL where to find vertices
@@ -54,6 +54,6 @@ public:
 		glVertexPointer(3, GL_FLOAT, 0, f_Vertices);
 		glDrawArrays(GL_QUADS, 0, 32);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
 	}
 };
