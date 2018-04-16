@@ -119,9 +119,6 @@
     <ClInclude Include="include\ModelManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ColourComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\StaticEntity.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>

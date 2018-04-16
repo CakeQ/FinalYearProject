@@ -185,7 +185,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraComponent.h" />
-    <ClInclude Include="include\ColourComponent.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\EngineCoreBase.h" />
     <ClInclude Include="include\EngineCoreGLFW.h" />
