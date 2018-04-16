@@ -12,7 +12,6 @@
 
 #include "Component.h"
 #include "CameraComponent.h"
-#include "ColourComponent.h"
 #include "ModelComponent.h"
 #include "TransformComponent.h"
 
