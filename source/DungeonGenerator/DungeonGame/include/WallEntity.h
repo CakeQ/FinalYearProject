@@ -8,7 +8,6 @@ class WallEntity : public DungeonEntity
 {
 
 public:
-	int i_State = 0;
 	WallEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
 		ChangeState();
@@ -19,7 +18,7 @@ public:
 
 	}
 
-	void ChangeState() override //You need to change this to work with neighbor system
+	void ChangeState() override
 	{
 		std::string s_Variation;
 		float f_Rotation = 0.0f;
@@ -109,5 +108,11 @@ public:
 		}
 
 		GetComponent<TransformComponent>()->Roll(glm::radians(f_Rotation));
+	}
+
+	void ChangeState(int i_IState)
+	{
+		i_State = i_IState;
+		ChangeState();
 	}
 };

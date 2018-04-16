@@ -63,14 +63,10 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 	glfwSetMouseButtonCallback(w_WindowID, MouseButtonCallBackEvent);
 	glfwSetKeyCallback(w_WindowID, KeyCallbackEvent);
 
-	//glfwSetInputMode(w_WindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
 	vt_KeyBuffer.resize(i_KeyBufferSize);																						//!< Sets size of key buffer.
 	std::fill(vt_KeyBuffer.begin(), vt_KeyBuffer.end(), false);																	//!< Fills key buffer.
 
 	s_DefaultShaderProgram = new Shader("assets/shaders/defaultShader.vert", "assets/shaders/defaultShader.frag");				//!< Loads default shaders.
-	//s_FontshaderProgram = new Shader("assets/shaders/fontShader.vert", "assets/shaders/fontShader.frag");						//!< Loads font shaders.
-	SetupDefaultFont();
 
 	glEnable(GL_DEPTH_TEST);																									//!< Enable depth testing.
 
@@ -191,61 +187,6 @@ void EngineCoreGLFW::RenderColouredBackground(float f_IRed, float f_IGreen, floa
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void EngineCoreGLFW::RenderText(std::string text, float x, float y, float scale, glm::vec3 colour)
-{
-	// set the window to orthographic
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(i_Width), 0.0f, static_cast<float>(i_Height));
-
-	float f_PixelValueX = x * i_Width;
-	float f_PixelValueY = y * i_Height;
-
-	glUseProgram(s_FontshaderProgram->ui_ShaderProgram);
-	glUniformMatrix4fv(glGetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-	// Activate corresponding render state	
-	glUniform3f(glGetUniformLocation(s_FontshaderProgram->ui_ShaderProgram, "textColour"), colour.x, colour.y, colour.z);
-	glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(ui_FontVAO);
-
-	// Iterate through all characters
-	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); c++)
-	{
-		Character ch = m_Characters[*c];
-
-		GLfloat f_XPos = f_PixelValueX + ch.v2_Bearing.x * scale;
-		GLfloat f_Ypos = f_PixelValueY - (ch.v2_Size.y - ch.v2_Bearing.y) * scale;
-
-		GLfloat w = ch.v2_Size.x * scale;
-		GLfloat h = ch.v2_Size.y * scale;
-		// Update VBO for each character
-		GLfloat vertices[6][4] = {
-			{ f_XPos,     f_Ypos + h,   0.0, 0.0 },
-			{ f_XPos,     f_Ypos,       0.0, 1.0 },
-			{ f_XPos + w, f_Ypos,       1.0, 1.0 },
-
-			{ f_XPos,     f_Ypos + h,   0.0, 0.0 },
-			{ f_XPos + w, f_Ypos,       1.0, 1.0 },
-			{ f_XPos + w, f_Ypos + h,   1.0, 0.0 }
-		};
-		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.ui_TextureID);
-		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, ui_FontVBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Render quad
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		f_PixelValueX += (ch.ui_Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
-	}
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	// go back to default shader
-	glUseProgram(s_DefaultShaderProgram->ui_ShaderProgram);
-}
-
 void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 {
 	// set the model component of our shader to the cube model
@@ -254,30 +195,6 @@ void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 	// the only thing we can draw so far is the cube, so we know it is bound already
 	// this will obviously have to change later
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-}
-
-void EngineCoreGLFW::DrawDebug(PhysicsComponent* c_PhysicsComponent, const glm::mat4& m4_IModelMatrix)
-{
-	// set the model component of our shader to the cube model
-	glUniformMatrix4fv(glGetUniformLocation(s_DefaultShaderProgram->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
-
-	// the only thing we can draw so far is the cube, so we know it is bound already
-	// this will obviously have to change later
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	if (c_PhysicsComponent)
-	{
-		c_PhysicsComponent->Draw(s_DefaultShaderProgram, m4_IModelMatrix);
-	}
-	else
-	{
-		std::cout << "ERROR: Model is NULL" << std::endl;
-	}
 }
 
 void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
@@ -290,87 +207,4 @@ void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
 	{
 		std::cout << "ERROR: Model is NULL" << std::endl;
 	}
-}
-
-void EngineCoreGLFW::SetupDefaultFont()
-{
-	// FreeType
-	FT_Library ft;
-	// All functions return a value different than 0 whenever an error occurred
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-	// Load font as face
-	FT_Face face;
-	if (FT_New_Face(ft, "Assets/Fonts/Pixeled.ttf", 0, &face))
-	{
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-		return;
-	}
-	else
-	{
-		std::cout << "Loaded default font" << std::endl;
-	}
-	// Set size to load glyphs as
-	FT_Set_Pixel_Sizes(face, 0, 48);
-
-	// Disable byte-alignment restriction
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	// Load first 128 characters of ASCII set
-	for (GLubyte c = 0; c < 128; c++)
-	{
-		// Load character glyph 
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-			continue;
-		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			face->glyph->bitmap.width,
-			face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		Character character = 
-		{
-			texture,
-			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			face->glyph->advance.x
-		};
-		m_Characters.insert(std::pair<GLchar, Character>(c, character));
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-	// Destroy FreeType once we're finished
-	FT_Done_Face(face);
-	FT_Done_FreeType(ft);
-
-
-	// Configure VAO/VBO for texture quads
-	glGenVertexArrays(1, &ui_FontVAO);
-	glGenBuffers(1, &ui_FontVBO);
-	glBindVertexArray(ui_FontVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, ui_FontVBO);
-	// dynamic draw as the text may change frequently
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 }

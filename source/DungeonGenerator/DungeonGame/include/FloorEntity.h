@@ -7,7 +7,6 @@
 class FloorEntity : public DungeonEntity
 {
 public:
-	int i_State = 0;
 	FloorEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
 		CalculateState();

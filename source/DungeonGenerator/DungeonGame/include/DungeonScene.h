@@ -34,10 +34,6 @@ public:
 		b2Vec2 b2_Gravity(0.0f, 0.0f);
 		b2_World = new b2World(b2_Gravity);
 
-		//int i_TestSeed = glfwGetTime();
-		int i_TestSeed = 413;
-		//d_CurrentDungeon = new Dungeon(i_TestSeed, mm_ModelManager, this);
-
 		if (b_Debug == true)
 		{
 			d_DebugDraw = new DebugDraw;
@@ -122,11 +118,6 @@ public:
 				}
 			}*/
 		}
-		
-		/*for (SceneText* t_Iterator : vt_SceneTextList)
-		{
-		e_EngineCore->RenderText(t_Iterator->s_Text, t_Iterator->v2_ScreenPos.x, t_Iterator->v2_ScreenPos.y, t_Iterator->f_TextSize, t_Iterator->v3_TextColor);
-		}*/
 	}
 
 	void DrawGUI() override

@@ -16,7 +16,6 @@ Scene::~Scene()
 
 	c_SceneCamera = nullptr;
 	e_GameEngine = nullptr;
-	//e_Background->~Entity();
 
 	for (b2Body* b2_BodyIterator = b2_World->GetBodyList(); b2_BodyIterator != 0; b2_BodyIterator = b2_BodyIterator->GetNext())
 	{

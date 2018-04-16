@@ -64,6 +64,40 @@ public:
 						if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
 						{
 							e_NewTile = new WallEntity(mm_ModelManager);
+							if (i == 0)
+							{
+								if (j == 0)
+								{
+									e_NewTile->ChangeState(6);
+								}
+								else if (j == v2_RoomSize.y - 1)
+								{
+									e_NewTile->ChangeState(3);
+								}
+								else
+								{
+									e_NewTile->ChangeState(10);
+								}
+							}
+							else if (i == v2_RoomSize.x - 1)
+							{
+								if (j == 0)
+								{
+									e_NewTile->ChangeState(12);
+								}
+								else if (j == v2_RoomSize.y - 1)
+								{
+									e_NewTile->ChangeState(9);
+								}
+								else
+								{
+									e_NewTile->ChangeState(10);
+								}
+							}
+							else
+							{
+								e_NewTile->ChangeState(5);
+							}
 						}
 						else if (i_Layer == 0)
 						{
@@ -75,7 +109,6 @@ public:
 						}
 
 						e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
-						e_NewTile->GetComponent<TransformComponent>()->q_Orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
 						vt_RoomContents.push_back(e_NewTile);
 					}
 				}
@@ -101,6 +134,7 @@ public:
 		PhysicsComponent* c_PhysicsComponent = GetComponent<PhysicsComponent>();
 		c_PhysicsComponent->b2_BodyDef.position = b2Vec2(v3_Position.x / 30, v3_Position.y / 30);
 		c_PhysicsComponent->b2_BodyDef.type = b2_dynamicBody;
+		c_PhysicsComponent->b2_BodyDef.fixedRotation = true;
 		c_PhysicsComponent->b2_Body = s_ParentScene->b2_World->CreateBody(&c_PhysicsComponent->b2_BodyDef);
 
 		c_PhysicsComponent->b2_Shape.SetAsBox((((v3_TileSize.x * v2_RoomSize.x) / 2 + 15) / 30), (((v3_TileSize.y * v2_RoomSize.y) / 2 + 15) / 30));

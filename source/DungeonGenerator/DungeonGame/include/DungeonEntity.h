@@ -7,7 +7,9 @@ class Room;
 class DungeonEntity : public Entity
 {
 public:
+	int i_State = 0;
 	ModelManager* mm_ModelManager;
+
 	DungeonEntity(ModelManager* mm_IModelManager)
 	{
 		AddComponent(new TransformComponent);
@@ -33,4 +35,10 @@ public:
 
 	virtual void CalculateState() = 0;
 	virtual void ChangeState() = 0;
+
+	void ChangeState(int i_IState)
+	{
+		i_State = i_IState;
+		ChangeState();
+	}
 };

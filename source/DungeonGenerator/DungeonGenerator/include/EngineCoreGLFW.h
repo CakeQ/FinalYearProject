@@ -20,9 +20,6 @@ Created by Daniel Thompson, P15230940.
 #include <ImGUI/imgui.h>
 #include <ImGUI/imgui_impl_glfw_gl3.h>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #include "EngineCoreBase.h"
 
 #include "Model.h"
@@ -68,12 +65,8 @@ public:
 	void SetCamera(const CameraComponent* c_ICamera) override;
 
 	void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue) override;
-	void RenderText(std::string text, float x, float y, float scale, glm::vec3 colour) override;
 
 	void DrawCube(const glm::mat4& m4_IModelMatrix) override;
-	void DrawDebug(PhysicsComponent* c_PhysicsComponent, const glm::mat4& m4_IModelMatrix) override;
 	void DrawModel(Model* model, glm::mat4& modelMatrix) override;
-
-	void EngineCoreGLFW::SetupDefaultFont();
 };
 
