@@ -21,7 +21,7 @@ EngineCoreGLFW::~EngineCoreGLFW()
 
 bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWindowName)											//!< Window Initialisation.
 {
-	//!< Begin GLFW Initialization																															//!< Begin GLFW set-up.
+	//!< Begin GLFW Initialization																								//!< Begin GLFW set-up.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);																				//!< Set GLFW version to 4.
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);																				//!< Set GLFW version to 4.3.
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, TRUE);																			//!< Set GLFW forward compatability to true.
@@ -37,7 +37,8 @@ bool EngineCoreGLFW::InitWindow(int i_IWidth, int i_IHeight, std::string s_IWind
 		return false;
 	}
 
-	w_WindowID = glfwCreateWindow(i_Width, i_Height, s_IWindowName.c_str(), nullptr, nullptr);									//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later. Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
+	w_WindowID = glfwCreateWindow(i_Width, i_Height, s_IWindowName.c_str(), nullptr, nullptr);									//!< Creates the window and assigns it to a reference ID integer so that it can be referenced later.
+																																//!<Parameters are Width, Height, Window name, Fullscreen properties and mirroring.
 
 	if (!w_WindowID)																											//!< Terminates if there is no window initialisation.
 	{
@@ -111,7 +112,6 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 
 		double d_FrameRate = 1000.0 / double(i_FrameRate);
 		std::string s_FrameText = std::to_string(d_FrameRate) + " FPS";
-		//RenderText(s_FrameText, 0.005f, 0.95f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 		i_FrameRate = 0;
 
 		glfwSwapBuffers(w_WindowID);																							//!< Swap window buffer.
@@ -153,16 +153,14 @@ void EngineCoreGLFW::MouseMoveCallbackEvent(GLFWwindow* w_IWindow, double d_IXPo
 
 void EngineCoreGLFW::MouseButtonCallBackEvent(GLFWwindow * w_IWindow, int i_IButton, int i_IAction, int i_iMods)
 {
-	std::cout << i_IButton << ", " << i_IAction << std::endl;
-	int i_State;
-	
+
 }
 
 void EngineCoreGLFW::WindowResizeCallbackEvent(GLFWwindow* w_IWindow, int i_IWidth, int i_IHeight)
 {
 	i_Width = i_IWidth;
 	i_Height = i_IHeight;
-	glViewport(0, 0, i_IWidth, i_IHeight);																					//!< Change OpenGL viewport to match window size.
+	glViewport(0, 0, i_IWidth, i_IHeight);														//!< Change OpenGL viewport to match window size.
 }
 
 void EngineCoreGLFW::SetCamera(const CameraComponent* c_ICamera)

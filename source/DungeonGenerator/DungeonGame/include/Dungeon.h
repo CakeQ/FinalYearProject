@@ -47,7 +47,6 @@ public:
 	void SpawnDungeon()
 	{
 		int i_Rooms = rand()%5 + 5;
-		//int i_Rooms = 1;
 
 		for (int i = 0; i < i_Rooms; i++)
 		{
@@ -118,8 +117,6 @@ public:
 			{
 				e_IteratorRoom->b_Moving = false;
 				e_IteratorRoom->RemovePhysics();
-
-				std::cout << std::endl;
 			}
 
 			b_Initialised = true;

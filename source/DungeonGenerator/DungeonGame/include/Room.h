@@ -174,4 +174,9 @@ public:
 	}
 
 	void Message(const std::string s_IMessage) override {}
+
+	const char* GetName()
+	{
+		return "Room " + i_RoomID;
+	}
 };

@@ -107,17 +107,6 @@ public:
 				}
 			}
 		}
-
-		if (b_Debug)
-		{
-			/*for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
-			{
-				if (e_IteratorRoom->GetComponent<PhysicsComponent>())
-				{
-					e_GameEngine->DrawDebug(e_IteratorRoom->GetComponent<PhysicsComponent>(), e_IteratorRoom->GetComponent<TransformComponent>()->GetModelMatrix());
-				}
-			}*/
-		}
 	}
 
 	void DrawGUI() override
@@ -149,21 +138,24 @@ public:
 			i_DungeonSeed = glfwGetTime();
 			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
 		}
+		/*
+		static auto GetRoom = [](void* Vec, int Index, const char** OutText)
+		{
+			std::vector<Room*>* vt_TempList = static_cast<std::vector<Room*>*>(Vec);
 
-		//static int i_ListBoxIndex = -1;
+			if (Index < 0 || Index >= vt_TempList->size())
+				return false;
+			*OutText = vt_TempList->at(Index)->GetName();
+			return true;
+		};
 
-		//ImGui::ListBox("", &i_ListBoxIndex, GetRoom(), static_cast<void*>(&d_CurrentDungeon->vt_RoomList.size(), 30);
+		static int i_ListBoxIndex = -1;
 
+		if (d_CurrentDungeon)
+		{
+			ImGui::ListBox("", &i_ListBoxIndex, GetRoom, static_cast<void*>(&d_CurrentDungeon->vt_RoomList), d_CurrentDungeon->vt_RoomList.size(), 15);
+		}
+		*/
 		ImGui::End();
 	}
-
-	/*static auto GetRoom = [](void* Vec, int Index, const char** OutText)
-	{
-		std::vector<Room*>* vt_TempList = static_cast<std::vector<Room*>*>(Vec);
-
-		if (Index < 0 || Index >= vt_TempList->size())
-			return false;
-		*OutText = "Room " + vt_TempList->at(Index)->i_RoomID;
-			return true;
-	}*/
 };
