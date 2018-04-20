@@ -64,7 +64,7 @@ void Mesh::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
 void Mesh::SetUpMesh()
 {
 	glGenVertexArrays(1, &ui_VAO);																					//!< Generate the evertext array for the VAO.
-	glGenBuffers(1, &ui_VBO);																							//!< Generate buffers for VBO.
+	glGenBuffers(1, &ui_VBO);																						//!< Generate buffers for VBO.
 	glGenBuffers(1, &ui_EBO);
 
 	glBindVertexArray(ui_VAO);																						//!< Bind the VAO.
@@ -74,14 +74,14 @@ void Mesh::SetUpMesh()
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ui_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (vt_Indices.size() * sizeof(GLuint)), &vt_Indices[0], GL_STATIC_DRAW);
-																														//!< Create a vertex array object.
-	glEnableVertexAttribArray(0);																						//!< Enable the VAO.
+																													//!< Create a vertex array object.
+	glEnableVertexAttribArray(0);																					//!< Enable the VAO.
 	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (GLvoid * )0);
 
-	glEnableVertexAttribArray(1);																						//!< Apply normals.
+	glEnableVertexAttribArray(1);																					//!< Apply normals.
 	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v3_Normal));
 
-	glEnableVertexAttribArray(2);																						//!< Apply Texture coords.
+	glEnableVertexAttribArray(2);																					//!< Apply Texture coords.
 	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v2_TextureCoords));
 
 	glBindVertexArray(0);
