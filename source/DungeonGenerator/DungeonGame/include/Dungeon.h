@@ -7,7 +7,7 @@
 
 #include "Scene.h"
 #include "ModelManager.h"
-#include "DungeonEntity.h"
+#include "DungeonComponent.h"
 #include "Room.h"
 
 class Dungeon
@@ -42,15 +42,43 @@ public:
 		{
 			vt_RoomList.pop_back();
 		}
+		for (unsigned int i = s_ParentScene->vt_EntityList.size(); i < 0; i--)
+		{
+			Entity* e_IteratorEntity = s_ParentScene->vt_EntityList[i];
+			if (e_IteratorEntity->GetComponent<DungeonComponent>())
+			{
+				DungeonComponent* c_DungeonComponent = e_IteratorEntity->GetComponent<DungeonComponent>();
+				if (c_DungeonComponent->i_Seed == i_Seed)
+				{
+					s_ParentScene->vt_EntityList.erase(s_ParentScene->vt_EntityList.begin() + i);
+				}
+			}
+		}
+		for (unsigned int i = s_ParentScene->vt_InstancedEntities.size(); i < 0; i--)
+		{
+			InstancedEntity* e_IteratorInstance = s_ParentScene->vt_InstancedEntities[i];
+			for (unsigned int i = e_IteratorInstance->vt_EntityList.size(); i < 0; i--)
+			{
+				Entity* e_IteratorEntity = e_IteratorInstance->vt_EntityList[i];
+				if (e_IteratorEntity->GetComponent<DungeonComponent>())
+				{
+					DungeonComponent* c_DungeonComponent = e_IteratorEntity->GetComponent<DungeonComponent>();
+					if (c_DungeonComponent->i_Seed == i_Seed)
+					{
+						e_IteratorInstance->vt_EntityList.erase(s_ParentScene->vt_EntityList.begin() + i);
+					}
+				}
+			}
+		}
 	}
 
 	void SpawnDungeon()
 	{
-		int i_Rooms = rand()%5 + 5;
+		int i_Rooms = rand()%5 + 10;
 
 		for (int i = 0; i < i_Rooms; i++)
 		{
-			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 3, rand() % 6 + 3);
+			glm::vec2 v2_RoomSize = glm::vec2(rand() % 6 + 5, rand() % 6 + 5);
 			if ((int(v2_RoomSize.x) % 2) == 0)
 			{
 				v2_RoomSize.x += 1;
@@ -59,8 +87,10 @@ public:
 			{
 				v2_RoomSize.y += 1;
 			}
-			glm::vec2 v2_RoomPos = SnapToGrid(GetRandomPointInCircle(5.0f));
+			glm::vec2 v2_RoomPos = GetRandomPointInCircle(10.0f);
 			SpawnRoom(glm::vec3(v2_RoomPos, 0.0f), v2_RoomSize, i);
+			i_Seed++;
+			srand(i_Seed);
 		}
 
 		for (Room* e_IteratorRoom : vt_RoomList)
@@ -73,13 +103,13 @@ public:
 
 	glm::vec2 GetRandomPointInCircle(float f_IRadius)
 	{
-		float f_R = f_IRadius - glm::sqrt(rand() % 2) * f_IRadius;
+		double f_R = f_IRadius - glm::sqrt(double(rand() % 100) / 100) * f_IRadius;
 
 		int i_TwoPi = rand() % 62831;									//< Generate a pseudo random of 2*pi because rand doesn't work with floats.
 		float f_A = i_TwoPi / 10000.0f;									//< Divide pseudo random by 10000 to achieve actual floated pseudo pi.
 
-		float f_X = f_IRadius * glm::cos(f_R) * f_R;
-		float f_Y = f_IRadius * glm::sin(f_A) * f_R;
+		float f_X = f_IRadius * glm::cos(f_A) * float(f_R);
+		float f_Y = f_IRadius * glm::sin(f_A) * float(f_R);
 
 		return glm::vec2(f_X, f_Y);
 	}
@@ -92,9 +122,15 @@ public:
 
 	void SpawnRoom(glm::vec3 v3_IRoomPos, glm::vec2 v2_IRoomSize, int i_IID)
 	{
+		std::cout << "Room spawned at " << v3_IRoomPos.x << ", " << v3_IRoomPos.y << std::endl;
 		Room* r_NewRoom = new Room(v3_IRoomPos, v2_IRoomSize, glm::vec3(v2_Grid, 0.0f), s_ParentScene, mm_ModelManager);
+		DungeonComponent* c_NewDungeonComponent = new DungeonComponent();
+		c_NewDungeonComponent->i_Seed = i_Seed;
+		r_NewRoom->AddComponent(c_NewDungeonComponent);
 		r_NewRoom->i_RoomID = i_IID;
+		r_NewRoom->GenerateRoom();
 		vt_RoomList.push_back(r_NewRoom);
+		s_ParentScene->vt_EntityList.push_back(r_NewRoom);
 	}
 
 	void Update(float f_IDeltaTime)

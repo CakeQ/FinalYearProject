@@ -10,6 +10,7 @@ class WallEntity : public DungeonEntity
 public:
 	WallEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
+		AddComponent(new ModelComponent);
 		ChangeState();
 	}
 

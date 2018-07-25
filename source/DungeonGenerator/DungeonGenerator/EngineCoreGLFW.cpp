@@ -101,7 +101,7 @@ bool EngineCoreGLFW::RunEngine(Game& g_IGameID)
 		while (d_SimulationTime < d_RealTime)
 		{
 			d_SimulationTime += d_DeltaTime;
-			g_IGameID.Update(d_DeltaTime);																						//!< Handle game updates.
+			g_IGameID.Update(float(d_DeltaTime));																						//!< Handle game updates.
 			i_FrameRate++;																										//!< Incriment framerate count.
 		}
 
@@ -195,7 +195,14 @@ void EngineCoreGLFW::DrawCube(const glm::mat4& m4_IModelMatrix)
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
-void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4& m4_IModelMatrix)
+void EngineCoreGLFW::DrawModel(Model * model, glm::mat4 m4_IModelMatrix)
+{
+	glm::mat4* m4_ModelMatrix = new glm::mat4[1];
+	m4_ModelMatrix[1] = m4_IModelMatrix;
+	DrawModel(model, m4_ModelMatrix);
+}
+
+void EngineCoreGLFW::DrawModel(Model* m_IModel, glm::mat4* m4_IModelMatrix)
 {
 	if (m_IModel)
 	{

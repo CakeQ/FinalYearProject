@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Entity.h"
-
-class Room;
+#include "ModelManager.h"
 
 class DungeonEntity : public Entity
 {
@@ -13,8 +12,6 @@ public:
 	DungeonEntity(ModelManager* mm_IModelManager)
 	{
 		AddComponent(new TransformComponent);
-		AddComponent(new ModelComponent);
-
 		mm_ModelManager = mm_IModelManager;
 	}
 

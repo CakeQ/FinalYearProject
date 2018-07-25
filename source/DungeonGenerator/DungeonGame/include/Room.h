@@ -7,8 +7,10 @@
 #include "FloorEntity.h"
 #include "ModelManager.h"
 #include "PhysicsComponent.h"
+#include "DungeonComponent.h"
+#include "Dungeon.h"
 
-class Room : public Entity
+class Room : public DungeonEntity
 {
 public:
 	bool b_Generated = false;
@@ -22,21 +24,16 @@ public:
 	glm::vec3 v3_Position;
 
 	Scene* s_ParentScene;
-	ModelManager* mm_ModelManager;
 
-	Room(glm::vec3 v3_IPosition, glm::vec2 v2_IRoomSize, glm::vec3 v3_ITileSize, Scene* s_IScene, ModelManager* mm_IModelManager)
+	Room(glm::vec3 v3_IPosition, glm::vec2 v2_IRoomSize, glm::vec3 v3_ITileSize, Scene* s_IScene, ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
-		AddComponent(new TransformComponent);
 		AddComponent(new PhysicsComponent);
 
-		mm_ModelManager = mm_IModelManager;
 		s_ParentScene = s_IScene;
 
 		v2_RoomSize = v2_IRoomSize;
 		v3_TileSize = v3_ITileSize;
 		v3_Position = v3_IPosition;
-
-		GenerateRoom();
 	}
 
 	~Room()
@@ -51,75 +48,72 @@ public:
 	{
 		if (!b_Generated)
 		{
-			for (int i_Layer = 0; i_Layer < 2; i_Layer++)
+			for (int i = 0; i < v2_RoomSize.x; i++)
 			{
-				for (int i = 0; i < v2_RoomSize.x; i++)
+				for (int j = 0; j < v2_RoomSize.y; j++)
 				{
-					for (int j = 0; j < v2_RoomSize.y; j++)
-					{
-						std::string s_WallType;
-						int i_WallRotation;
-						DungeonEntity* e_NewTile;
+					std::string s_WallType;
+					DungeonEntity* e_NewTile;
 
-						if ((i_Layer == 1) && (i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
+					if ((i == 0 || i == v2_RoomSize.x - 1 || j == 0 || j == v2_RoomSize.y - 1))
+					{
+						e_NewTile = new WallEntity(mm_ModelManager);
+						if (i == 0)
 						{
-							e_NewTile = new WallEntity(mm_ModelManager);
-							if (i == 0)
+							if (j == 0)
 							{
-								if (j == 0)
-								{
-									e_NewTile->ChangeState(6);
-								}
-								else if (j == v2_RoomSize.y - 1)
-								{
-									e_NewTile->ChangeState(3);
-								}
-								else
-								{
-									e_NewTile->ChangeState(10);
-								}
+								e_NewTile->ChangeState(6);
 							}
-							else if (i == v2_RoomSize.x - 1)
+							else if (j == v2_RoomSize.y - 1)
 							{
-								if (j == 0)
-								{
-									e_NewTile->ChangeState(12);
-								}
-								else if (j == v2_RoomSize.y - 1)
-								{
-									e_NewTile->ChangeState(9);
-								}
-								else
-								{
-									e_NewTile->ChangeState(10);
-								}
+								e_NewTile->ChangeState(3);
 							}
 							else
 							{
-								e_NewTile->ChangeState(5);
+								e_NewTile->ChangeState(10);
 							}
 						}
-						else if (i_Layer == 0)
+						else if (i == v2_RoomSize.x - 1)
 						{
-							e_NewTile = new FloorEntity(mm_ModelManager);
+							if (j == 0)
+							{
+								e_NewTile->ChangeState(12);
+							}
+							else if (j == v2_RoomSize.y - 1)
+							{
+								e_NewTile->ChangeState(9);
+							}
+							else
+							{
+								e_NewTile->ChangeState(10);
+							}
 						}
 						else
 						{
-							continue;
+							e_NewTile->ChangeState(5);
 						}
-
-						e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), (3.95f * i_Layer));
-						vt_RoomContents.push_back(e_NewTile);
 					}
+					else
+					{
+						e_NewTile = new FloorEntity(mm_ModelManager);
+					}
+
+					DungeonComponent* c_DungeonComponent = new DungeonComponent();
+					c_DungeonComponent->i_Seed = GetComponent<DungeonComponent>()->i_Seed;
+					e_NewTile->AddComponent(c_DungeonComponent);
+					e_NewTile->GetComponent<TransformComponent>()->v3_Position = v3_Position + glm::vec3((v3_TileSize.x * i), (v3_TileSize.y * j), 0);
+					vt_RoomContents.push_back(e_NewTile);
+					s_ParentScene->vt_EntityList.push_back(e_NewTile);
 				}
 			}
 			b_Generated = true;
+			s_ParentScene->SortInstancedEntities();
 		}
 	}
 
 	void RemoveTile(DungeonEntity* e_ITile)
 	{
-		for (int i = 0; i < vt_RoomContents.size(); i++)
+		for (unsigned int i = 0; i < vt_RoomContents.size(); i++)
 		{
 			if (e_ITile == vt_RoomContents[i])
 			{
@@ -137,7 +131,7 @@ public:
 		c_PhysicsComponent->b2_BodyDef.fixedRotation = true;
 		c_PhysicsComponent->b2_Body = s_ParentScene->b2_World->CreateBody(&c_PhysicsComponent->b2_BodyDef);
 
-		c_PhysicsComponent->b2_Shape.SetAsBox((((v3_TileSize.x * v2_RoomSize.x) / 2 + 15) / 30), (((v3_TileSize.y * v2_RoomSize.y) / 2 + 15) / 30));
+		c_PhysicsComponent->b2_Shape.SetAsBox((((v3_TileSize.x * (v2_RoomSize.x + 1)) / 2 + 15) / 30), (((v3_TileSize.y * (v2_RoomSize.y + 1)) / 2 + 15) / 30));
 		c_PhysicsComponent->b2_FixtureDef.density = 1.0f;
 		c_PhysicsComponent->b2_FixtureDef.friction = 0.7f;
 		c_PhysicsComponent->b2_FixtureDef.shape = &c_PhysicsComponent->b2_Shape;
@@ -179,4 +173,7 @@ public:
 	{
 		return "Room " + i_RoomID;
 	}
+
+	void CalculateState() {};
+	void ChangeState() {};
 };

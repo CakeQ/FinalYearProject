@@ -5,16 +5,12 @@
 
 #include "Scene.h"
 #include "Dungeon.h"
-
-#include "DebugDraw.h"
+#include "DungeonComponent.h"
 
 class DungeonScene : public Scene
 {
 public:
 	Dungeon* d_CurrentDungeon;
-	DebugDraw* d_DebugDraw;
-
-	bool b_Debug = true;
 	int i_DungeonSeed;
 
 	DungeonScene(EngineCore* e_IEngine) : Scene(e_IEngine)
@@ -25,7 +21,7 @@ public:
 	void SetUpScene() override
 	{
 		e_PlayerEntity = new PlayerEntity;
-		e_PlayerEntity->GetComponent<TransformComponent>()->v3_Position = glm::vec3(-225.0f, -225.0f, 500.0f);
+		e_PlayerEntity->GetComponent<TransformComponent>()->v3_Position = glm::vec3(0.0f, 0.0f, 2500.0f);
 		e_PlayerEntity->GetComponent<CameraComponent>()->q_Orientation = glm::quat(0.0f, 0.0f, 0.0f, 0.0f);
 
 		vt_EntityList.push_back(e_PlayerEntity);
@@ -33,13 +29,6 @@ public:
 
 		b2Vec2 b2_Gravity(0.0f, 0.0f);
 		b2_World = new b2World(b2_Gravity);
-
-		if (b_Debug == true)
-		{
-			d_DebugDraw = new DebugDraw;
-			b2_World->SetDebugDraw(d_DebugDraw);
-			d_DebugDraw->SetFlags(b2Draw::e_shapeBit);
-		}
 	}
 
 	void Update(float f_IDeltaTime) override
@@ -64,26 +53,64 @@ public:
 		float f_RedValue = 0, f_GreenValue = 0, f_BlueValue = 0;
 		e_GameEngine->RenderColouredBackground(f_RedValue, f_GreenValue, f_BlueValue);
 		e_GameEngine->SetCamera(c_SceneCamera);
+		std::vector<Model*> vt_DrawnModels;
 
 		for (Entity* e_IteratorEntity : vt_EntityList)
 		{
-			if (e_IteratorEntity->GetComponent<ModelComponent>() != nullptr)
+			if (!e_IteratorEntity->GetComponent<ModelComponent>()) continue;												//!< Check to see if Entity has ModelComponent.
+			ModelComponent* c_IteratorModelComponent = e_IteratorEntity->GetComponent<ModelComponent>();
+			if (!c_IteratorModelComponent->m_Model || c_IteratorModelComponent->b_Hidden) continue;							//!< Check to see if ModelComponent has Model.
+			Model* c_IteratorModel = c_IteratorModelComponent->m_Model;
+			bool b_Iterated = false;
+			for (InstancedEntity* e_InstancedEntity : vt_InstancedEntities)
 			{
-				for (Texture texture : e_IteratorEntity->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
+				if (c_IteratorModel == e_InstancedEntity->m_Model)
 				{
-					glBindTexture(GL_TEXTURE_2D, texture.ui_ID);
-				}
-
-				if (!e_IteratorEntity->GetComponent<ModelComponent>()->b_Hidden)
-				{
-					if (e_IteratorEntity->GetComponent<ModelComponent>()->m_Model)
-					{
-						e_GameEngine->DrawModel(e_IteratorEntity->GetComponent<ModelComponent>()->m_Model, e_IteratorEntity->GetComponent<TransformComponent>()->GetModelMatrix());
-					}
+					b_Iterated = true;
 				}
 			}
+			if (b_Iterated) continue;
+			e_GameEngine->DrawModel(c_IteratorModel, e_IteratorEntity->GetComponent<TransformComponent>()->GetModelMatrix());
 		}
-		if (d_CurrentDungeon)
+		for (InstancedEntity* e_InstancedEntity : vt_InstancedEntities)
+		{
+			Model* c_IteratorModel = e_InstancedEntity->m_Model;
+			int i_Instances = e_InstancedEntity->vt_EntityList.size();
+			glm::mat4* m4_InstancedMatrices = new glm::mat4[i_Instances];
+			for (int i = 0; i < e_InstancedEntity->vt_EntityList.size(); i++)
+			{
+				m4_InstancedMatrices[i] = e_InstancedEntity->vt_EntityList[i]->GetComponent<TransformComponent>()->GetModelMatrix();
+			}
+			e_GameEngine->DrawModel(c_IteratorModel, m4_InstancedMatrices);
+		}
+		//if (std::find(vt_DrawnModels.begin(), vt_DrawnModels.end(), c_IteratorModel) != vt_DrawnModels.end()) continue;	//!< Check to see if Model already drawn.
+
+		//std::vector<glm::mat4> vt_Matrices;
+
+		//for (Texture texture : e_IteratorEntity->GetComponent<ModelComponent>()->m_Model->vt_TexturesLoaded)
+		//{
+		//	glBindTexture(GL_TEXTURE_2D, texture.ui_ID);
+		//}
+
+		//for (Entity* e_OtherEntity : vt_EntityList)
+		//{
+		//	if (!e_OtherEntity->GetComponent<ModelComponent>()) continue;												//!< Check to see if Other Entity has ModelComponent.
+		//	ModelComponent* c_OtherModelComponent = e_OtherEntity->GetComponent<ModelComponent>();
+		//	if (!c_OtherModelComponent->m_Model || c_OtherModelComponent->b_Hidden) continue;							//!< Check to see if Other ModelComponent has Model.
+		//	Model* c_OtherModel = c_OtherModelComponent->m_Model;
+		//	if (c_OtherModel != c_IteratorModel) continue;																//!< Check to see if Other Model matches Model.
+
+		//	vt_Matrices.push_back(e_OtherEntity->GetComponent<TransformComponent>()->GetModelMatrix());
+		//}
+
+		//glm::mat4* m4_ModelMatrices;
+		//m4_ModelMatrices = new glm::mat4[vt_Matrices.size()];
+		//for (unsigned int i = 0; i < vt_Matrices.size(); i++)
+		//{
+		//	m4_ModelMatrices[i] = vt_Matrices.back();
+		//	vt_Matrices.pop_back();
+		//}
+		/*if (d_CurrentDungeon)
 		{
 			for (Room* e_IteratorRoom : d_CurrentDungeon->vt_RoomList)
 			{
@@ -106,7 +133,7 @@ public:
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	void DrawGUI() override
@@ -114,7 +141,7 @@ public:
 		ImGui::Begin("Debug Window");
 
 		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::SetWindowSize(ImVec2(e_GameEngine->i_Width*0.1, e_GameEngine->i_Height*0.5));
+		ImGui::SetWindowSize(ImVec2(float(e_GameEngine->i_Width*0.1), float(e_GameEngine->i_Height*0.5)));
 
 		ImGui::InputInt("Seed", &i_DungeonSeed);
 
@@ -135,8 +162,16 @@ public:
 
 		if (ImGui::Button("Generate Random Dungeon"))
 		{
-			i_DungeonSeed = glfwGetTime();
+			i_DungeonSeed = int(glfwGetTime());
 			d_CurrentDungeon = new Dungeon(i_DungeonSeed, mm_ModelManager, this);
+		}
+
+		if (ImGui::Button("Clear Dungeon"))
+		{
+			if (d_CurrentDungeon)
+			{
+				d_CurrentDungeon = nullptr;
+			}
 		}
 		/*
 		static auto GetRoom = [](void* Vec, int Index, const char** OutText)

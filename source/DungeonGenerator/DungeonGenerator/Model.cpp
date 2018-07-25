@@ -178,8 +178,15 @@ GLint Model::TextureFromFile(const char * c_IPath, std::string s_IDirectory)
 	return ui_TextureID;
 }
 
-void Model::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
-{
+void Model::Draw(Shader* s_IShader, glm::mat4* m4_IModelMatrix)
+{	
+	int i_InstanceAmount = m4_IModelMatrix->length();
+
+	unsigned int ui_InstanceVBO;
+	glGenBuffers(1, &ui_InstanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, ui_InstanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * i_InstanceAmount, &m4_IModelMatrix[0], GL_STATIC_DRAW);
+
 	for (Mesh m_IteratorMesh : vt_Meshes)
 	{
 		m_IteratorMesh.Draw(s_IShader, m4_IModelMatrix);

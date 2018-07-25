@@ -23,12 +23,19 @@
 #include "StaticEntity.h"
 #include "PlayerEntity.h"
 
+struct InstancedEntity
+{
+	Model* m_Model;
+	std::vector<Entity*> vt_EntityList;
+};
+
 class Scene
 {
 public:
 	EngineCore* e_GameEngine;
 
 	std::vector<Entity*> vt_EntityList;
+	std::vector<InstancedEntity*> vt_InstancedEntities;
 
 	Entity* e_PlayerEntity;
 	CameraComponent* c_SceneCamera;
@@ -46,4 +53,5 @@ public:
 	virtual void DrawGUI() = 0;
 	virtual void SetUpScene() = 0;
 	void SetCurrentCamera(CameraComponent* c_ICamera);
+	void SortInstancedEntities();
 };

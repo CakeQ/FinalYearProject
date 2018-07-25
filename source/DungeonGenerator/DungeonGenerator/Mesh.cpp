@@ -16,7 +16,7 @@ Mesh::Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, st
 }
 
 
-void Mesh::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
+void Mesh::Draw(Shader* s_IShader, glm::mat4* m4_IModelMatrix)
 {
 	// bind the appropriate textures
 	unsigned int diffuseNr = 1;
@@ -44,12 +44,9 @@ void Mesh::Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix)
 		glBindTexture(GL_TEXTURE_2D, vt_Textures[i].ui_ID);
 	}
 
-	// set the model component of our shader to the object model
-	glUniformMatrix4fv(glGetUniformLocation(s_IShader->ui_ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(m4_IModelMatrix));
-
 	// draw mesh
 	glBindVertexArray(ui_VAO);
-	glDrawElements(GL_TRIANGLES, vt_Indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElementsInstanced(GL_TRIANGLES, vt_Indices.size(), GL_UNSIGNED_INT, 0, m4_IModelMatrix->length());
 	glBindVertexArray(0);
 
 	// return to default texture
@@ -83,6 +80,20 @@ void Mesh::SetUpMesh()
 
 	glEnableVertexAttribArray(2);																					//!< Apply Texture coords.
 	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (GLvoid *)offsetof(Vertex, v2_TextureCoords));
+
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_FLOAT, false, sizeof(glm::mat4), (GLvoid *)0);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, false, sizeof(glm::mat4), (GLvoid *)(sizeof(glm::vec4)));
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, false, sizeof(glm::mat4), (GLvoid *)(2 * sizeof(glm::vec4)));
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, false, sizeof(glm::mat4), (GLvoid*)(3 * sizeof(glm::vec4)));
+
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
+	glVertexAttribDivisor(6, 1);
 
 	glBindVertexArray(0);
 }

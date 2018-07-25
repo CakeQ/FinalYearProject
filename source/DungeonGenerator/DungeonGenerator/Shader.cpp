@@ -81,8 +81,3 @@ Shader::Shader(const char *c_IVertexPath, const char *c_IFragmentPath)
 
 	Use();
 }
-
-void Shader::Use()
-{
-	glUseProgram(ui_ShaderProgram);
-}

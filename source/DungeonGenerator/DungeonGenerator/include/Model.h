@@ -30,6 +30,6 @@ public:
 	std::vector<Mesh> vt_Meshes;
 
 	Model(std::string filepath);
-	void Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix);
+	void Draw(Shader* s_IShader, glm::mat4* m4_IModelMatrix);
 	GLint TextureFromFile(const char *c_IPath, std::string s_IDirectory);
 };

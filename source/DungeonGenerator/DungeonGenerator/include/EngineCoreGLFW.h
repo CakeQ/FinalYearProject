@@ -67,6 +67,7 @@ public:
 	void RenderColouredBackground(float f_IRed, float f_IGreen, float f_IBlue) override;
 
 	void DrawCube(const glm::mat4& m4_IModelMatrix) override;
-	void DrawModel(Model* model, glm::mat4& modelMatrix) override;
+	void DrawModel(Model* model, glm::mat4 m4_IModelMatrix) override;
+	void DrawModel(Model* model, glm::mat4* modelMatrix) override;
 };
 

@@ -9,6 +9,7 @@ class FloorEntity : public DungeonEntity
 public:
 	FloorEntity(ModelManager* mm_IModelManager) : DungeonEntity(mm_IModelManager)
 	{
+		AddComponent(new ModelComponent);
 		CalculateState();
 		ChangeState();
 	}

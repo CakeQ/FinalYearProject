@@ -44,5 +44,5 @@ public:
 	std::vector<Texture> vt_Textures;
 
 	Mesh(std::vector<Vertex> vt_IVertices, std::vector<GLuint> vt_IIndices, std::vector<Texture> vt_ITextures);
-	void Draw(Shader* s_IShader, glm::mat4 m4_IModelMatrix);
+	void Draw(Shader* s_IShader, glm::mat4* m4_IModelMatrix);
 };
